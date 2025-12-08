@@ -1,0 +1,18 @@
+package maps
+
+import (
+	"iter"
+
+	"github.com/yaadata/bina/core/collection"
+	. "github.com/yaadata/optionsgo"
+)
+
+type Map[K any, V any] interface {
+	collection.Collection[K]
+	Get(key K, value V) Option[V]
+	Put(key K, value V) bool
+	Delete(key K) bool
+	Enumerate() iter.Seq2[K, V]
+	Keys() iter.Seq[K]
+	values() iter.Seq[V]
+}

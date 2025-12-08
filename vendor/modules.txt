@@ -1,0 +1,6 @@
+# github.com/yaadata/optionsgo v0.5.0
+## explicit; go 1.25.4
+github.com/yaadata/optionsgo
+github.com/yaadata/optionsgo/core
+github.com/yaadata/optionsgo/internal
+github.com/yaadata/optionsgo/shared
