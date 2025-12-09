@@ -5,8 +5,9 @@ import "github.com/yaadata/bina/core/compare"
 type ReferenceComparableInt int
 
 var _ compare.Comparable[ReferenceComparableInt] = (*ReferenceComparableInt)(nil)
+var _ compare.Orderable[ReferenceComparableInt] = (*ReferenceComparableInt)(nil)
 
-func (c *ReferenceComparableInt) Compare(other ReferenceComparableInt) compare.Order {
+func (c *ReferenceComparableInt) Order(other ReferenceComparableInt) compare.Order {
 	if *c < other {
 		return compare.OrderLess
 	}
@@ -17,5 +18,5 @@ func (c *ReferenceComparableInt) Compare(other ReferenceComparableInt) compare.O
 }
 
 func (c *ReferenceComparableInt) Equal(other ReferenceComparableInt) bool {
-	return c.Compare(other).IsEqual()
+	return c.Order(other).IsEqual()
 }

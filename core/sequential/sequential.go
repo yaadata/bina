@@ -3,9 +3,11 @@ package sequential
 import (
 	"iter"
 
-	"github.com/yaadata/bina/core/collection"
-	"github.com/yaadata/bina/core/shared"
 	. "github.com/yaadata/optionsgo"
+
+	"github.com/yaadata/bina/core/collection"
+	"github.com/yaadata/bina/core/compare"
+	"github.com/yaadata/bina/core/shared"
 )
 
 type Sequence[T any] interface {
@@ -25,5 +27,6 @@ type Sequence[T any] interface {
 	Insert(index int, item T) Sequence[T]
 	RemoveAt(index int) T
 	Retain(predicate shared.Predicate[T]) Sequence[T]
+	Sort(fn func(a, b T) compare.Order) Sequence[T]
 	ToSlice() []T
 }
