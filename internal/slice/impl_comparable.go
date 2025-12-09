@@ -6,38 +6,18 @@ import (
 	"sort"
 
 	. "github.com/yaadata/optionsgo"
-	"github.com/yaadata/optionsgo/core"
 
 	"github.com/yaadata/bina/core/compare"
 	"github.com/yaadata/bina/core/sequential"
 	"github.com/yaadata/bina/core/shared"
 )
 
-type comparableBuilder[T compare.Comparable[T]] struct {
-	from     Option[[]T]
-	capacity Option[int]
-}
-
-func (b *comparableBuilder[T]) From(items ...T) Builder[T] {
-	b.from = Some(items)
-	return b
-}
-
-func (b *comparableBuilder[T]) Capacity(cap int) Builder[T] {
-	b.capacity = Some(cap)
-	return b
-}
-
-func (b *comparableBuilder[T]) Build() sequential.Sequence[T] {
-	return &sliceComparableInterface[T]{
-		inner: b.from.OrElse(func() core.Option[[]T] {
-			return Some(make([]T, 0, b.capacity.UnwrapOrDefault()))
-		}).Unwrap(),
-	}
-}
-
 type sliceComparableInterface[T compare.Comparable[T]] struct {
 	inner []T
+}
+
+func SliceFromComparableInterface[T compare.Comparable[T]](items ...T) *sliceComparableInterface[T] {
+	return &sliceComparableInterface[T]{inner: items}
 }
 
 // Compile-time interface implementation check for sliceComparableInterface
