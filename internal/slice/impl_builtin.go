@@ -5,10 +5,11 @@ import (
 	"slices"
 	"sort"
 
+	. "github.com/yaadata/optionsgo"
+
 	"github.com/yaadata/bina/core/compare"
 	"github.com/yaadata/bina/core/sequential"
 	"github.com/yaadata/bina/core/shared"
-	. "github.com/yaadata/optionsgo"
 )
 
 type sliceFromBuiltin[T comparable] struct {
@@ -124,7 +125,7 @@ func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequential.S
 func (s *sliceFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T] {
 	for _, item := range s.inner {
 		if predicate(item) {
-			Some(item)
+			return Some(item)
 		}
 	}
 	return None[T]()
@@ -133,7 +134,7 @@ func (s *sliceFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T] {
 func (s *sliceFromBuiltin[T]) FindIndex(predicate shared.Predicate[T]) Option[int] {
 	for index, item := range s.inner {
 		if predicate(item) {
-			Some(index)
+			return Some(index)
 		}
 	}
 	return None[int]()

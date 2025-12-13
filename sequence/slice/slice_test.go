@@ -105,7 +105,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 				return item == 4
 			})
 			// ========= [A]ssert =========
-			must.False(t, actual.IsNone())
+			must.True(t, actual.IsNone())
 		})
 
 		// SCENARIO: an item matches the predicate
@@ -120,4 +120,31 @@ func TestSliceFromBuiltin(t *testing.T) {
 		})
 	})
 
+	t.Run("FindIndex returns Option", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3).
+			Build()
+
+		// SCENARIO: no item matches predicate
+		t.Run("No match", func(t *testing.T) {
+			// ========= [A]ct =========
+			actual := sequence.FindIndex(func(item int) bool {
+				return item == 4
+			})
+			// ========= [A]ssert =========
+			must.True(t, actual.IsNone())
+		})
+
+		// SCENARIO: an item matches the predicate
+		t.Run("Returns first match", func(t *testing.T) {
+			// ========= [A]ct =========
+			actual := sequence.FindIndex(func(item int) bool {
+				return item == 1 || item == 3
+			})
+			// ========= [A]ssert =========
+			must.True(t, actual.IsSome())
+			must.Eq(t, 0, actual.Unwrap())
+		})
+	})
 }
