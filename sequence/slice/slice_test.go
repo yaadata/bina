@@ -326,4 +326,69 @@ func TestSliceFromBuiltin(t *testing.T) {
 			must.True(t, sequence.IsEmpty())
 		})
 	})
+
+	t.Run("Aggregate methods work", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3, 4, 5).
+			Build()
+
+		// SCENARIO: Any
+		t.Run("Any - False", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Any(func(item int) bool {
+				return item > 10
+			})
+			// ========= [A]ssert  =========
+			must.False(t, actual)
+		})
+		t.Run("Any - True", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Any(func(item int) bool {
+				return item > 3
+			})
+			// ========= [A]ssert  =========
+			must.True(t, actual)
+		})
+
+		// SCENARIO: Count
+		t.Run("Count", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Count(func(item int) bool {
+				return item%2 == 0
+			})
+			// ========= [A]ssert  =========
+			must.Eq(t, 2, actual)
+		})
+
+		// SCENARIO: Every
+		t.Run("Every - True", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Every(func(item int) bool {
+				return item < 10
+			})
+			// ========= [A]ssert  =========
+			must.True(t, actual)
+		})
+
+		t.Run("Every - false", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Every(func(item int) bool {
+				return item > 10
+			})
+			// ========= [A]ssert  =========
+			must.False(t, actual)
+		})
+
+		// SCENARIO: For each
+		t.Run("ForEach", func(t *testing.T) {
+			// ========= [A]ct     =========
+			summation := 0
+			sequence.ForEach(func(item int) {
+				summation += item
+			})
+			// ========= [A]ssert  =========
+			must.Eq(t, 15, summation)
+		})
+	})
 }
