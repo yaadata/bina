@@ -280,4 +280,50 @@ func TestSliceFromBuiltin(t *testing.T) {
 			must.Eq(t, 3, last.Unwrap())
 		})
 	})
+
+	t.Run("Collection methods work", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3).
+			Build()
+
+		// SCENARIO: Len
+		t.Run("Len", func(t *testing.T) {
+			// ========= [A]ct     =========
+			length := sequence.Len()
+			// ========= [A]ssert  =========
+			must.Eq(t, 3, length)
+		})
+
+		// SCENARIO: Contains
+		t.Run("Contains - false", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Contains(4)
+			// ========= [A]ssert  =========
+			must.False(t, actual)
+		})
+		t.Run("Contains - true", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Contains(2)
+			// ========= [A]ssert  =========
+			must.True(t, actual)
+		})
+
+		// SCENARIO: IsEmpty
+		t.Run("IsEmpty - false", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.IsEmpty()
+			// ========= [A]ssert  =========
+			must.False(t, actual)
+		})
+
+		// SCENARIO: Clear
+		t.Run("Clear", func(t *testing.T) {
+			// ========= [A]ct     =========
+			sequence.Clear()
+			// ========= [A]ssert  =========
+			must.Eq(t, 0, sequence.Len())
+			must.True(t, sequence.IsEmpty())
+		})
+	})
 }
