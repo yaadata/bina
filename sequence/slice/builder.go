@@ -5,7 +5,7 @@ import (
 	"github.com/yaadata/optionsgo/core"
 
 	"github.com/yaadata/bina/core/compare"
-	"github.com/yaadata/bina/core/sequential"
+	"github.com/yaadata/bina/core/sequence"
 	internal "github.com/yaadata/bina/internal/slice"
 	"github.com/yaadata/bina/sequence/builder"
 )
@@ -32,7 +32,7 @@ func (b *builtinBuilder[T]) Capacity(cap int) builder.Builder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() sequential.Sequence[T] {
+func (b *builtinBuilder[T]) Build() sequence.Sequence[T] {
 	return internal.SliceFromBuiltin[T](b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)
@@ -60,7 +60,7 @@ func (b *comparableBuilder[T]) Capacity(cap int) builder.Builder[T] {
 	return b
 }
 
-func (b *comparableBuilder[T]) Build() sequential.Sequence[T] {
+func (b *comparableBuilder[T]) Build() sequence.Sequence[T] {
 	return internal.SliceFromComparableInterface[T](b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)

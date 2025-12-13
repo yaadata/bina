@@ -8,7 +8,7 @@ import (
 	. "github.com/yaadata/optionsgo"
 
 	"github.com/yaadata/bina/core/compare"
-	"github.com/yaadata/bina/core/sequential"
+	"github.com/yaadata/bina/core/sequence"
 	"github.com/yaadata/bina/core/shared"
 )
 
@@ -16,7 +16,7 @@ type sliceFromBuiltin[T comparable] struct {
 	inner []T
 }
 
-var _ sequential.Sequence[int] = (*sliceFromBuiltin[int])(nil)
+var _ sequence.Sequence[int] = (*sliceFromBuiltin[int])(nil)
 
 func SliceFromBuiltin[T comparable](items ...T) *sliceFromBuiltin[T] {
 	return &sliceFromBuiltin[T]{inner: items}
@@ -69,7 +69,7 @@ func (s *sliceFromBuiltin[T]) ForEach(fn func(T)) {
 	}
 }
 
-func (s *sliceFromBuiltin[T]) Append(item T) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Append(item T) sequence.Sequence[T] {
 	s.inner = append(s.inner, item)
 	return s
 }
@@ -94,12 +94,12 @@ func (s *sliceFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
 	}
 }
 
-func (s *sliceFromBuiltin[T]) Extend(items ...T) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Extend(items ...T) sequence.Sequence[T] {
 	s.inner = append(s.inner, items...)
 	return s
 }
 
-func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence sequential.Sequence[T]) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence sequence.Sequence[T]) sequence.Sequence[T] {
 	s.inner = append(s.inner, sequence.ToSlice()...)
 	return s
 }
@@ -112,7 +112,7 @@ func (s *sliceFromBuiltin[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequence.Sequence[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -155,7 +155,7 @@ func (s *sliceFromBuiltin[T]) Get(index int) Option[T] {
 	return Some(s.inner[index])
 }
 
-func (s *sliceFromBuiltin[T]) Insert(index int, item T) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Insert(index int, item T) sequence.Sequence[T] {
 	s.inner = append(s.inner[:index], append([]T{item}, s.inner[index:]...)...)
 	return s
 }
@@ -166,7 +166,7 @@ func (s *sliceFromBuiltin[T]) RemoveAt(index int) T {
 	return item
 }
 
-func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) sequence.Sequence[T] {
 	var retained = make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -177,7 +177,7 @@ func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) sequential.S
 	return s
 }
 
-func (s *sliceFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) sequential.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) sequence.Sequence[T] {
 	sort.SliceStable(s.inner, func(i, j int) bool {
 		a := s.inner[i]
 		b := s.inner[j]
