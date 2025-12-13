@@ -6,6 +6,7 @@ import (
 
 	"github.com/shoenig/test/must"
 
+	"github.com/yaadata/bina/core/compare"
 	"github.com/yaadata/bina/sequence/slice"
 )
 
@@ -15,7 +16,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 		sequence := slice.NewBuiltinBuilder[int]().
 			Capacity(10).
 			Build()
-		// ========= [A]ssert =========
+		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
 		must.Eq(t, 10, cap(sequence.ToSlice()))
 	})
@@ -24,7 +25,8 @@ func TestSliceFromBuiltin(t *testing.T) {
 		// ========= [A]rrange =========
 		sequence := slice.NewBuiltinBuilder[int]().
 			Build()
-		// ========= [A]ssert =========
+
+		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
 		must.Eq(t, 0, cap(sequence.ToSlice()))
 	})
@@ -34,7 +36,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 		sequence := slice.NewBuiltinBuilder[int]().
 			From(1, 2, 3).
 			Build()
-		// ========= [A]ssert =========
+		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
 		must.Eq(t, []int{1, 2, 3}, sequence.ToSlice())
 	})
@@ -45,8 +47,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 		sequence := slice.NewBuiltinBuilder[int]().
 			From(original...).
 			Build()
-
-		// ========= [A]ssert =========
+		// ========= [A]ssert  =========
 		for index, value := range sequence.Enumerate() {
 			must.Eq(t, original[index], value)
 		}
@@ -58,12 +59,12 @@ func TestSliceFromBuiltin(t *testing.T) {
 		sequence := slice.NewBuiltinBuilder[int]().
 			From(original...).
 			Build()
-		// ========= [A]ct =========
+		// ========= [A]ct     =========
 		var actual []int
 		for value := range sequence.All() {
 			actual = append(actual, value)
 		}
-		// ========= [A]ssert =========
+		// ========= [A]ssert  =========
 		must.True(t, slices.Equal(original, actual))
 	})
 
@@ -72,9 +73,9 @@ func TestSliceFromBuiltin(t *testing.T) {
 		sequence := slice.NewBuiltinBuilder[int]().
 			From(1, 2, 3).
 			Build()
-		// ========= [A]ct =========
+		// ========= [A]ct     =========
 		sequence.Extend(4, 5, 6)
-		// ========= [A]ssert =========
+		// ========= [A]ssert  =========
 		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
 	})
 
@@ -86,9 +87,9 @@ func TestSliceFromBuiltin(t *testing.T) {
 		other := slice.NewBuiltinBuilder[int]().
 			From(4, 5, 6).
 			Build()
-		// ========= [A]ct =========
+		// ========= [A]ct     =========
 		sequence.ExtendFromSequence(other)
-		// ========= [A]ssert =========
+		// ========= [A]ssert  =========
 		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
 	})
 
@@ -100,21 +101,21 @@ func TestSliceFromBuiltin(t *testing.T) {
 
 		// SCENARIO: no item matches predicate
 		t.Run("No match", func(t *testing.T) {
-			// ========= [A]ct =========
+			// ========= [A]ct     =========
 			actual := sequence.Find(func(item int) bool {
 				return item == 4
 			})
-			// ========= [A]ssert =========
+			// ========= [A]ssert  =========
 			must.True(t, actual.IsNone())
 		})
 
 		// SCENARIO: an item matches the predicate
 		t.Run("Returns first match", func(t *testing.T) {
-			// ========= [A]ct =========
+			// ========= [A]ct     =========
 			actual := sequence.Find(func(item int) bool {
 				return item == 1 || item == 3
 			})
-			// ========= [A]ssert =========
+			// ========= [A]ssert  =========
 			must.True(t, actual.IsSome())
 			must.Eq(t, 1, actual.Unwrap())
 		})
@@ -128,23 +129,155 @@ func TestSliceFromBuiltin(t *testing.T) {
 
 		// SCENARIO: no item matches predicate
 		t.Run("No match", func(t *testing.T) {
-			// ========= [A]ct =========
+			// ========= [A]ct     =========
 			actual := sequence.FindIndex(func(item int) bool {
 				return item == 4
 			})
-			// ========= [A]ssert =========
+			// ========= [A]ssert  =========
 			must.True(t, actual.IsNone())
 		})
 
 		// SCENARIO: an item matches the predicate
 		t.Run("Returns first match", func(t *testing.T) {
-			// ========= [A]ct =========
+			// ========= [A]ct     =========
 			actual := sequence.FindIndex(func(item int) bool {
 				return item == 1 || item == 3
 			})
-			// ========= [A]ssert =========
+			// ========= [A]ssert  =========
 			must.True(t, actual.IsSome())
 			must.Eq(t, 0, actual.Unwrap())
+		})
+	})
+
+	t.Run("Can Filter", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3, 4, 5, 6).
+			Build()
+		// ========= [A]ct     =========
+		actual := sequence.Filter(func(item int) bool {
+			return item%2 == 0
+		})
+		// ========= [A]ssert  =========
+		must.True(t, slices.Equal([]int{2, 4, 6}, actual.ToSlice()))
+	})
+
+	t.Run("Can Get", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3).
+			Build()
+		// SCENARIO: no item at index
+		t.Run("No item at index", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Get(3)
+			// ========= [A]ssert  =========
+			must.True(t, actual.IsNone())
+		})
+
+		// SCENARIO: item at index
+		t.Run("Item at index", func(t *testing.T) {
+			// ========= [A]ct     =========
+			actual := sequence.Get(1)
+			// ========= [A]ssert  =========
+			must.True(t, actual.IsSome())
+			must.Eq(t, 2, actual.Unwrap())
+		})
+	})
+
+	t.Run("Can Insert", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 4).
+			Build()
+		// ========= [A]ct     =========
+		sequence.Insert(2, 3)
+		// ========= [A]ssert  =========
+		must.True(t, slices.Equal([]int{1, 2, 3, 4}, sequence.ToSlice()))
+	})
+
+	t.Run("Can RemoveAt", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3, 4).
+			Build()
+		// ========= [A]ct     =========
+		sequence.RemoveAt(2)
+		// ========= [A]ssert  =========
+		must.True(t, slices.Equal([]int{1, 2, 4}, sequence.ToSlice()))
+	})
+
+	t.Run("Can RemoveAt - panics", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3, 4).
+			Build()
+		// ========= [A]ssert  =========
+		must.Panic(t, func() {
+			sequence.RemoveAt(20)
+		})
+	})
+
+	t.Run("Can Retain", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(1, 2, 3, 4, 5, 6).
+			Build()
+		// ========= [A]ct     =========
+		_ = sequence.Retain(func(item int) bool {
+			return item%2 == 0
+		})
+		// ========= [A]ssert  =========
+		must.True(t, slices.Equal([]int{2, 4, 6}, sequence.ToSlice()))
+	})
+
+	t.Run("Can Sort", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(5, 2, 6, 1, 4, 3).
+			Build()
+		// ========= [A]ct     =========
+		sequence.Sort(func(a, b int) compare.Order {
+			if a < b {
+				return compare.OrderLess
+			} else if a > b {
+				return compare.OrderGreater
+			} else {
+				return compare.OrderEqual
+			}
+		})
+		// ========= [A]ssert  =========
+		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+	})
+
+	t.Run("Can Get First and Last", func(t *testing.T) {
+		// SCENARIO: Empty sequence
+		t.Run("Empty sequence", func(t *testing.T) {
+			// ========= [A]rrange =========
+			sequence := slice.NewBuiltinBuilder[int]().
+				Build()
+			// ========= [A]ct     =========
+			first := sequence.First()
+			last := sequence.Last()
+			// ========= [A]ssert  =========
+			must.True(t, first.IsNone())
+			must.True(t, last.IsNone())
+		})
+
+		// SCENARIO: Non-empty sequence
+		t.Run("Non-empty sequence", func(t *testing.T) {
+			// ========= [A]rrange =========
+			sequence := slice.NewBuiltinBuilder[int]().
+				From(1, 2, 3).
+				Build()
+			// ========= [A]ct     =========
+			first := sequence.First()
+			last := sequence.Last()
+			// ========= [A]ssert  =========
+			must.True(t, first.IsSome())
+			must.Eq(t, 1, first.Unwrap())
+			must.True(t, last.IsSome())
+			must.Eq(t, 3, last.Unwrap())
 		})
 	})
 }
