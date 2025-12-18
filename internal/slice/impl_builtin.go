@@ -16,7 +16,7 @@ type sliceFromBuiltin[T comparable] struct {
 	inner []T
 }
 
-var _ sequence.Sequence[int] = (*sliceFromBuiltin[int])(nil)
+var _ sequence.Slice[int] = (*sliceFromBuiltin[int])(nil)
 
 func SliceFromBuiltin[T comparable](items ...T) *sliceFromBuiltin[T] {
 	return &sliceFromBuiltin[T]{inner: items}
@@ -69,9 +69,8 @@ func (s *sliceFromBuiltin[T]) ForEach(fn func(T)) {
 	}
 }
 
-func (s *sliceFromBuiltin[T]) Append(item T) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Append(item T) {
 	s.inner = append(s.inner, item)
-	return s
 }
 
 func (s *sliceFromBuiltin[T]) All() iter.Seq[T] {
@@ -94,14 +93,12 @@ func (s *sliceFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
 	}
 }
 
-func (s *sliceFromBuiltin[T]) Extend(items ...T) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Extend(items ...T) {
 	s.inner = append(s.inner, items...)
-	return s
 }
 
-func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence sequence.Sequence[T]) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence sequence.Sequence[T]) {
 	s.inner = append(s.inner, sequence.ToSlice()...)
-	return s
 }
 
 func (s *sliceFromBuiltin[T]) Last() Option[T] {
@@ -112,14 +109,16 @@ func (s *sliceFromBuiltin[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequence.Slice[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
 			filtered = append(filtered, item)
 		}
 	}
-	return &sliceFromBuiltin[T]{inner: filtered}
+	return &sliceFromBuiltin[T]{
+		inner: filtered,
+	}
 }
 
 func (s *sliceFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T] {
@@ -155,9 +154,8 @@ func (s *sliceFromBuiltin[T]) Get(index int) Option[T] {
 	return Some(s.inner[index])
 }
 
-func (s *sliceFromBuiltin[T]) Insert(index int, item T) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Insert(index int, item T) {
 	s.inner = append(s.inner[:index], append([]T{item}, s.inner[index:]...)...)
-	return s
 }
 
 func (s *sliceFromBuiltin[T]) RemoveAt(index int) T {
@@ -166,7 +164,7 @@ func (s *sliceFromBuiltin[T]) RemoveAt(index int) T {
 	return item
 }
 
-func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) {
 	var retained = make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -174,16 +172,14 @@ func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) sequence.Seq
 		}
 	}
 	s.inner = retained
-	return s
 }
 
-func (s *sliceFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) sequence.Sequence[T] {
+func (s *sliceFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) {
 	sort.SliceStable(s.inner, func(i, j int) bool {
 		a := s.inner[i]
 		b := s.inner[j]
 		return fn(a, b).IsLess()
 	})
-	return s
 }
 
 func (s *sliceFromBuiltin[T]) ToSlice() []T {

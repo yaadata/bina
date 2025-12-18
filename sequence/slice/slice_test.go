@@ -224,7 +224,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			From(1, 2, 3, 4, 5, 6).
 			Build()
 		// ========= [A]ct     =========
-		_ = sequence.Retain(func(item int) bool {
+		sequence.Retain(func(item int) bool {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========

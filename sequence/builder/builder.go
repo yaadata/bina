@@ -4,8 +4,8 @@ import (
 	"github.com/yaadata/bina/core/sequence"
 )
 
-type Builder[T any] interface {
-	From(items ...T) Builder[T]
-	Capacity(cap int) Builder[T]
-	Build() sequence.Sequence[T]
+type Builder[T any, Target sequence.Sequence[T]] interface {
+	From(items ...T) Builder[T, Target]
+	Capacity(cap int) Builder[T, Target]
+	Build() Target
 }

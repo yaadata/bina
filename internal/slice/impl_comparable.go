@@ -22,7 +22,7 @@ func SliceFromComparableInterface[T compare.Comparable[T]](items ...T) *sliceCom
 
 // Compile-time interface implementation check for sliceComparableInterface
 func _[T compare.Comparable[T]]() {
-	var _ sequence.Sequence[T] = (*sliceComparableInterface[T])(nil)
+	var _ sequence.Slice[T] = (*sliceComparableInterface[T])(nil)
 }
 
 func (s *sliceComparableInterface[T]) Len() int {
@@ -77,9 +77,8 @@ func (s *sliceComparableInterface[T]) ForEach(fn func(T)) {
 	}
 }
 
-func (s *sliceComparableInterface[T]) Append(item T) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) Append(item T) {
 	s.inner = append(s.inner, item)
-	return s
 }
 
 func (s *sliceComparableInterface[T]) All() iter.Seq[T] {
@@ -102,14 +101,12 @@ func (s *sliceComparableInterface[T]) Enumerate() iter.Seq2[int, T] {
 	}
 }
 
-func (s *sliceComparableInterface[T]) Extend(items ...T) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) Extend(items ...T) {
 	s.inner = append(s.inner, items...)
-	return s
 }
 
-func (s *sliceComparableInterface[T]) ExtendFromSequence(sequence sequence.Sequence[T]) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) ExtendFromSequence(sequence sequence.Sequence[T]) {
 	s.inner = append(s.inner, sequence.ToSlice()...)
-	return s
 }
 
 func (s *sliceComparableInterface[T]) Last() Option[T] {
@@ -120,7 +117,7 @@ func (s *sliceComparableInterface[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceComparableInterface[T]) Filter(predicate shared.Predicate[T]) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) Filter(predicate shared.Predicate[T]) sequence.Slice[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -163,9 +160,8 @@ func (s *sliceComparableInterface[T]) Get(index int) Option[T] {
 	return Some(s.inner[index])
 }
 
-func (s *sliceComparableInterface[T]) Insert(index int, item T) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) Insert(index int, item T) {
 	s.inner = append(s.inner[:index], append([]T{item}, s.inner[index:]...)...)
-	return s
 }
 
 func (s *sliceComparableInterface[T]) RemoveAt(index int) T {
@@ -174,7 +170,7 @@ func (s *sliceComparableInterface[T]) RemoveAt(index int) T {
 	return item
 }
 
-func (s *sliceComparableInterface[T]) Retain(predicate shared.Predicate[T]) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) Retain(predicate shared.Predicate[T]) {
 	var retained = make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -182,16 +178,14 @@ func (s *sliceComparableInterface[T]) Retain(predicate shared.Predicate[T]) sequ
 		}
 	}
 	s.inner = retained
-	return s
 }
 
-func (s *sliceComparableInterface[T]) Sort(fn func(a, b T) compare.Order) sequence.Sequence[T] {
+func (s *sliceComparableInterface[T]) Sort(fn func(a, b T) compare.Order) {
 	sort.SliceStable(s.inner, func(i, j int) bool {
 		a := s.inner[i]
 		b := s.inner[j]
 		return fn(a, b).IsLess()
 	})
-	return s
 }
 
 func (s *sliceComparableInterface[T]) ToSlice() []T {
