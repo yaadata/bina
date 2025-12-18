@@ -20,7 +20,9 @@ type Sequence[T any] interface {
 	FindIndex(predicate shared.Predicate[T]) Option[int]
 	Get(index int) Option[T]
 	Insert(index int, item T)
+	RemoveAt(index int) Option[T]
 	Retain(predicate shared.Predicate[T])
+
 	Sort(fn func(a, b T) compare.Order)
 	ToSlice() []T
 }

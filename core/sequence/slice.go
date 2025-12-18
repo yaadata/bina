@@ -12,5 +12,4 @@ type Slice[T any] interface {
 	Filter(predicate shared.Predicate[T]) Slice[T]
 	First() Option[T]
 	Last() Option[T]
-	RemoveAt(index int) T
 }

@@ -158,10 +158,13 @@ func (s *sliceFromBuiltin[T]) Insert(index int, item T) {
 	s.inner = append(s.inner[:index], append([]T{item}, s.inner[index:]...)...)
 }
 
-func (s *sliceFromBuiltin[T]) RemoveAt(index int) T {
-	var item T
-	s.inner, item = slices.Delete(s.inner, index, index+1), s.inner[index]
-	return item
+func (s *sliceFromBuiltin[T]) RemoveAt(index int) Option[T] {
+	if index < 0 || index >= len(s.inner) {
+		return None[T]()
+	}
+	item := s.inner[index]
+	s.inner = slices.Delete(s.inner, index, index+1)
+	return Some(item)
 }
 
 func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) {

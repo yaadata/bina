@@ -202,20 +202,21 @@ func TestSliceFromBuiltin(t *testing.T) {
 			From(1, 2, 3, 4).
 			Build()
 		// ========= [A]ct     =========
-		sequence.RemoveAt(2)
+		removed := sequence.RemoveAt(2)
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]int{1, 2, 4}, sequence.ToSlice()))
+		must.True(t, removed.IsSome())
+		must.Eq(t, 3, removed.Unwrap())
 	})
 
-	t.Run("Can RemoveAt - panics", func(t *testing.T) {
+	t.Run("Can RemoveAt - returns None", func(t *testing.T) {
 		// ========= [A]rrange =========
 		sequence := slice.NewBuiltinBuilder[int]().
 			From(1, 2, 3, 4).
 			Build()
+		// ========= [A]ct     =========
+		removed := sequence.RemoveAt(20)
 		// ========= [A]ssert  =========
-		must.Panic(t, func() {
-			sequence.RemoveAt(20)
-		})
+		must.True(t, removed.IsNone())
 	})
 
 	t.Run("Can Retain", func(t *testing.T) {
