@@ -1,0 +1,19 @@
+name: Mirror to GitHub
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */12 * * *'  # Every 12 hours
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  mirror:
+    runs-on: docker
+    steps:
+      - name: Clone and push mirror
+        run: |
+          git clone --bare https://codeberg.org/${{ github.repository }}.git repo.git
+          cd repo.git
+          git push --mirror https://x-access-token:${{ secrets.MIRROR_GITHUB_TOKEN }}@github.com/yaadata/${{ github.event.repository.name }}.git
