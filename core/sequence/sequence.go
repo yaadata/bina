@@ -5,9 +5,9 @@ import (
 
 	. "github.com/yaadata/optionsgo"
 
-	"github.com/yaadata/bina/core/collection"
-	"github.com/yaadata/bina/core/compare"
-	"github.com/yaadata/bina/core/shared"
+	"codeberg.org/yaadata/bina/core/collection"
+	"codeberg.org/yaadata/bina/core/compare"
+	"codeberg.org/yaadata/bina/core/shared"
 )
 
 type Sequence[T any] interface {

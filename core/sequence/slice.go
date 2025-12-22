@@ -1,7 +1,7 @@
 package sequence
 
 import (
-	"github.com/yaadata/bina/core/shared"
+	"codeberg.org/yaadata/bina/core/shared"
 	. "github.com/yaadata/optionsgo"
 )
 

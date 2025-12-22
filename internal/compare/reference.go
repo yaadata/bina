@@ -1,6 +1,6 @@
 package compare
 
-import "github.com/yaadata/bina/core/compare"
+import "codeberg.org/yaadata/bina/core/compare"
 
 type ReferenceComparableInt int
 

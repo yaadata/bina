@@ -1,4 +1,4 @@
-module github.com/yaadata/bina
+module codeberg.org/yaadata/bina
 
 go 1.25.4
 

@@ -4,10 +4,10 @@ import (
 	. "github.com/yaadata/optionsgo"
 	"github.com/yaadata/optionsgo/core"
 
-	"github.com/yaadata/bina/core/compare"
-	"github.com/yaadata/bina/core/sequence"
-	internal "github.com/yaadata/bina/internal/slice"
-	"github.com/yaadata/bina/sequence/builder"
+	"codeberg.org/yaadata/bina/core/compare"
+	"codeberg.org/yaadata/bina/core/sequence"
+	internal "codeberg.org/yaadata/bina/internal/slice"
+	"codeberg.org/yaadata/bina/sequence/builder"
 )
 
 func NewBuiltinBuilder[T comparable]() builder.Builder[T, sequence.Slice[T]] {

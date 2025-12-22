@@ -6,8 +6,8 @@ import (
 
 	"github.com/shoenig/test/must"
 
-	"github.com/yaadata/bina/core/compare"
-	"github.com/yaadata/bina/sequence/slice"
+	"codeberg.org/yaadata/bina/core/compare"
+	"codeberg.org/yaadata/bina/sequence/slice"
 )
 
 func TestSliceFromBuiltin(t *testing.T) {

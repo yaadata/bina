@@ -1,6 +1,6 @@
 package collection
 
-import "github.com/yaadata/bina/core/shared"
+import "codeberg.org/yaadata/bina/core/shared"
 
 type Aggregate[T any] interface {
 	Any(predicate shared.Predicate[T]) bool

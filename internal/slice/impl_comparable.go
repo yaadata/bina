@@ -7,9 +7,9 @@ import (
 
 	. "github.com/yaadata/optionsgo"
 
-	"github.com/yaadata/bina/core/compare"
-	"github.com/yaadata/bina/core/sequence"
-	"github.com/yaadata/bina/core/shared"
+	"codeberg.org/yaadata/bina/core/compare"
+	"codeberg.org/yaadata/bina/core/sequence"
+	"codeberg.org/yaadata/bina/core/shared"
 )
 
 type sliceComparableInterface[T compare.Comparable[T]] struct {

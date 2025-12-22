@@ -1,7 +1,7 @@
 package extension
 
 import (
-	"github.com/yaadata/bina/core/compare"
+	"codeberg.org/yaadata/bina/core/compare"
 )
 
 type ComparableType[T any] struct {
