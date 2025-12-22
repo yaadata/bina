@@ -2,8 +2,13 @@ name: Go Tests
 
 on:
   push:
+    paths: &go-paths
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
   pull_request:
     types: [opened, synchronize]
+    paths: *go-paths
 
 jobs:
   test:
