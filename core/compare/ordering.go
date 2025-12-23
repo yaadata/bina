@@ -20,12 +20,20 @@ func (s Order) IsLess() bool {
 	return s == OrderLess
 }
 
+func (s Order) IsLessThanOrEqualTo() bool {
+	return s == OrderEqual || s == OrderLess
+}
+
 func (s Order) IsEqual() bool {
 	return s == OrderEqual
 }
 
 func (s Order) IsGreater() bool {
 	return s == OrderGreater
+}
+
+func (s Order) IsGreaterThanOrEqualTo() bool {
+	return s == OrderEqual || s == OrderGreater
 }
 
 func (s Order) String() Option[string] {

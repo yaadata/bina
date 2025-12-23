@@ -22,7 +22,6 @@ type Sequence[T any] interface {
 	Insert(index int, item T)
 	RemoveAt(index int) Option[T]
 	Retain(predicate shared.Predicate[T])
-
 	Sort(fn func(a, b T) compare.Order)
 	ToSlice() []T
 }
