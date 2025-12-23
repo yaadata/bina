@@ -5,7 +5,7 @@ import (
 	"github.com/yaadata/optionsgo/core"
 
 	"codeberg.org/yaadata/bina/core/compare"
-	internal "codeberg.org/yaadata/bina/internal/slice"
+	"codeberg.org/yaadata/bina/internal/slice"
 	"codeberg.org/yaadata/bina/sequence"
 	"codeberg.org/yaadata/bina/sequence/builder"
 )
@@ -33,7 +33,7 @@ func (b *builtinBuilder[T]) Capacity(cap int) builder.Builder[T, sequence.Slice[
 }
 
 func (b *builtinBuilder[T]) Build() sequence.Slice[T] {
-	return internal.SliceFromBuiltin[T](b.from.OrElse(func() core.Option[[]T] {
+	return slice.SliceFromBuiltin[T](b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)
 }
@@ -61,7 +61,7 @@ func (b *comparableBuilder[T]) Capacity(cap int) builder.Builder[T, sequence.Sli
 }
 
 func (b *comparableBuilder[T]) Build() sequence.Slice[T] {
-	return internal.SliceFromComparableInterface[T](b.from.OrElse(func() core.Option[[]T] {
+	return slice.SliceFromComparableInterface[T](b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)
 }
