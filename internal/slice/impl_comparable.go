@@ -8,8 +8,8 @@ import (
 	. "github.com/yaadata/optionsgo"
 
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/core/sequence"
-	"codeberg.org/yaadata/bina/core/shared"
+	"codeberg.org/yaadata/bina/core/predicate"
+	"codeberg.org/yaadata/bina/sequence"
 )
 
 type sliceComparableInterface[T compare.Comparable[T]] struct {
@@ -48,11 +48,11 @@ func (s *sliceComparableInterface[T]) Contains(element T) bool {
 	return false
 }
 
-func (s *sliceComparableInterface[T]) Any(predicate shared.Predicate[T]) bool {
+func (s *sliceComparableInterface[T]) Any(predicate predicate.Predicate[T]) bool {
 	return slices.ContainsFunc(s.inner, predicate)
 }
 
-func (s *sliceComparableInterface[T]) Count(predicate shared.Predicate[T]) int {
+func (s *sliceComparableInterface[T]) Count(predicate predicate.Predicate[T]) int {
 	var count int
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -62,7 +62,7 @@ func (s *sliceComparableInterface[T]) Count(predicate shared.Predicate[T]) int {
 	return count
 }
 
-func (s *sliceComparableInterface[T]) Every(predicate shared.Predicate[T]) bool {
+func (s *sliceComparableInterface[T]) Every(predicate predicate.Predicate[T]) bool {
 	for _, item := range s.inner {
 		if !predicate(item) {
 			return false
@@ -117,7 +117,7 @@ func (s *sliceComparableInterface[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceComparableInterface[T]) Filter(predicate shared.Predicate[T]) sequence.Slice[T] {
+func (s *sliceComparableInterface[T]) Filter(predicate predicate.Predicate[T]) sequence.Slice[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -127,7 +127,7 @@ func (s *sliceComparableInterface[T]) Filter(predicate shared.Predicate[T]) sequ
 	return &sliceComparableInterface[T]{inner: filtered}
 }
 
-func (s *sliceComparableInterface[T]) Find(predicate shared.Predicate[T]) Option[T] {
+func (s *sliceComparableInterface[T]) Find(predicate predicate.Predicate[T]) Option[T] {
 	for _, item := range s.inner {
 		if predicate(item) {
 			Some(item)
@@ -136,7 +136,7 @@ func (s *sliceComparableInterface[T]) Find(predicate shared.Predicate[T]) Option
 	return None[T]()
 }
 
-func (s *sliceComparableInterface[T]) FindIndex(predicate shared.Predicate[T]) Option[int] {
+func (s *sliceComparableInterface[T]) FindIndex(predicate predicate.Predicate[T]) Option[int] {
 	for index, item := range s.inner {
 		if predicate(item) {
 			Some(index)
@@ -173,7 +173,7 @@ func (s *sliceComparableInterface[T]) RemoveAt(index int) Option[T] {
 	return Some(item)
 }
 
-func (s *sliceComparableInterface[T]) Retain(predicate shared.Predicate[T]) {
+func (s *sliceComparableInterface[T]) Retain(predicate predicate.Predicate[T]) {
 	var retained = make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {

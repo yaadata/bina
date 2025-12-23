@@ -3,7 +3,7 @@ package maps
 import (
 	"iter"
 
-	"codeberg.org/yaadata/bina/core/sequence"
+	"codeberg.org/yaadata/bina/sequence"
 	. "github.com/yaadata/optionsgo"
 )
 

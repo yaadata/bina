@@ -1,7 +1,7 @@
 package builder
 
 import (
-	"codeberg.org/yaadata/bina/core/sequence"
+	"codeberg.org/yaadata/bina/sequence"
 )
 
 type Builder[T any, Target sequence.Sequence[T]] interface {

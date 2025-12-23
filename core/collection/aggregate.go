@@ -1,10 +1,12 @@
 package collection
 
-import "codeberg.org/yaadata/bina/core/shared"
+import (
+	"codeberg.org/yaadata/bina/core/predicate"
+)
 
 type Aggregate[T any] interface {
-	Any(predicate shared.Predicate[T]) bool
-	Count(predicate shared.Predicate[T]) int
-	Every(predicate shared.Predicate[T]) bool
+	Any(predicate predicate.Predicate[T]) bool
+	Count(predicate predicate.Predicate[T]) int
+	Every(predicate predicate.Predicate[T]) bool
 	ForEach(fn func(T))
 }

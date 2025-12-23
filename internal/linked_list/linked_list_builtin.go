@@ -6,8 +6,8 @@ import (
 	. "github.com/yaadata/optionsgo"
 
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/core/sequence"
-	"codeberg.org/yaadata/bina/core/shared"
+	"codeberg.org/yaadata/bina/core/predicate"
+	"codeberg.org/yaadata/bina/sequence"
 )
 
 type linkedlistFromBuiltin[T comparable] struct {
@@ -39,7 +39,7 @@ func (s *linkedlistFromBuiltin[T]) Contains(element T) bool {
 	return false
 }
 
-func (s *linkedlistFromBuiltin[T]) Any(predicate shared.Predicate[T]) bool {
+func (s *linkedlistFromBuiltin[T]) Any(predicate predicate.Predicate[T]) bool {
 	for value := range s.All() {
 		if predicate(value) {
 			return true
@@ -48,7 +48,7 @@ func (s *linkedlistFromBuiltin[T]) Any(predicate shared.Predicate[T]) bool {
 	return false
 }
 
-func (s *linkedlistFromBuiltin[T]) Count(predicate shared.Predicate[T]) int {
+func (s *linkedlistFromBuiltin[T]) Count(predicate predicate.Predicate[T]) int {
 	var result int
 	for value := range s.All() {
 		if predicate(value) {
@@ -58,7 +58,7 @@ func (s *linkedlistFromBuiltin[T]) Count(predicate shared.Predicate[T]) int {
 	return result
 }
 
-func (s *linkedlistFromBuiltin[T]) Every(predicate shared.Predicate[T]) bool {
+func (s *linkedlistFromBuiltin[T]) Every(predicate predicate.Predicate[T]) bool {
 	for value := range s.All() {
 		if !predicate(value) {
 			return false
@@ -129,7 +129,7 @@ func (s *linkedlistFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
 	}
 }
 
-func (s *linkedlistFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T] {
+func (s *linkedlistFromBuiltin[T]) Find(predicate predicate.Predicate[T]) Option[T] {
 	for value := range s.All() {
 		if predicate(value) {
 			return Some(value)
@@ -138,7 +138,7 @@ func (s *linkedlistFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T]
 	return None[T]()
 }
 
-func (s *linkedlistFromBuiltin[T]) FindIndex(predicate shared.Predicate[T]) Option[int] {
+func (s *linkedlistFromBuiltin[T]) FindIndex(predicate predicate.Predicate[T]) Option[int] {
 	for index, value := range s.Enumerate() {
 		if predicate(value) {
 			return Some(index)
@@ -183,7 +183,7 @@ func (s *linkedlistFromBuiltin[T]) Insert(index int, item T) {
 	}
 }
 
-func (s *linkedlistFromBuiltin[T]) Retain(predicate shared.Predicate[T]) {
+func (s *linkedlistFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
 	if s.len == 0 {
 		return
 	}

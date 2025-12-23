@@ -1,6 +1,6 @@
 package linkedlist
 
-import "codeberg.org/yaadata/bina/core/sequence"
+import "codeberg.org/yaadata/bina/sequence"
 
 type singlyLinkedListNode[T any] struct {
 	value T

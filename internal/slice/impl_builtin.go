@@ -8,8 +8,8 @@ import (
 	. "github.com/yaadata/optionsgo"
 
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/core/sequence"
-	"codeberg.org/yaadata/bina/core/shared"
+	"codeberg.org/yaadata/bina/core/predicate"
+	"codeberg.org/yaadata/bina/sequence"
 )
 
 type sliceFromBuiltin[T comparable] struct {
@@ -40,11 +40,11 @@ func (s *sliceFromBuiltin[T]) Contains(element T) bool {
 	return slices.Contains(s.inner, element)
 }
 
-func (s *sliceFromBuiltin[T]) Any(predicate shared.Predicate[T]) bool {
+func (s *sliceFromBuiltin[T]) Any(predicate predicate.Predicate[T]) bool {
 	return slices.ContainsFunc(s.inner, predicate)
 }
 
-func (s *sliceFromBuiltin[T]) Count(predicate shared.Predicate[T]) int {
+func (s *sliceFromBuiltin[T]) Count(predicate predicate.Predicate[T]) int {
 	var count int
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -54,7 +54,7 @@ func (s *sliceFromBuiltin[T]) Count(predicate shared.Predicate[T]) int {
 	return count
 }
 
-func (s *sliceFromBuiltin[T]) Every(predicate shared.Predicate[T]) bool {
+func (s *sliceFromBuiltin[T]) Every(predicate predicate.Predicate[T]) bool {
 	for _, item := range s.inner {
 		if !predicate(item) {
 			return false
@@ -109,7 +109,7 @@ func (s *sliceFromBuiltin[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequence.Slice[T] {
+func (s *sliceFromBuiltin[T]) Filter(predicate predicate.Predicate[T]) sequence.Slice[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {
@@ -121,7 +121,7 @@ func (s *sliceFromBuiltin[T]) Filter(predicate shared.Predicate[T]) sequence.Sli
 	}
 }
 
-func (s *sliceFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T] {
+func (s *sliceFromBuiltin[T]) Find(predicate predicate.Predicate[T]) Option[T] {
 	for _, item := range s.inner {
 		if predicate(item) {
 			return Some(item)
@@ -130,7 +130,7 @@ func (s *sliceFromBuiltin[T]) Find(predicate shared.Predicate[T]) Option[T] {
 	return None[T]()
 }
 
-func (s *sliceFromBuiltin[T]) FindIndex(predicate shared.Predicate[T]) Option[int] {
+func (s *sliceFromBuiltin[T]) FindIndex(predicate predicate.Predicate[T]) Option[int] {
 	for index, item := range s.inner {
 		if predicate(item) {
 			return Some(index)
@@ -167,7 +167,7 @@ func (s *sliceFromBuiltin[T]) RemoveAt(index int) Option[T] {
 	return Some(item)
 }
 
-func (s *sliceFromBuiltin[T]) Retain(predicate shared.Predicate[T]) {
+func (s *sliceFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
 	var retained = make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {

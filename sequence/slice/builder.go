@@ -5,8 +5,8 @@ import (
 	"github.com/yaadata/optionsgo/core"
 
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/core/sequence"
 	internal "codeberg.org/yaadata/bina/internal/slice"
+	"codeberg.org/yaadata/bina/sequence"
 	"codeberg.org/yaadata/bina/sequence/builder"
 )
 
