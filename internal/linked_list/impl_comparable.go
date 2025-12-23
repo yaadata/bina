@@ -38,6 +38,8 @@ func (s *linkedListFromComparable[T]) IsEmpty() bool {
 
 func (s *linkedListFromComparable[T]) Clear() {
 	s.head = nil
+	s.tail = nil
+	s.len = 0
 }
 
 func (s *linkedListFromComparable[T]) Contains(element T) bool {
@@ -202,6 +204,8 @@ func (s *linkedListFromComparable[T]) Retain(predicate predicate.Predicate[T]) {
 		if !predicate(node.value) {
 			previousNode.next = node.next
 			s.len--
+		} else {
+			previousNode = node
 		}
 	}
 	if !predicate(s.head.value) {
@@ -210,6 +214,7 @@ func (s *linkedListFromComparable[T]) Retain(predicate predicate.Predicate[T]) {
 			s.len = 0
 		} else {
 			s.head = s.head.next
+			s.len--
 		}
 	}
 }
@@ -220,7 +225,7 @@ func (s *linkedListFromComparable[T]) Sort(fn func(a, b T) compare.Order) {
 }
 
 func (s *linkedListFromComparable[T]) ToSlice() []T {
-	res := make([]T, s.len)
+	res := make([]T, 0, s.len)
 	for value := range s.All() {
 		res = append(res, value)
 	}
@@ -270,8 +275,13 @@ func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.Linke
 			var res sequence.LinkedListNode[T] = node
 			return Some(res)
 		}
+		currentIndex++
 	}
 	return None[sequence.LinkedListNode[T]]()
+}
+
+func (s *linkedListFromComparable[T]) Head() Option[sequence.LinkedListNode[T]] {
+	return optionalNode(s.head)
 }
 
 func (s *linkedListFromComparable[T]) Prepend(value T) {
@@ -286,4 +296,9 @@ func (s *linkedListFromComparable[T]) Prepend(value T) {
 		s.head = newHead
 		s.tail = newHead
 	}
+	s.len++
+}
+
+func (s *linkedListFromComparable[T]) Tail() Option[sequence.LinkedListNode[T]] {
+	return optionalNode(s.tail)
 }
