@@ -368,6 +368,8 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, sequence.Len())
 			must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
+			head := sequence.Head()
+			must.Eq(t, 1, head.Unwrap().Value())
 		})
 
 		t.Run("Can Prepend to empty list", func(t *testing.T) {
@@ -427,6 +429,9 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, sequence.Len())
 			must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
+			tail := sequence.Tail()
+			must.True(t, tail.IsSome())
+			must.Eq(t, 4, tail.Unwrap().Value())
 		})
 	})
 }
