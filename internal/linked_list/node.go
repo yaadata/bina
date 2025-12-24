@@ -6,8 +6,8 @@ import (
 )
 
 type linkedListNode[T any] struct {
-	value T
 	next  *linkedListNode[T]
+	value T
 }
 
 var _ sequence.LinkedListNode[int] = (*linkedListNode[int])(nil)
