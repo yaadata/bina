@@ -1,4 +1,4 @@
-package linkedlist
+package doublylinkedlist
 
 import (
 	"iter"
@@ -16,9 +16,9 @@ type linkedlistFromBuiltin[T comparable] struct {
 	len  int
 }
 
-var _ sequence.LinkedList[int, sequence.SinglyLinkedListNode[int]] = (*linkedlistFromBuiltin[int])(nil)
+var _ sequence.LinkedList[int, sequence.DoublyLinkedListNode[int]] = (*linkedlistFromBuiltin[int])(nil)
 
-func LinkedListFromBuiltin[T comparable]() sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]] {
+func LinkedListFromBuiltin[T comparable]() sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]] {
 	return &linkedlistFromBuiltin[T]{
 		head: nil,
 		tail: nil,
@@ -170,10 +170,7 @@ func (s *linkedlistFromBuiltin[T]) Insert(index int, item T) {
 	if index < 0 {
 		panic("index cannot be less than zero")
 	}
-	newNode := &linkedListNode[T]{
-		value: item,
-		next:  nil,
-	}
+	newNode := newLinkedListNode(item)
 	if index == 0 {
 		s.head, s.tail = newNode, newNode
 		s.len++
@@ -183,8 +180,8 @@ func (s *linkedlistFromBuiltin[T]) Insert(index int, item T) {
 	previousNode := s.head
 	for node := previousNode.next; node != nil; node = node.next {
 		if index == currentIndex {
-			previousNode.next = newNode
-			newNode.next = node
+			previousNode.setNext(newNode)
+			newNode.setNext(node)
 			s.len++
 			return
 		}
@@ -200,7 +197,7 @@ func (s *linkedlistFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
 	previousNode := s.head
 	for node := previousNode.next; node != nil; node = node.next {
 		if !predicate(node.value) {
-			previousNode.next = node.next
+			previousNode.setNext(node.next)
 			s.len--
 		} else {
 			previousNode = node
@@ -211,7 +208,7 @@ func (s *linkedlistFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
 			s.head, s.tail = nil, nil
 			s.len = 0
 		} else {
-			s.head = s.head.next
+			s.head.setNext(s.head.next)
 			s.len--
 		}
 	}
@@ -237,7 +234,7 @@ func (s *linkedlistFromBuiltin[T]) Extend(values ...T) {
 			next:  nil,
 		}
 		if s.tail != nil {
-			s.tail.next = nextNode
+			s.tail.setNext(nextNode)
 			s.tail = nextNode
 			s.len++
 		} else {
@@ -255,7 +252,7 @@ func (s *linkedlistFromBuiltin[T]) ExtendFromSequence(seq sequence.Sequence[T]) 
 			next:  nil,
 		}
 		if s.tail != nil {
-			s.tail.next = nextNode
+			s.tail.setNext(nextNode)
 			s.tail = nextNode
 			s.len++
 		} else {
@@ -266,19 +263,19 @@ func (s *linkedlistFromBuiltin[T]) ExtendFromSequence(seq sequence.Sequence[T]) 
 	}
 }
 
-func (s *linkedlistFromBuiltin[T]) GetNodeAt(index int) Option[sequence.SinglyLinkedListNode[T]] {
+func (s *linkedlistFromBuiltin[T]) GetNodeAt(index int) Option[sequence.DoublyLinkedListNode[T]] {
 	currentIndex := 0
 	for node := s.head; node != nil; node = node.next {
 		if currentIndex == index {
-			var res sequence.SinglyLinkedListNode[T] = node
+			var res sequence.DoublyLinkedListNode[T] = node
 			return Some(res)
 		}
 		currentIndex++
 	}
-	return None[sequence.SinglyLinkedListNode[T]]()
+	return None[sequence.DoublyLinkedListNode[T]]()
 }
 
-func (s *linkedlistFromBuiltin[T]) Head() Option[sequence.SinglyLinkedListNode[T]] {
+func (s *linkedlistFromBuiltin[T]) Head() Option[sequence.DoublyLinkedListNode[T]] {
 	return optionalNode(s.head)
 }
 
@@ -297,6 +294,6 @@ func (s *linkedlistFromBuiltin[T]) Prepend(value T) {
 	s.len++
 }
 
-func (s *linkedlistFromBuiltin[T]) Tail() Option[sequence.SinglyLinkedListNode[T]] {
+func (s *linkedlistFromBuiltin[T]) Tail() Option[sequence.DoublyLinkedListNode[T]] {
 	return optionalNode(s.tail)
 }

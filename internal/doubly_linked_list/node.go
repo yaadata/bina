@@ -11,10 +11,23 @@ type linkedListNode[T any] struct {
 	value    T
 }
 
+func newLinkedListNode[T any](value T) *linkedListNode[T] {
+	return &linkedListNode[T]{
+		next:     nil,
+		previous: nil,
+		value:    value,
+	}
+}
+
 var _ sequence.DoublyLinkedListNode[int] = (*linkedListNode[int])(nil)
 
 func (l *linkedListNode[T]) Next() Option[sequence.DoublyLinkedListNode[T]] {
 	return optionalNode(l.next)
+}
+
+func (l *linkedListNode[T]) setNext(next *linkedListNode[T]) {
+	l.next = next
+	next.previous = l
 }
 
 func (l *linkedListNode[T]) Previous() Option[sequence.DoublyLinkedListNode[T]] {

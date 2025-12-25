@@ -20,14 +20,14 @@ func (l *linkedListNode[T]) SetValue(value T) {
 	l.value = value
 }
 
-func (l *linkedListNode[T]) Next() Option[sequence.LinkedListNode[T]] {
+func (l *linkedListNode[T]) Next() Option[sequence.SinglyLinkedListNode[T]] {
 	return optionalNode(l.next)
 }
 
-func optionalNode[T any](l *linkedListNode[T]) Option[sequence.LinkedListNode[T]] {
+func optionalNode[T any](l *linkedListNode[T]) Option[sequence.SinglyLinkedListNode[T]] {
 	if l == nil {
-		return None[sequence.LinkedListNode[T]]()
+		return None[sequence.SinglyLinkedListNode[T]]()
 	}
-	var node sequence.LinkedListNode[T] = l
+	var node sequence.SinglyLinkedListNode[T] = l
 	return Some(node)
 }

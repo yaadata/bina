@@ -5,8 +5,7 @@ import (
 )
 
 type DoublyLinkedListNode[T any] interface {
+	LinkedListNode[T]
 	Next() Option[DoublyLinkedListNode[T]]
 	Previous() Option[DoublyLinkedListNode[T]]
-	SetValue(value T)
-	Value() T
 }

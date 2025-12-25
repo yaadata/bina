@@ -15,7 +15,7 @@ type linkedListFromComparable[T compare.Comparable[T]] struct {
 	len  int
 }
 
-func LinkedListFromComparable[T compare.Comparable[T]]() sequence.LinkedList[T] {
+func LinkedListFromComparable[T compare.Comparable[T]]() sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]] {
 	return &linkedListFromComparable[T]{
 		head: nil,
 		tail: nil,
@@ -25,7 +25,7 @@ func LinkedListFromComparable[T compare.Comparable[T]]() sequence.LinkedList[T] 
 
 // Compile-time interface implementation check for sliceComparableInterface
 func _[T compare.Comparable[T]]() {
-	var _ sequence.LinkedList[T] = (*linkedListFromComparable[T])(nil)
+	var _ sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]] = (*linkedListFromComparable[T])(nil)
 }
 
 func (s *linkedListFromComparable[T]) Len() int {
@@ -268,19 +268,19 @@ func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T
 	}
 }
 
-func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.LinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.SinglyLinkedListNode[T]] {
 	currentIndex := 0
 	for node := s.head; node != nil; node = node.next {
 		if currentIndex == index {
-			var res sequence.LinkedListNode[T] = node
+			var res sequence.SinglyLinkedListNode[T] = node
 			return Some(res)
 		}
 		currentIndex++
 	}
-	return None[sequence.LinkedListNode[T]]()
+	return None[sequence.SinglyLinkedListNode[T]]()
 }
 
-func (s *linkedListFromComparable[T]) Head() Option[sequence.LinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) Head() Option[sequence.SinglyLinkedListNode[T]] {
 	return optionalNode(s.head)
 }
 
@@ -299,6 +299,6 @@ func (s *linkedListFromComparable[T]) Prepend(value T) {
 	s.len++
 }
 
-func (s *linkedListFromComparable[T]) Tail() Option[sequence.LinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) Tail() Option[sequence.SinglyLinkedListNode[T]] {
 	return optionalNode(s.tail)
 }
