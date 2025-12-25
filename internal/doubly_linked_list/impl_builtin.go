@@ -111,7 +111,7 @@ func (s *linkedlistFromBuiltin[T]) Append(item T) {
 		s.head = node
 		s.tail = node
 	} else {
-		s.tail.next = node
+		s.tail.setNext(node)
 		s.tail = node
 	}
 	s.len++
@@ -208,7 +208,8 @@ func (s *linkedlistFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
 			s.head, s.tail = nil, nil
 			s.len = 0
 		} else {
-			s.head.setNext(s.head.next)
+			s.head = s.head.next
+			s.head.previous = nil
 			s.len--
 		}
 	}

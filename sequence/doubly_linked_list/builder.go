@@ -1,4 +1,4 @@
-package doublylinkedlistnode
+package doublylinkedlist
 
 import (
 	. "github.com/yaadata/optionsgo"
