@@ -112,7 +112,6 @@ func (s *linkedlistFromBuiltin[T]) Append(item T) {
 		s.head = node
 		s.tail = node
 	} else {
-		node.next = s.head
 		s.tail.setNext(node)
 		s.tail = node
 	}
@@ -180,7 +179,7 @@ func (s *linkedlistFromBuiltin[T]) Insert(index int, item T) {
 	}
 	currentIndex := 1
 	previousNode := s.head
-	for node := s.head; node != nil && node.next != s.head; node = node.next {
+	for node := previousNode.next; node != nil && node.next != s.head; node = node.next {
 		if index == currentIndex {
 			previousNode.setNext(newNode)
 			newNode.setNext(node)

@@ -107,8 +107,9 @@ func (s *linkedListFromComparable[T]) RemoveAt(position int) Option[T] {
 
 func (s *linkedListFromComparable[T]) Append(item T) {
 	node := &linkedListNode[T]{
-		value: item,
-		next:  nil,
+		next:     nil,
+		previous: nil,
+		value:    item,
 	}
 	if s.head == nil {
 		s.head = node
