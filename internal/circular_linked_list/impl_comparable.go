@@ -87,22 +87,33 @@ func (s *linkedListFromComparable[T]) ForEach(fn func(value T)) {
 }
 
 func (s *linkedListFromComparable[T]) RemoveAt(position int) Option[T] {
-	var currentIndex int
-	var previous *linkedListNode[T]
-	for node := s.head; node != nil && node.next != s.head; node = node.next {
-		if currentIndex == position {
-			if previous == nil {
-				s.head = node.next
-			} else {
-				previous.next = node.next
-			}
-			s.len--
-			return Some(node.value)
-		}
-		previous = node
-		currentIndex++
+	if position < 0 || position >= s.len {
+		return None[T]()
 	}
-	return None[T]()
+	var previous *linkedListNode[T]
+	node := s.head
+	for i := 0; i < position; i++ {
+		previous = node
+		node = node.next
+	}
+	value := node.value
+	if previous == nil {
+		s.head = node.next
+		if s.tail != nil {
+			s.tail.setNext(s.head)
+		}
+	} else {
+		previous.next = node.next
+		if node == s.tail {
+			s.tail = previous
+		}
+	}
+	s.len--
+	if s.len == 0 {
+		s.head = nil
+		s.tail = nil
+	}
+	return Some(value)
 }
 
 func (s *linkedListFromComparable[T]) Append(item T) {
@@ -117,28 +128,31 @@ func (s *linkedListFromComparable[T]) Append(item T) {
 	} else {
 		s.tail.setNext(node)
 		s.tail = node
+		s.tail.setNext(s.head)
 	}
 	s.len++
 }
 
 func (s *linkedListFromComparable[T]) All() iter.Seq[T] {
 	return func(yield func(T) bool) {
-		for node := s.head; node != nil && node.next != s.head; node = node.next {
+		node := s.head
+		for i := 0; i < s.len; i++ {
 			if !yield(node.value) {
 				return
 			}
+			node = node.next
 		}
 	}
 }
 
 func (s *linkedListFromComparable[T]) Enumerate() iter.Seq2[int, T] {
 	return func(yield func(int, T) bool) {
-		index := 0
-		for node := s.head; node != nil && node.next != s.head; node = node.next {
-			if !yield(index, node.value) {
+		node := s.head
+		for i := 0; i < s.len; i++ {
+			if !yield(i, node.value) {
 				return
 			}
-			index++
+			node = node.next
 		}
 	}
 }
@@ -171,57 +185,87 @@ func (s *linkedListFromComparable[T]) Get(targetIndex int) Option[T] {
 }
 
 func (s *linkedListFromComparable[T]) Insert(index int, item T) {
-	if index < 0 {
-		panic("index cannot be less than zero")
+	if index < 0 || index > s.len {
+		panic("index out of bounds")
 	}
 	newNode := newLinkedListNode(item)
 	if index == 0 {
-		s.head, s.tail = newNode, newNode
+		if s.head == nil {
+			s.head = newNode
+			s.tail = newNode
+		} else {
+			newNode.setNext(s.head)
+			s.head = newNode
+			s.tail.setNext(s.head)
+		}
 		s.len++
 		return
 	}
-	currentIndex := 1
-	previousNode := s.head
-	for node := previousNode.next; node != nil && node.next != s.head; node = node.next {
-		if index == currentIndex {
-			previousNode.setNext(newNode)
-			newNode.setNext(node)
-			s.len++
-			return
-		}
-		previousNode = node
-		currentIndex++
+	if index == s.len {
+		s.tail.setNext(newNode)
+		s.tail = newNode
+		s.tail.setNext(s.head)
+		s.len++
+		return
 	}
+	previousNode := s.head
+	for i := 0; i < index-1; i++ {
+		previousNode = previousNode.next
+	}
+	newNode.setNext(previousNode.next)
+	previousNode.setNext(newNode)
+	s.len++
 }
 
 func (s *linkedListFromComparable[T]) Retain(predicate predicate.Predicate[T]) {
 	if s.len == 0 {
 		return
 	}
+	// Handle head removal first - find new head
+	for s.head != nil && !predicate(s.head.value) {
+		if s.head == s.tail {
+			s.head, s.tail = nil, nil
+			s.len = 0
+			return
+		}
+		s.head = s.head.next
+		s.len--
+	}
+	if s.head == nil {
+		return
+	}
+	// Now iterate through the rest
 	previousNode := s.head
-	for node := previousNode.next; node != nil && node.next != nil; node = node.next {
+	count := s.len - 1
+	node := s.head.next
+	for i := 0; i < count; i++ {
+		next := node.next
 		if !predicate(node.value) {
-			previousNode.setNext(node.next)
+			previousNode.next = next
+			if node == s.tail {
+				s.tail = previousNode
+			}
 			s.len--
 		} else {
 			previousNode = node
 		}
+		node = next
 	}
-	if !predicate(s.head.value) {
-		if s.head == s.tail {
-			s.head, s.tail = nil, nil
-			s.len = 0
-		} else {
-			s.head = s.head.next
-			s.head.previous = nil
-			s.len--
-		}
+	// Restore circular link
+	if s.tail != nil {
+		s.tail.setNext(s.head)
 	}
 }
 
 func (s *linkedListFromComparable[T]) Sort(fn func(a, b T) compare.Order) {
+	if s.tail != nil {
+		s.tail.next = nil // Break circular link before sorting
+	}
 	s.head = mergeSort(s.head, fn)
 	s.tail = tail(s.head)
+	if s.tail != nil {
+		s.tail.setNext(s.head) // Restore circular link
+	}
 }
 
 func (s *linkedListFromComparable[T]) ToSlice() []T {
@@ -241,6 +285,7 @@ func (s *linkedListFromComparable[T]) Extend(values ...T) {
 		if s.tail != nil {
 			s.tail.setNext(nextNode)
 			s.tail = nextNode
+			s.tail.setNext(s.head)
 			s.len++
 		} else {
 			s.head = nextNode
@@ -259,6 +304,7 @@ func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T
 		if s.tail != nil {
 			s.tail.setNext(nextNode)
 			s.tail = nextNode
+			s.tail.setNext(s.head)
 			s.len++
 		} else {
 			s.head = nextNode
@@ -269,15 +315,15 @@ func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T
 }
 
 func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.DoublyLinkedListNode[T]] {
-	currentIndex := 0
-	for node := s.head; node != nil && node.next != s.head; node = node.next {
-		if currentIndex == index {
-			var res sequence.DoublyLinkedListNode[T] = node
-			return Some(res)
-		}
-		currentIndex++
+	if index < 0 || index >= s.len {
+		return None[sequence.DoublyLinkedListNode[T]]()
 	}
-	return None[sequence.DoublyLinkedListNode[T]]()
+	node := s.head
+	for i := 0; i < index; i++ {
+		node = node.next
+	}
+	var res sequence.DoublyLinkedListNode[T] = node
+	return Some(res)
 }
 
 func (s *linkedListFromComparable[T]) Head() Option[sequence.DoublyLinkedListNode[T]] {
@@ -290,8 +336,9 @@ func (s *linkedListFromComparable[T]) Prepend(value T) {
 		next:  nil,
 	}
 	if s.head != nil {
-		newHead.next = s.head
+		newHead.setNext(s.head)
 		s.head = newHead
+		s.tail.setNext(s.head) // Maintain circular link
 	} else {
 		s.head = newHead
 		s.tail = newHead

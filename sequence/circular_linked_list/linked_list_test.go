@@ -77,6 +77,10 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
 		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		tail := sequence.Tail()
+		head := sequence.Head()
+		must.True(t, tail.Unwrap().Next().Equal(head))
+		must.True(t, head.Unwrap().Previous().Equal(tail))
 	})
 
 	t.Run("Can Extend From Sequence", func(t *testing.T) {
@@ -92,6 +96,10 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
 		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		tail := sequence.Tail()
+		head := sequence.Head()
+		must.True(t, tail.Unwrap().Next().Equal(head))
+		must.True(t, head.Unwrap().Previous().Equal(tail))
 	})
 
 	t.Run("Find returns Option", func(t *testing.T) {
@@ -370,6 +378,9 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
 			head := sequence.Head()
 			must.Eq(t, 1, head.Unwrap().Value())
+			tail := sequence.Tail()
+			must.True(t, head.Unwrap().Previous().Equal(tail))
+			must.True(t, tail.Unwrap().Next().Equal(head))
 		})
 
 		t.Run("Can Prepend to empty list", func(t *testing.T) {
@@ -432,6 +443,9 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			tail := sequence.Tail()
 			must.True(t, tail.IsSome())
 			must.Eq(t, 4, tail.Unwrap().Value())
+			head := sequence.Head()
+			must.True(t, tail.Unwrap().Next().Equal(head))
+			must.True(t, head.Unwrap().Previous().Equal(tail))
 		})
 	})
 }
@@ -866,6 +880,9 @@ func TestLinkedListFromComparable(t *testing.T) {
 			must.True(t, tail.IsSome())
 			must.True(t, tail.Unwrap().Previous().IsSome())
 			must.Eq(t, 4, tail.Unwrap().Value())
+			head := sequence.Head()
+			must.True(t, tail.Unwrap().Next().Equal(head))
+			must.True(t, head.Unwrap().Previous().Equal(tail))
 		})
 	})
 }
