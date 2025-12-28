@@ -18,15 +18,6 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		must.Eq(t, 0, sequence.Len())
 	})
 
-	t.Run("Can build with capacity (no-op for linked list)", func(t *testing.T) {
-		// ========= [A]rrange =========
-		sequence := linkedlist.NewBuiltinBuilder[int]().
-			Capacity(10).
-			Build()
-		// ========= [A]ssert  =========
-		must.Eq(t, 0, sequence.Len())
-	})
-
 	t.Run("Can build from items", func(t *testing.T) {
 		// ========= [A]rrange =========
 		sequence := linkedlist.NewBuiltinBuilder[int]().
@@ -460,15 +451,6 @@ func TestLinkedListFromComparable(t *testing.T) {
 	t.Run("Can build", func(t *testing.T) {
 		// ========= [A]rrange =========
 		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
-			Build()
-		// ========= [A]ssert  =========
-		must.Eq(t, 0, sequence.Len())
-	})
-
-	t.Run("Can build with capacity (no-op for linked list)", func(t *testing.T) {
-		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
-			Capacity(10).
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())

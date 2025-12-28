@@ -4,8 +4,7 @@ import (
 	"codeberg.org/yaadata/bina/sequence"
 )
 
-type Builder[T any, Target sequence.Sequence[T]] interface {
-	From(items ...T) Builder[T, Target]
-	Capacity(cap int) Builder[T, Target]
+type BaseBuilder[T any, Target sequence.Sequence[T], Self any] interface {
+	From(items ...T) Self
 	Build() Target
 }
