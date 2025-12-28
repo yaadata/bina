@@ -92,7 +92,7 @@ func (s *linkedListFromComparable[T]) RemoveAt(position int) Option[T] {
 	}
 	var previous *linkedListNode[T]
 	node := s.head
-	for i := 0; i < position; i++ {
+	for range position {
 		previous = node
 		node = node.next
 	}
@@ -100,7 +100,7 @@ func (s *linkedListFromComparable[T]) RemoveAt(position int) Option[T] {
 	if previous == nil {
 		s.head = node.next
 		if s.tail != nil {
-			s.tail.setNext(s.head)
+			connectNodes(s.tail, s.head)
 		}
 	} else {
 		previous.next = node.next
@@ -117,18 +117,14 @@ func (s *linkedListFromComparable[T]) RemoveAt(position int) Option[T] {
 }
 
 func (s *linkedListFromComparable[T]) Append(item T) {
-	node := &linkedListNode[T]{
-		next:     nil,
-		previous: nil,
-		value:    item,
-	}
+	node := newLinkedListNode(item)
 	if s.head == nil {
 		s.head = node
 		s.tail = node
 	} else {
-		s.tail.setNext(node)
+		connectNodes(s.tail, node)
+		connectNodes(node, s.head)
 		s.tail = node
-		s.tail.setNext(s.head)
 	}
 	s.len++
 }
@@ -193,18 +189,19 @@ func (s *linkedListFromComparable[T]) Insert(index int, item T) {
 		if s.head == nil {
 			s.head = newNode
 			s.tail = newNode
+			connectNodes(s.head, s.tail)
 		} else {
-			newNode.setNext(s.head)
+			connectNodes(newNode, s.head)
+			connectNodes(s.tail, newNode)
 			s.head = newNode
-			s.tail.setNext(s.head)
 		}
 		s.len++
 		return
 	}
 	if index == s.len {
-		s.tail.setNext(newNode)
+		connectNodes(s.tail, newNode)
+		connectNodes(newNode, s.head)
 		s.tail = newNode
-		s.tail.setNext(s.head)
 		s.len++
 		return
 	}
@@ -212,8 +209,8 @@ func (s *linkedListFromComparable[T]) Insert(index int, item T) {
 	for i := 0; i < index-1; i++ {
 		previousNode = previousNode.next
 	}
-	newNode.setNext(previousNode.next)
-	previousNode.setNext(newNode)
+	connectNodes(newNode, previousNode.next)
+	connectNodes(previousNode, newNode)
 	s.len++
 }
 
@@ -238,7 +235,7 @@ func (s *linkedListFromComparable[T]) Retain(predicate predicate.Predicate[T]) {
 	previousNode := s.head
 	count := s.len - 1
 	node := s.head.next
-	for i := 0; i < count; i++ {
+	for range count {
 		next := node.next
 		if !predicate(node.value) {
 			previousNode.next = next
@@ -253,7 +250,7 @@ func (s *linkedListFromComparable[T]) Retain(predicate predicate.Predicate[T]) {
 	}
 	// Restore circular link
 	if s.tail != nil {
-		s.tail.setNext(s.head)
+		connectNodes(s.tail, s.head)
 	}
 }
 
@@ -264,7 +261,7 @@ func (s *linkedListFromComparable[T]) Sort(fn func(a, b T) compare.Order) {
 	s.head = mergeSort(s.head, fn)
 	s.tail = tail(s.head)
 	if s.tail != nil {
-		s.tail.setNext(s.head) // Restore circular link
+		connectNodes(s.tail, s.head) // Restore circular link
 	}
 }
 
@@ -278,14 +275,11 @@ func (s *linkedListFromComparable[T]) ToSlice() []T {
 
 func (s *linkedListFromComparable[T]) Extend(values ...T) {
 	for _, value := range values {
-		nextNode := &linkedListNode[T]{
-			value: value,
-			next:  nil,
-		}
+		nextNode := newLinkedListNode(value)
 		if s.tail != nil {
-			s.tail.setNext(nextNode)
+			connectNodes(s.tail, nextNode)
+			connectNodes(nextNode, s.head)
 			s.tail = nextNode
-			s.tail.setNext(s.head)
 			s.len++
 		} else {
 			s.head = nextNode
@@ -302,9 +296,9 @@ func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T
 			next:  nil,
 		}
 		if s.tail != nil {
-			s.tail.setNext(nextNode)
+			connectNodes(s.tail, nextNode)
+			connectNodes(nextNode, s.head)
 			s.tail = nextNode
-			s.tail.setNext(s.head)
 			s.len++
 		} else {
 			s.head = nextNode
@@ -319,7 +313,7 @@ func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.Doubl
 		return None[sequence.DoublyLinkedListNode[T]]()
 	}
 	node := s.head
-	for i := 0; i < index; i++ {
+	for range index {
 		node = node.next
 	}
 	var res sequence.DoublyLinkedListNode[T] = node
@@ -331,14 +325,11 @@ func (s *linkedListFromComparable[T]) Head() Option[sequence.DoublyLinkedListNod
 }
 
 func (s *linkedListFromComparable[T]) Prepend(value T) {
-	newHead := &linkedListNode[T]{
-		value: value,
-		next:  nil,
-	}
+	newHead := newLinkedListNode(value)
 	if s.head != nil {
-		newHead.setNext(s.head)
+		connectNodes(newHead, s.head)
+		connectNodes(s.tail, newHead)
 		s.head = newHead
-		s.tail.setNext(s.head) // Maintain circular link
 	} else {
 		s.head = newHead
 		s.tail = newHead

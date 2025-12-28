@@ -25,11 +25,6 @@ func (l *linkedListNode[T]) Next() Option[sequence.DoublyLinkedListNode[T]] {
 	return optionalNode(l.next)
 }
 
-func (l *linkedListNode[T]) setNext(next *linkedListNode[T]) {
-	l.next = next
-	next.previous = l
-}
-
 func (l *linkedListNode[T]) Previous() Option[sequence.DoublyLinkedListNode[T]] {
 	return optionalNode(l.previous)
 }
@@ -40,6 +35,11 @@ func (l *linkedListNode[T]) SetValue(value T) {
 
 func (l *linkedListNode[T]) Value() T {
 	return l.value
+}
+
+func connectNodes[T any](left, right *linkedListNode[T]) {
+	left.next = right
+	right.previous = left
 }
 
 func optionalNode[T any](l *linkedListNode[T]) Option[sequence.DoublyLinkedListNode[T]] {
