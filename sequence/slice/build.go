@@ -32,7 +32,7 @@ func (b *builtinBuilder[T]) Capacity(cap int) *builtinBuilder[T] {
 }
 
 func (b *builtinBuilder[T]) Build() sequence.Slice[T] {
-	return slice.SliceFromBuiltin[T](b.from.OrElse(func() core.Option[[]T] {
+	return slice.SliceFromBuiltin(b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)
 }
@@ -60,7 +60,7 @@ func (b *comparableBuilder[T]) Capacity(cap int) *comparableBuilder[T] {
 }
 
 func (b *comparableBuilder[T]) Build() sequence.Slice[T] {
-	return slice.SliceFromComparableInterface[T](b.from.OrElse(func() core.Option[[]T] {
+	return slice.SliceFromComparableInterface(b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)
 }
