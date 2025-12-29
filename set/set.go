@@ -1,4 +1,4 @@
-package sets
+package set
 
 import (
 	"iter"
@@ -9,15 +9,14 @@ import (
 
 type Set[T any] interface {
 	collection.Collection[T]
-	Seq() iter.Seq[T]
+	collection.Aggregate[T]
 	Add(value T) bool
-	Remove(value T) bool
 	All() iter.Seq[T]
-
-	Union(other Set[T]) Option[Set[T]]
-	Intersect(other Set[T]) Option[Set[T]]
 	Difference(other Set[T]) Option[Set[T]]
-	SymmetricDifference(other Set[T]) Option[Set[T]]
+	Intersect(other Set[T]) Option[Set[T]]
 	IsSubsetOf(other Set[T]) bool
 	IsSupersetOf(other Set[T]) bool
+	Remove(value T) bool
+	SymmetricDifference(other Set[T]) Option[Set[T]]
+	Union(other Set[T]) Set[T]
 }
