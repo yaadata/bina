@@ -14,6 +14,12 @@ type hashSetFromHashable[K comparable, T hashable.Hashable[K]] struct {
 	set map[K]T
 }
 
+func HashSetFromHashable[K comparable, T hashable.Hashable[K]](capacity int) set.Set[T] {
+	return &hashSetFromHashable[K, T]{
+		set: make(map[K]T, capacity),
+	}
+}
+
 func (s *hashSetFromHashable[K, T]) Len() int {
 	return len(s.set)
 }
@@ -87,12 +93,10 @@ func (s *hashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[set.Set[
 	return None[set.Set[T]]()
 }
 
-func (s *hashSetFromHashable[K, T]) Remove(element T) bool {
-	if s.Contains(element) {
-		delete(s.set, element.Hash())
-		return true
+func (s *hashSetFromHashable[K, T]) Extend(values ...T) {
+	for _, value := range values {
+		s.set[value.Hash()] = value
 	}
-	return false
 }
 
 func (s *hashSetFromHashable[K, T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
@@ -134,6 +138,14 @@ func (s *hashSetFromHashable[K, T]) IsSupersetOf(other set.Set[T]) bool {
 		}
 	}
 	return true
+}
+
+func (s *hashSetFromHashable[K, T]) Remove(element T) bool {
+	if s.Contains(element) {
+		delete(s.set, element.Hash())
+		return true
+	}
+	return false
 }
 
 func (s *hashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {

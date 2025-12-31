@@ -12,6 +12,7 @@ type Set[T any] interface {
 	collection.Aggregate[T]
 	Add(value T) bool
 	All() iter.Seq[T]
+	Extend(values ...T)
 	Difference(other Set[T]) Option[Set[T]]
 	Intersect(other Set[T]) Option[Set[T]]
 	IsSubsetOf(other Set[T]) bool

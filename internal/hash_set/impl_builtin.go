@@ -17,6 +17,12 @@ func _[T comparable]() {
 	var _ set.Set[T] = (*hashSetFromBuiltin[T])(nil)
 }
 
+func HashSetFromBuiltin[T comparable](capacity int) set.Set[T] {
+	return &hashSetFromBuiltin[T]{
+		set: make(map[T]bool, capacity),
+	}
+}
+
 func (s *hashSetFromBuiltin[T]) Len() int {
 	return len(s.set)
 }
@@ -89,12 +95,10 @@ func (s *hashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.Set[T]] 
 	return None[set.Set[T]]()
 }
 
-func (s *hashSetFromBuiltin[T]) Remove(element T) bool {
-	if s.Contains(element) {
-		delete(s.set, element)
-		return true
+func (s *hashSetFromBuiltin[T]) Extend(values ...T) {
+	for _, value := range values {
+		s.set[value] = true
 	}
-	return false
 }
 
 func (s *hashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
@@ -136,6 +140,14 @@ func (s *hashSetFromBuiltin[T]) IsSupersetOf(other set.Set[T]) bool {
 		}
 	}
 	return true
+}
+
+func (s *hashSetFromBuiltin[T]) Remove(element T) bool {
+	if s.Contains(element) {
+		delete(s.set, element)
+		return true
+	}
+	return false
 }
 
 func (s *hashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
