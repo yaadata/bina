@@ -7,4 +7,5 @@ import (
 
 type Builder[T any, Target set.Set[T], Self any] interface {
 	builder.BaseBuilder[T, Target, Self]
+	From(values ...T) Self
 }
