@@ -90,7 +90,16 @@ func (s *hashSetFromHashable[K, T]) All() iter.Seq[T] {
 }
 
 func (s *hashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[set.Set[T]] {
-	return None[set.Set[T]]()
+	res := HashSetFromHashable[K, T](s.Len())
+	for element := range s.All() {
+		if !other.Contains(element) {
+			res.Add(element)
+		}
+	}
+	if res.IsEmpty() {
+		return None[set.Set[T]]()
+	}
+	return Some(res)
 }
 
 func (s *hashSetFromHashable[K, T]) Extend(values ...T) {
