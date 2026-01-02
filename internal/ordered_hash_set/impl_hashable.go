@@ -11,8 +11,8 @@ import (
 )
 
 type orderedHashSetFromHashable[K comparable, T hashable.Hashable[K]] struct {
-	ordered []T
 	deleted []bool
+	ordered []T
 	set     map[K]int
 	size    int
 }
@@ -23,8 +23,8 @@ func _[K comparable, T hashable.Hashable[K]]() {
 
 func OrderedHashSetFromHashable[K comparable, T hashable.Hashable[K]](capacity int) set.Set[T] {
 	return &orderedHashSetFromHashable[K, T]{
-		ordered: make([]T, 0, capacity),
 		deleted: make([]bool, capacity/2),
+		ordered: make([]T, 0, capacity),
 		set:     make(map[K]int, capacity),
 		size:    0,
 	}
