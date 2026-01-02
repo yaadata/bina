@@ -1,2 +1,0 @@
-// Package extension
-package extension
