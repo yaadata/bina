@@ -250,7 +250,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			set.Extend(4, 5, 6)
 			// ========= [A]ssert  =========
 			must.Eq(t, 6, set.Len())
-			must.Eq(t, []int{1, 2, 3, 4, 5, 6}, set.Slice())
+			must.Eq(t, []int{1, 2, 3, 4, 5, 6}, set.AsSlice())
 		})
 
 		t.Run("Extend - with duplicates", func(t *testing.T) {
@@ -262,7 +262,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			set.Extend(2, 3, 4)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, set.Len())
-			must.Eq(t, []int{1, 2, 3, 4}, set.Slice())
+			must.Eq(t, []int{1, 2, 3, 4}, set.AsSlice())
 		})
 
 		// SCENARIO: Remove
@@ -277,7 +277,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			must.True(t, removed)
 			must.Eq(t, 2, set.Len())
 			must.False(t, set.Contains(2))
-			must.Eq(t, []int{1, 3}, set.Slice())
+			must.Eq(t, []int{1, 3}, set.AsSlice())
 		})
 
 		t.Run("Remove - non-existing element", func(t *testing.T) {
@@ -474,7 +474,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 				From(insertionOrder...).
 				Build()
 			// ========= [A]ct     =========
-			actual := set.Slice()
+			actual := set.AsSlice()
 			// ========= [A]ssert  =========
 			must.Eq(t, insertionOrder, actual)
 		})
@@ -717,7 +717,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			set.Extend(4, 5, 6)
 			// ========= [A]ssert  =========
 			must.Eq(t, 6, set.Len())
-			must.Eq(t, []HashableInt{1, 2, 3, 4, 5, 6}, set.Slice())
+			must.Eq(t, []HashableInt{1, 2, 3, 4, 5, 6}, set.AsSlice())
 		})
 
 		t.Run("Extend - with duplicates", func(t *testing.T) {
@@ -729,7 +729,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			set.Extend(2, 3, 4)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, set.Len())
-			must.Eq(t, []HashableInt{1, 2, 3, 4}, set.Slice())
+			must.Eq(t, []HashableInt{1, 2, 3, 4}, set.AsSlice())
 		})
 
 		// SCENARIO: Remove
@@ -744,7 +744,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			must.True(t, removed)
 			must.Eq(t, 2, set.Len())
 			must.False(t, set.Contains(2))
-			must.Eq(t, []HashableInt{1, 3}, set.Slice())
+			must.Eq(t, []HashableInt{1, 3}, set.AsSlice())
 		})
 
 		t.Run("Remove - non-existing element", func(t *testing.T) {
@@ -941,7 +941,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 				From(insertionOrder...).
 				Build()
 			// ========= [A]ct     =========
-			actual := set.Slice()
+			actual := set.AsSlice()
 			// ========= [A]ssert  =========
 			must.Eq(t, insertionOrder, actual)
 		})

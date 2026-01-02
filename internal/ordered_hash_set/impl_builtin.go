@@ -252,7 +252,7 @@ func (s *orderedHashSetFromBuiltin[T]) Last() Option[T] {
 	return None[T]()
 }
 
-func (s *orderedHashSetFromBuiltin[T]) Slice() []T {
+func (s *orderedHashSetFromBuiltin[T]) AsSlice() []T {
 	res := make([]T, 0, s.size)
 	for element := range s.All() {
 		res = append(res, element)

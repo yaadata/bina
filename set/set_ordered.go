@@ -11,5 +11,5 @@ type OrderedSet[T any] interface {
 	Enumerate() iter.Seq2[int, T]
 	First() Option[T]
 	Last() Option[T]
-	Slice() []T
+	AsSlice() []T
 }

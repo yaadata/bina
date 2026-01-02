@@ -253,7 +253,7 @@ func (s *orderedHashSetFromHashable[K, T]) Last() Option[T] {
 	return None[T]()
 }
 
-func (s *orderedHashSetFromHashable[K, T]) Slice() []T {
+func (s *orderedHashSetFromHashable[K, T]) AsSlice() []T {
 	res := make([]T, 0, s.size)
 	for element := range s.All() {
 		res = append(res, element)
