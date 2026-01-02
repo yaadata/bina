@@ -190,7 +190,7 @@ func (s *orderedHashSetFromHashable[K, T]) Remove(element T) bool {
 	delete(s.set, element.Hash())
 	s.size--
 	if s.size >= len(s.set)/2 {
-		s.Compact()
+		s.compact()
 	}
 	return true
 }
@@ -226,7 +226,7 @@ func (s *orderedHashSetFromHashable[K, T]) Union(other set.Set[T]) set.Set[T] {
 	return res
 }
 
-func (s *orderedHashSetFromHashable[K, T]) Compact() {
+func (s *orderedHashSetFromHashable[K, T]) compact() {
 	updatedOrder := make([]T, 0, s.size)
 	for index, element := range s.ordered {
 		if !s.deleted[index] {
@@ -251,4 +251,12 @@ func (s *orderedHashSetFromHashable[K, T]) Last() Option[T] {
 		return Some(s.ordered[l-1])
 	}
 	return None[T]()
+}
+
+func (s *orderedHashSetFromHashable[K, T]) Slice() []T {
+	res := make([]T, 0, s.size)
+	for element := range s.All() {
+		res = append(res, element)
+	}
+	return res
 }
