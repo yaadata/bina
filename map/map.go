@@ -9,7 +9,8 @@ import (
 
 type Map[K any, V any] interface {
 	collection.Collection[K]
-	Get(key K, value V) Option[V]
+	collection.Aggregate[K]
+	Get(key K) Option[V]
 	Put(key K, value V) bool
 	Delete(key K) bool
 	Enumerate() iter.Seq2[K, V]
