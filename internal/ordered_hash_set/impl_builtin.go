@@ -20,7 +20,7 @@ func _[T comparable]() {
 	var _ set.OrderedSet[T] = (*orderedHashSetFromBuiltin[T])(nil)
 }
 
-func OrderedHashSetFromBuiltin[T comparable](capacity int) set.Set[T] {
+func OrderedHashSetFromBuiltin[T comparable](capacity int) set.OrderedSet[T] {
 	return &orderedHashSetFromBuiltin[T]{
 		ordered: make([]T, 0, capacity),
 		deleted: make([]bool, capacity/2),
@@ -216,6 +216,12 @@ func (s *orderedHashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Opt
 
 func (s *orderedHashSetFromBuiltin[T]) Union(other set.Set[T]) set.Set[T] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len() + other.Len())
+	for element := range s.All() {
+		res.Add(element)
+	}
+	for element := range other.All() {
+		res.Add(element)
+	}
 	return res
 }
 

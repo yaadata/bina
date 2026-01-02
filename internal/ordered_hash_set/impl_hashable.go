@@ -21,7 +21,7 @@ func _[K comparable, T hashable.Hashable[K]]() {
 	var _ set.OrderedSet[T] = (*orderedHashSetFromHashable[K, T])(nil)
 }
 
-func OrderedHashSetFromHashable[K comparable, T hashable.Hashable[K]](capacity int) set.Set[T] {
+func OrderedHashSetFromHashable[K comparable, T hashable.Hashable[K]](capacity int) set.OrderedSet[T] {
 	return &orderedHashSetFromHashable[K, T]{
 		deleted: make([]bool, capacity/2),
 		ordered: make([]T, 0, capacity),
@@ -217,6 +217,12 @@ func (s *orderedHashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T])
 
 func (s *orderedHashSetFromHashable[K, T]) Union(other set.Set[T]) set.Set[T] {
 	var res = hashset.HashSetFromHashable[K, T](s.Len() + other.Len())
+	for element := range s.All() {
+		res.Add(element)
+	}
+	for element := range other.All() {
+		res.Add(element)
+	}
 	return res
 }
 

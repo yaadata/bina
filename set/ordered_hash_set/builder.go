@@ -1,4 +1,4 @@
-package hashset
+package orderedhashset
 
 import (
 	"codeberg.org/yaadata/bina/set"
