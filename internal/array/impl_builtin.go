@@ -75,26 +75,6 @@ func (s *arrayFromBuiltin[T]) ForEach(fn func(T)) {
 	}
 }
 
-func (s *arrayFromBuiltin[T]) InsertRange(elements []T, cfgs ...core_range.CoreRangeConfig) bool {
-	r := core_range.New()
-	for _, cfg := range cfgs {
-		cfg(r)
-	}
-	length := s.Len()
-	from := r.From().UnwrapOrDefault()
-	if from < 0 {
-		return false
-	}
-	end := r.End().UnwrapOrElse(func() int {
-		return from + len(elements)
-	})
-	if end > length {
-		return false
-	}
-	slices.Replace(s.inner, from, end, elements...)
-	return true
-}
-
 func (s *arrayFromBuiltin[T]) All() iter.Seq[T] {
 	return func(yield func(item T) bool) {
 		for _, item := range s.inner {
@@ -168,11 +148,31 @@ func (s *arrayFromBuiltin[T]) Get(index int) Option[T] {
 	return Some(s.inner[index])
 }
 
-func (s *arrayFromBuiltin[T]) Insert(index int, item T) bool {
+func (s *arrayFromBuiltin[T]) Offer(element T, index int) bool {
 	if index < 0 || index >= s.Len() {
 		return false
 	}
-	s.inner[index] = item
+	s.inner[index] = element
+	return true
+}
+
+func (s *arrayFromBuiltin[T]) OfferRange(elements []T, cfgs ...core_range.CoreRangeConfig) bool {
+	r := core_range.New()
+	for _, cfg := range cfgs {
+		cfg(r)
+	}
+	length := s.Len()
+	from := r.From().UnwrapOrDefault()
+	if from < 0 {
+		return false
+	}
+	end := r.End().UnwrapOrElse(func() int {
+		return from + len(elements)
+	})
+	if end > length {
+		return false
+	}
+	slices.Replace(s.inner, from, end, elements...)
 	return true
 }
 

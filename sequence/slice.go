@@ -6,7 +6,7 @@ import (
 )
 
 type Slice[T any] interface {
-	Sequence[T]
+	DynamicSequence[T]
 	Append(element T)
 	Extend(element ...T)
 	ExtendFromSequence(sequence Sequence[T])

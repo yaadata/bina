@@ -5,7 +5,7 @@ import (
 )
 
 type LinkedList[T any, Node LinkedListNode[T]] interface {
-	Sequence[T]
+	DynamicSequence[T]
 	Append(item T)
 	Extend(values ...T)
 	ExtendFromSequence(sequence Sequence[T])
