@@ -37,7 +37,7 @@ func (b *builtinBuilder[T]) Build() sequence.Slice[T] {
 	}).Unwrap()...)
 }
 
-func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, sequence.Slice[T], *comparableBuilder[T]] {
+func NewComparableInterfaceBuilder[T compare.Comparable[T]]() Builder[T, sequence.Slice[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		from:     None[[]T](),
 		capacity: None[int](),

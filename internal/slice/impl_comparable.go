@@ -130,7 +130,7 @@ func (s *sliceComparableInterface[T]) Filter(predicate predicate.Predicate[T]) s
 func (s *sliceComparableInterface[T]) Find(predicate predicate.Predicate[T]) Option[T] {
 	for _, item := range s.inner {
 		if predicate(item) {
-			Some(item)
+			return Some(item)
 		}
 	}
 	return None[T]()
@@ -139,7 +139,7 @@ func (s *sliceComparableInterface[T]) Find(predicate predicate.Predicate[T]) Opt
 func (s *sliceComparableInterface[T]) FindIndex(predicate predicate.Predicate[T]) Option[int] {
 	for index, item := range s.inner {
 		if predicate(item) {
-			Some(index)
+			return Some(index)
 		}
 	}
 	return None[int]()

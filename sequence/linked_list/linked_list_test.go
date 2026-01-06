@@ -171,10 +171,23 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			From(1, 2, 4).
 			Build()
 		// ========= [A]ct     =========
-		sequence.Insert(2, 3)
+		inserted := sequence.Insert(2, 3)
 		// ========= [A]ssert  =========
+		must.True(t, inserted)
 		must.Eq(t, 4, sequence.Len())
 		must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
+	})
+
+	t.Run("Cannot Insert", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := linkedlist.NewBuiltinBuilder[int]().
+			From(1, 2, 4).
+			Build()
+		// ========= [A]ct     =========
+		inserted := sequence.Insert(20, 3)
+		// ========= [A]ssert  =========
+		must.False(t, inserted)
+		must.Eq(t, 3, sequence.Len())
 	})
 
 	t.Run("Can RemoveAt", func(t *testing.T) {
@@ -595,10 +608,23 @@ func TestLinkedListFromComparable(t *testing.T) {
 			From(1, 2, 4).
 			Build()
 		// ========= [A]ct     =========
-		sequence.Insert(2, 3)
+		inserted := sequence.Insert(2, 3)
 		// ========= [A]ssert  =========
+		must.True(t, inserted)
 		must.Eq(t, 4, sequence.Len())
 		must.Eq(t, []ComparableInt{1, 2, 3, 4}, sequence.ToSlice())
+	})
+
+	t.Run("Cannot Insert", func(t *testing.T) {
+		// ========= [A]rrange =========
+		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+			From(1, 2, 4).
+			Build()
+		// ========= [A]ct     =========
+		inserted := sequence.Insert(200, 3)
+		// ========= [A]ssert  =========
+		must.False(t, inserted)
+		must.Eq(t, 3, sequence.Len())
 	})
 
 	t.Run("Can RemoveAt", func(t *testing.T) {
