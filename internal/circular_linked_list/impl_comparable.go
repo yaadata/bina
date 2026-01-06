@@ -180,9 +180,9 @@ func (s *linkedListFromComparable[T]) Get(targetIndex int) Option[T] {
 	return None[T]()
 }
 
-func (s *linkedListFromComparable[T]) Insert(index int, item T) {
+func (s *linkedListFromComparable[T]) Insert(index int, item T) bool {
 	if index < 0 || index > s.len {
-		panic("index out of bounds")
+		return false
 	}
 	newNode := newLinkedListNode(item)
 	if index == 0 {
@@ -196,14 +196,14 @@ func (s *linkedListFromComparable[T]) Insert(index int, item T) {
 			s.head = newNode
 		}
 		s.len++
-		return
+		return true
 	}
 	if index == s.len {
 		connectNodes(s.tail, newNode)
 		connectNodes(newNode, s.head)
 		s.tail = newNode
 		s.len++
-		return
+		return true
 	}
 	previousNode := s.head
 	for i := 0; i < index-1; i++ {
@@ -212,6 +212,7 @@ func (s *linkedListFromComparable[T]) Insert(index int, item T) {
 	connectNodes(newNode, previousNode.next)
 	connectNodes(previousNode, newNode)
 	s.len++
+	return true
 }
 
 func (s *linkedListFromComparable[T]) Retain(predicate predicate.Predicate[T]) {

@@ -154,8 +154,12 @@ func (s *sliceFromBuiltin[T]) Get(index int) Option[T] {
 	return Some(s.inner[index])
 }
 
-func (s *sliceFromBuiltin[T]) Insert(index int, item T) {
+func (s *sliceFromBuiltin[T]) Insert(index int, item T) bool {
+	if index < 0 || index >= s.Len() {
+		return false
+	}
 	s.inner = append(s.inner[:index], append([]T{item}, s.inner[index:]...)...)
+	return true
 }
 
 func (s *sliceFromBuiltin[T]) RemoveAt(index int) Option[T] {

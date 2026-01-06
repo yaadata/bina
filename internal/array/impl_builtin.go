@@ -168,8 +168,12 @@ func (s *arrayFromBuiltin[T]) Get(index int) Option[T] {
 	return Some(s.inner[index])
 }
 
-func (s *arrayFromBuiltin[T]) Insert(index int, item T) {
-	s.inner = append(s.inner[:index], append([]T{item}, s.inner[index:]...)...)
+func (s *arrayFromBuiltin[T]) Insert(index int, item T) bool {
+	if index < 0 || index >= s.Len() {
+		return false
+	}
+	s.inner[index] = item
+	return true
 }
 
 func (s *arrayFromBuiltin[T]) RemoveAt(index int) Option[T] {
@@ -182,13 +186,11 @@ func (s *arrayFromBuiltin[T]) RemoveAt(index int) Option[T] {
 }
 
 func (s *arrayFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
-	var retained = make([]T, 0, len(s.inner))
-	for _, item := range s.inner {
-		if predicate(item) {
-			retained = append(retained, item)
+	for index, element := range s.Enumerate() {
+		if !predicate(element) {
+			s.inner[index] = *new(T)
 		}
 	}
-	s.inner = retained
 }
 
 func (s *arrayFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) {

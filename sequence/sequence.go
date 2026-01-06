@@ -18,7 +18,7 @@ type Sequence[T any] interface {
 	Find(predicate predicate.Predicate[T]) Option[T]
 	FindIndex(predicate predicate.Predicate[T]) Option[int]
 	Get(index int) Option[T]
-	Insert(index int, item T)
+	Insert(index int, item T) bool
 	RemoveAt(index int) Option[T]
 	Retain(predicate predicate.Predicate[T])
 	Sort(fn func(a, b T) compare.Order)
