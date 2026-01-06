@@ -450,7 +450,7 @@ func (c ComparableInt) Equal(other ComparableInt) bool {
 func TestLinkedListFromComparable(t *testing.T) {
 	t.Run("Can build", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
@@ -458,7 +458,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Can build from items", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3).
 			Build()
 		// ========= [A]ssert  =========
@@ -469,7 +469,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 	t.Run("Can enumerate", func(t *testing.T) {
 		// ========= [A]rrange =========
 		original := []ComparableInt{1, 2, 3}
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(original...).
 			Build()
 		// ========= [A]ct     =========
@@ -484,7 +484,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 	t.Run("Can gather all", func(t *testing.T) {
 		// ========= [A]rrange =========
 		original := []ComparableInt{1, 2, 3}
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(original...).
 			Build()
 		// ========= [A]ct     =========
@@ -498,7 +498,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Can Extend", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3).
 			Build()
 		// ========= [A]ct     =========
@@ -510,10 +510,10 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Can Extend From Sequence", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3).
 			Build()
-		other := linkedlist.NewComparableBuilder[ComparableInt]().
+		other := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(4, 5, 6).
 			Build()
 		// ========= [A]ct     =========
@@ -525,7 +525,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Find returns Option", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3).
 			Build()
 
@@ -553,7 +553,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("FindIndex returns Option", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3).
 			Build()
 
@@ -581,7 +581,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Can Get", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3).
 			Build()
 
@@ -605,7 +605,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Can Insert", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 4).
 			Build()
 		// ========= [A]ct     =========
@@ -617,7 +617,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Can RemoveAt", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3, 4).
 			Build()
 		// ========= [A]ct     =========
@@ -723,7 +723,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 	t.Run("Aggregate methods work", func(t *testing.T) {
 		// ========= [A]rrange =========
-		sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+		sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 			From(1, 2, 3, 4, 5).
 			Build()
 
@@ -789,7 +789,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 	t.Run("LinkedList specific methods", func(t *testing.T) {
 		t.Run("Can Prepend", func(t *testing.T) {
 			// ========= [A]rrange =========
-			sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+			sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 				From(2, 3, 4).
 				Build()
 			// ========= [A]ct     =========
@@ -803,7 +803,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 		t.Run("Can Prepend to empty list", func(t *testing.T) {
 			// ========= [A]rrange =========
-			sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+			sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 				Build()
 			// ========= [A]ct     =========
 			sequence.Prepend(1)
@@ -814,7 +814,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 		t.Run("Can GetNodeAt", func(t *testing.T) {
 			// ========= [A]rrange =========
-			sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+			sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 				From(1, 2, 3).
 				Build()
 
@@ -838,7 +838,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 		t.Run("Can modify node value via SetValue", func(t *testing.T) {
 			// ========= [A]rrange =========
-			sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+			sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 				From(1, 2, 3).
 				Build()
 			// ========= [A]ct     =========
@@ -850,7 +850,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 
 		t.Run("Can Append", func(t *testing.T) {
 			// ========= [A]rrange =========
-			sequence := linkedlist.NewComparableBuilder[ComparableInt]().
+			sequence := linkedlist.NewComparableInterfaceBuilder[ComparableInt]().
 				From(1, 2, 3).
 				Build()
 			// ========= [A]ct     =========

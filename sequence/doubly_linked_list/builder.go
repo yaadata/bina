@@ -7,4 +7,5 @@ import (
 
 type Builder[T any, Target sequence.Sequence[T], Self any] interface {
 	builder.BaseBuilder[T, Target, Self]
+	From(items ...T) Self
 }

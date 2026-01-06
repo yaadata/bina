@@ -5,6 +5,5 @@ import (
 )
 
 type BaseBuilder[T any, Target sequence.Sequence[T], Self any] interface {
-	From(items ...T) Self
 	Build() Target
 }

@@ -6,6 +6,7 @@ import (
 
 type LinkedList[T any, Node LinkedListNode[T]] interface {
 	Sequence[T]
+	Append(item T)
 	Extend(values ...T)
 	ExtendFromSequence(sequence Sequence[T])
 	Head() Option[Node]

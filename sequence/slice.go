@@ -7,7 +7,8 @@ import (
 
 type Slice[T any] interface {
 	Sequence[T]
-	Extend(items ...T)
+	Append(element T)
+	Extend(element ...T)
 	ExtendFromSequence(sequence Sequence[T])
 	Filter(predicate predicate.Predicate[T]) Slice[T]
 	First() Option[T]

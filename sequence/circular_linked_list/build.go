@@ -6,7 +6,6 @@ import (
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/circular_linked_list"
 	"codeberg.org/yaadata/bina/sequence"
-	"codeberg.org/yaadata/bina/sequence/builder"
 )
 
 func NewBuiltinBuilder[T comparable]() Builder[T, sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]], *builtinBuilder[T]] {
@@ -30,7 +29,7 @@ func (b *builtinBuilder[T]) Build() sequence.LinkedList[T, sequence.DoublyLinked
 	return ll
 }
 
-func NewComparableBuilder[T compare.Comparable[T]]() builder.BaseBuilder[T, sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]], *comparableBuilder[T]] {
+func NewComparableInterfaceBuilder[T compare.Comparable[T]]() Builder[T, sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		from: None[[]T](),
 	}
