@@ -1,26 +1,26 @@
 package compare
 
-type ComparableType[T any] struct {
+type comparableWrapper[T any] struct {
 	inner T
 	fn    func(a, b T) Order
 }
 
-var _ Comparable[ComparableType[int]] = (*ComparableType[int])(nil)
+var _ Comparable[comparableWrapper[int]] = (*comparableWrapper[int])(nil)
 
-func (e *ComparableType[T]) Compare(other ComparableType[T]) Order {
+func (e *comparableWrapper[T]) Compare(other comparableWrapper[T]) Order {
 	return e.fn(e.inner, other.inner)
 }
 
-func (e *ComparableType[T]) Equal(other ComparableType[T]) bool {
+func (e *comparableWrapper[T]) Equal(other comparableWrapper[T]) bool {
 	return e.fn(e.inner, other.inner) == OrderEqual
 }
 
-func (e *ComparableType[T]) Inner() T {
+func (e *comparableWrapper[T]) Inner() T {
 	return e.inner
 }
 
-func ToComparableType[T any](inner T, fn func(a, b T) Order) *ComparableType[T] {
-	return &ComparableType[T]{
+func ToComparable[T any](inner T, fn func(a, b T) Order) *comparableWrapper[T] {
+	return &comparableWrapper[T]{
 		inner: inner,
 		fn:    fn,
 	}
