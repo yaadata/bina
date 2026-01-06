@@ -2,6 +2,7 @@ package array
 
 import (
 	"iter"
+	"reflect"
 	"slices"
 	"sort"
 
@@ -32,7 +33,9 @@ func (s *arrayFromBuiltin[T]) Len() int {
 }
 
 func (s *arrayFromBuiltin[T]) IsEmpty() bool {
-	return s.position == 0
+	return s.Every(func(item T) bool {
+		return reflect.ValueOf(item).IsZero()
+	})
 }
 
 func (s *arrayFromBuiltin[T]) Clear() {

@@ -2,6 +2,7 @@ package array
 
 import (
 	"iter"
+	"reflect"
 	"slices"
 	"sort"
 
@@ -14,14 +15,12 @@ import (
 )
 
 type arrayComparableInterface[T compare.Comparable[T]] struct {
-	inner    []T
-	position int
+	inner []T
 }
 
 func ArrayFromComparableInterface[T compare.Comparable[T]](size int) *arrayComparableInterface[T] {
 	return &arrayComparableInterface[T]{
-		inner:    make([]T, size),
-		position: 0,
+		inner: make([]T, size),
 	}
 }
 
@@ -35,7 +34,9 @@ func (s *arrayComparableInterface[T]) Len() int {
 }
 
 func (s *arrayComparableInterface[T]) IsEmpty() bool {
-	return s.position == 0
+	return s.Every(func(item T) bool {
+		return reflect.ValueOf(item).IsZero()
+	})
 }
 
 func (s *arrayComparableInterface[T]) Clear() {
