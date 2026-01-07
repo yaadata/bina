@@ -90,10 +90,6 @@ func (b *dequeSlice[T]) Sort(fn func(a, b T) compare.Order) {
 	b.inner.Sort(fn)
 }
 
-func (b *dequeSlice[T]) ToSlice() []T {
-	return b.inner.ToSlice()
-}
-
 func (b *dequeSlice[T]) PushFront(element T) {
 	b.inner.Insert(0, element)
 }

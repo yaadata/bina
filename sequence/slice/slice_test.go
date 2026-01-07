@@ -18,7 +18,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
-		must.Eq(t, 10, cap(sequence.ToSlice()))
+		must.Eq(t, 10, sequence.Capacity())
 	})
 
 	t.Run("Can build without capacity", func(t *testing.T) {
@@ -28,7 +28,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 
 		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
-		must.Eq(t, 0, cap(sequence.ToSlice()))
+		must.Eq(t, 0, sequence.Capacity())
 	})
 
 	t.Run("Can build from items", func(t *testing.T) {
@@ -38,7 +38,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []int{1, 2, 3}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can enumerate", func(t *testing.T) {
@@ -91,7 +91,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 		// ========= [A]ct     =========
 		sequence.Extend(4, 5, 6)
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Can Extend From Sequence", func(t *testing.T) {
@@ -105,7 +105,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 		// ========= [A]ct     =========
 		sequence.ExtendFromSequence(other)
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Find returns Option", func(t *testing.T) {
@@ -174,7 +174,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]int{2, 4, 6}, actual.ToSlice()))
+		must.True(t, slices.Equal([]int{2, 4, 6}, slices.Collect(actual.Values())))
 	})
 
 	t.Run("Can Get", func(t *testing.T) {
@@ -209,7 +209,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 		inserted := sequence.Insert(2, 3)
 		// ========= [A]ssert  =========
 		must.True(t, inserted)
-		must.True(t, slices.Equal([]int{1, 2, 3, 4}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]int{1, 2, 3, 4}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Cannot Insert", func(t *testing.T) {
@@ -256,7 +256,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]int{2, 4, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]int{2, 4, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Can Sort", func(t *testing.T) {
@@ -275,7 +275,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			}
 		})
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Can Get First and Last", func(t *testing.T) {
@@ -435,7 +435,6 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
-		must.Eq(t, 10, cap(sequence.ToSlice()))
 	})
 
 	t.Run("Can build without capacity", func(t *testing.T) {
@@ -445,7 +444,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 
 		// ========= [A]ssert  =========
 		must.Eq(t, 0, sequence.Len())
-		must.Eq(t, 0, cap(sequence.ToSlice()))
+		must.Eq(t, 0, sequence.Capacity())
 	})
 
 	t.Run("Can build from items", func(t *testing.T) {
@@ -455,7 +454,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []ComparableInt{1, 2, 3}, sequence.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can enumerate", func(t *testing.T) {
@@ -508,7 +507,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 		// ========= [A]ct     =========
 		sequence.Extend(4, 5, 6)
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Can Extend From Sequence", func(t *testing.T) {
@@ -522,7 +521,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 		// ========= [A]ct     =========
 		sequence.ExtendFromSequence(other)
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Find returns Option", func(t *testing.T) {
@@ -591,7 +590,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]ComparableInt{2, 4, 6}, actual.ToSlice()))
+		must.True(t, slices.Equal([]ComparableInt{2, 4, 6}, slices.Collect(actual.Values())))
 	})
 
 	t.Run("Can Get", func(t *testing.T) {
@@ -626,7 +625,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 		inserted := sequence.Insert(2, 3)
 		// ========= [A]ssert  =========
 		must.True(t, inserted)
-		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Cannot Insert", func(t *testing.T) {
@@ -673,7 +672,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]ComparableInt{2, 4, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]ComparableInt{2, 4, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Can Sort", func(t *testing.T) {
@@ -692,7 +691,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			}
 		})
 		// ========= [A]ssert  =========
-		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4, 5, 6}, sequence.ToSlice()))
+		must.True(t, slices.Equal([]ComparableInt{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values())))
 	})
 
 	t.Run("Can Get First and Last", func(t *testing.T) {

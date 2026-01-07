@@ -20,5 +20,4 @@ type Sequence[T any] interface {
 	Get(index int) Option[T]
 	Retain(predicate predicate.Predicate[T])
 	Sort(fn func(a, b T) compare.Order)
-	ToSlice() []T
 }

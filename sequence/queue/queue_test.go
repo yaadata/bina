@@ -1,6 +1,7 @@
 package queue_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/shoenig/test/must"
@@ -364,7 +365,7 @@ func TestQueueFromBuiltin(t *testing.T) {
 						return compare.OrderEqual
 					})
 					// ========= [A]ssert  =========
-					slice := q.ToSlice()
+					slice := slices.Collect(q.Values())
 					must.Eq(t, []int{1, 1, 2, 3, 4, 5, 6, 9}, slice)
 				})
 
@@ -373,7 +374,7 @@ func TestQueueFromBuiltin(t *testing.T) {
 					// ========= [A]rrange =========
 					q := newQueue(1, 2, 3)
 					// ========= [A]ct     =========
-					slice := q.ToSlice()
+					slice := slices.Collect(q.Values())
 					// ========= [A]ssert  =========
 					must.Eq(t, []int{1, 2, 3}, slice)
 				})
@@ -730,7 +731,7 @@ func TestQueueFromComparable(t *testing.T) {
 						return compare.OrderEqual
 					})
 					// ========= [A]ssert  =========
-					slice := q.ToSlice()
+					slice := slices.Collect(q.Values())
 					must.Eq(t, []ComparableInt{1, 1, 2, 3, 4, 5, 6, 9}, slice)
 				})
 
@@ -739,7 +740,7 @@ func TestQueueFromComparable(t *testing.T) {
 					// ========= [A]rrange =========
 					q := newQueue(1, 2, 3)
 					// ========= [A]ct     =========
-					slice := q.ToSlice()
+					slice := slices.Collect(q.Values())
 					// ========= [A]ssert  =========
 					must.Eq(t, []ComparableInt{1, 2, 3}, slice)
 				})

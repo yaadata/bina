@@ -2,6 +2,7 @@ package stack
 
 import (
 	"iter"
+	"slices"
 
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
@@ -92,7 +93,7 @@ func (b *sliceStack[T]) Sort(fn func(a, b T) compare.Order) {
 }
 
 func (b *sliceStack[T]) ToSlice() []T {
-	return b.inner.ToSlice()
+	return slices.Collect(b.inner.Values())
 }
 
 func (b *sliceStack[T]) Push(element T) {
@@ -190,7 +191,7 @@ func (b *linkedListStack[T]) Sort(fn func(a, b T) compare.Order) {
 }
 
 func (b *linkedListStack[T]) ToSlice() []T {
-	return b.inner.ToSlice()
+	return slices.Collect(b.inner.Values())
 }
 
 func (b *linkedListStack[T]) Push(element T) {

@@ -90,10 +90,6 @@ func (b *queueSlice[T]) Sort(fn func(a, b T) compare.Order) {
 	b.inner.Sort(fn)
 }
 
-func (b *queueSlice[T]) ToSlice() []T {
-	return b.inner.ToSlice()
-}
-
 func (b *queueSlice[T]) Enqueue(element T) {
 	b.inner.Append(element)
 }

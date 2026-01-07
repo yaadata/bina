@@ -1,6 +1,7 @@
 package deque_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/shoenig/test/must"
@@ -423,18 +424,7 @@ func TestDequeFromBuiltin(t *testing.T) {
 						return compare.OrderEqual
 					})
 					// ========= [A]ssert  =========
-					slice := d.ToSlice()
-					must.Eq(t, []int{1, 1, 2, 3, 4, 5, 6, 9}, slice)
-				})
-
-				// SCENARIO: ToSlice
-				t.Run("ToSlice", func(t *testing.T) {
-					// ========= [A]rrange =========
-					d := newDeque(1, 2, 3)
-					// ========= [A]ct     =========
-					slice := d.ToSlice()
-					// ========= [A]ssert  =========
-					must.Eq(t, []int{1, 2, 3}, slice)
+					must.Eq(t, []int{1, 1, 2, 3, 4, 5, 6, 9}, slices.Collect(d.Values()))
 				})
 			})
 		})
@@ -848,18 +838,7 @@ func TestDequeFromComparable(t *testing.T) {
 						return compare.OrderEqual
 					})
 					// ========= [A]ssert  =========
-					slice := d.ToSlice()
-					must.Eq(t, []ComparableInt{1, 1, 2, 3, 4, 5, 6, 9}, slice)
-				})
-
-				// SCENARIO: ToSlice
-				t.Run("ToSlice", func(t *testing.T) {
-					// ========= [A]rrange =========
-					d := newDeque(1, 2, 3)
-					// ========= [A]ct     =========
-					slice := d.ToSlice()
-					// ========= [A]ssert  =========
-					must.Eq(t, []ComparableInt{1, 2, 3}, slice)
+					must.Eq(t, []ComparableInt{1, 1, 2, 3, 4, 5, 6, 9}, slices.Collect(d.Values()))
 				})
 			})
 		})

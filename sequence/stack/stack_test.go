@@ -1,6 +1,7 @@
 package stack_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/shoenig/test/must"
@@ -364,18 +365,7 @@ func TestStackFromBuiltin(t *testing.T) {
 						return compare.OrderEqual
 					})
 					// ========= [A]ssert  =========
-					slice := s.ToSlice()
-					must.Eq(t, []int{1, 1, 2, 3, 4, 5, 6, 9}, slice)
-				})
-
-				// SCENARIO: ToSlice
-				t.Run("ToSlice", func(t *testing.T) {
-					// ========= [A]rrange =========
-					s := newStack(1, 2, 3)
-					// ========= [A]ct     =========
-					slice := s.ToSlice()
-					// ========= [A]ssert  =========
-					must.Eq(t, []int{1, 2, 3}, slice)
+					must.Eq(t, []int{1, 1, 2, 3, 4, 5, 6, 9}, slices.Collect(s.Values()))
 				})
 			})
 		})
@@ -730,18 +720,7 @@ func TestStackFromComparable(t *testing.T) {
 						return compare.OrderEqual
 					})
 					// ========= [A]ssert  =========
-					slice := s.ToSlice()
-					must.Eq(t, []ComparableInt{1, 1, 2, 3, 4, 5, 6, 9}, slice)
-				})
-
-				// SCENARIO: ToSlice
-				t.Run("ToSlice", func(t *testing.T) {
-					// ========= [A]rrange =========
-					s := newStack(1, 2, 3)
-					// ========= [A]ct     =========
-					slice := s.ToSlice()
-					// ========= [A]ssert  =========
-					must.Eq(t, []ComparableInt{1, 2, 3}, slice)
+					must.Eq(t, []ComparableInt{1, 1, 2, 3, 4, 5, 6, 9}, slices.Collect(s.Values()))
 				})
 			})
 		})

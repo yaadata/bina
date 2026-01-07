@@ -90,10 +90,6 @@ func (b *dequeLinkedList[T]) Sort(fn func(a, b T) compare.Order) {
 	b.inner.Sort(fn)
 }
 
-func (b *dequeLinkedList[T]) ToSlice() []T {
-	return b.inner.ToSlice()
-}
-
 func (b *dequeLinkedList[T]) PushFront(element T) {
 	b.inner.Prepend(element)
 }

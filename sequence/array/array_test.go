@@ -1,6 +1,7 @@
 package array_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/shoenig/test/must"
@@ -31,7 +32,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 10, arr.Len())
-		must.Eq(t, []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, arr.ToSlice())
+		must.Eq(t, []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, slices.Collect(arr.Values()))
 	})
 
 	t.Run("IsEmpty on new array returns true", func(t *testing.T) {
@@ -64,7 +65,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, arr.Len())
 		must.True(t, arr.IsEmpty())
-		must.Eq(t, []int{0, 0, 0}, arr.ToSlice())
+		must.Eq(t, []int{0, 0, 0}, slices.Collect(arr.Values()))
 	})
 
 	t.Run("Contains finds existing element", func(t *testing.T) {
@@ -189,7 +190,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		success := arr.Offer(42, 1)
 		// ========= [A]ssert  =========
 		must.True(t, success)
-		must.Eq(t, []int{0, 42, 0}, arr.ToSlice())
+		must.Eq(t, []int{0, 42, 0}, slices.Collect(arr.Values()))
 	})
 
 	t.Run("Offer fails for negative index", func(t *testing.T) {
@@ -224,7 +225,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		success := arr.OfferRange([]int{1, 2, 3})
 		// ========= [A]ssert  =========
 		must.True(t, success)
-		must.Eq(t, []int{1, 2, 3, 0, 0}, arr.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 0, 0}, slices.Collect(arr.Values()))
 		must.Eq(t, 5, arr.Len()) // Size remains fixed
 	})
 
@@ -529,7 +530,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []int{0, 2, 0, 4, 0, 6}, arr.ToSlice())
+		must.Eq(t, []int{0, 2, 0, 4, 0, 6}, slices.Collect(arr.Values()))
 		must.Eq(t, 6, arr.Len()) // Size remains fixed
 	})
 
@@ -544,7 +545,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []int{0, 0, 0}, arr.ToSlice())
+		must.Eq(t, []int{0, 0, 0}, slices.Collect(arr.Values()))
 		must.True(t, arr.IsEmpty())
 	})
 
@@ -559,10 +560,10 @@ func TestArrayFromBuiltin(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []int{2, 4, 6}, filtered.ToSlice())
+		must.Eq(t, []int{2, 4, 6}, slices.Collect(filtered.Values()))
 		must.Eq(t, 3, filtered.Len())
 		// Original array unchanged
-		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, arr.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, slices.Collect(arr.Values()))
 		must.Eq(t, 6, arr.Len())
 	})
 
@@ -601,7 +602,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			return compare.OrderEqual
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []int{1, 2, 3, 5, 8, 9}, arr.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 5, 8, 9}, slices.Collect(arr.Values()))
 		must.Eq(t, 6, arr.Len()) // Size remains fixed
 	})
 
@@ -621,7 +622,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			return compare.OrderEqual
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []int{9, 8, 5, 3, 2, 1}, arr.ToSlice())
+		must.Eq(t, []int{9, 8, 5, 3, 2, 1}, slices.Collect(arr.Values()))
 	})
 
 	t.Run("Sort is stable", func(t *testing.T) {
@@ -640,7 +641,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			return compare.OrderEqual
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []int{1, 1, 1, 2, 3}, arr.ToSlice())
+		must.Eq(t, []int{1, 1, 1, 2, 3}, slices.Collect(arr.Values()))
 	})
 }
 
@@ -836,7 +837,7 @@ func TestArrayFromComparable(t *testing.T) {
 		success := arr.Offer(42, 1)
 		// ========= [A]ssert  =========
 		must.True(t, success)
-		must.Eq(t, []ComparableInt{0, 42, 0}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{0, 42, 0}, slices.Collect(arr.Values()))
 	})
 
 	t.Run("Offer fails for negative index", func(t *testing.T) {
@@ -871,7 +872,7 @@ func TestArrayFromComparable(t *testing.T) {
 		success := arr.OfferRange([]ComparableInt{1, 2, 3})
 		// ========= [A]ssert  =========
 		must.True(t, success)
-		must.Eq(t, []ComparableInt{1, 2, 3, 0, 0}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3, 0, 0}, slices.Collect(arr.Values()))
 		must.Eq(t, 5, arr.Len()) // Size remains fixed
 	})
 
@@ -1176,7 +1177,7 @@ func TestArrayFromComparable(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []ComparableInt{0, 2, 0, 4, 0, 6}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{0, 2, 0, 4, 0, 6}, slices.Collect(arr.Values()))
 		must.Eq(t, 6, arr.Len()) // Size remains fixed
 	})
 
@@ -1191,7 +1192,7 @@ func TestArrayFromComparable(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []ComparableInt{0, 0, 0}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{0, 0, 0}, slices.Collect(arr.Values()))
 		must.True(t, arr.IsEmpty())
 	})
 
@@ -1206,10 +1207,10 @@ func TestArrayFromComparable(t *testing.T) {
 			return item%2 == 0
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []ComparableInt{2, 4, 6}, filtered.ToSlice())
+		must.Eq(t, []ComparableInt{2, 4, 6}, slices.Collect(filtered.Values()))
 		must.Eq(t, 3, filtered.Len())
 		// Original array unchanged
-		must.Eq(t, []ComparableInt{1, 2, 3, 4, 5, 6}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3, 4, 5, 6}, slices.Collect(arr.Values()))
 		must.Eq(t, 6, arr.Len())
 	})
 
@@ -1243,7 +1244,7 @@ func TestArrayFromComparable(t *testing.T) {
 			return a.Compare(b)
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []ComparableInt{1, 2, 3, 5, 8, 9}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3, 5, 8, 9}, slices.Collect(arr.Values()))
 		must.Eq(t, 6, arr.Len()) // Size remains fixed
 	})
 
@@ -1258,7 +1259,7 @@ func TestArrayFromComparable(t *testing.T) {
 			return b.Compare(a) // Reversed for descending
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []ComparableInt{9, 8, 5, 3, 2, 1}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{9, 8, 5, 3, 2, 1}, slices.Collect(arr.Values()))
 	})
 
 	t.Run("Sort is stable", func(t *testing.T) {
@@ -1272,6 +1273,6 @@ func TestArrayFromComparable(t *testing.T) {
 			return a.Compare(b)
 		})
 		// ========= [A]ssert  =========
-		must.Eq(t, []ComparableInt{1, 1, 1, 2, 3}, arr.ToSlice())
+		must.Eq(t, []ComparableInt{1, 1, 1, 2, 3}, slices.Collect(arr.Values()))
 	})
 }

@@ -73,6 +73,10 @@ func (s *sliceFromBuiltin[T]) Append(item T) {
 	s.inner = append(s.inner, item)
 }
 
+func (s *sliceFromBuiltin[T]) Capacity() int {
+	return cap(s.inner)
+}
+
 func (s *sliceFromBuiltin[T]) Values() iter.Seq[T] {
 	return func(yield func(item T) bool) {
 		for _, item := range s.inner {
@@ -98,7 +102,7 @@ func (s *sliceFromBuiltin[T]) Extend(items ...T) {
 }
 
 func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence sequence.Sequence[T]) {
-	s.inner = append(s.inner, sequence.ToSlice()...)
+	s.inner = append(s.inner, slices.Collect(sequence.Values())...)
 }
 
 func (s *sliceFromBuiltin[T]) Last() Option[T] {

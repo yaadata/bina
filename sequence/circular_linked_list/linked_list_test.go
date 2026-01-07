@@ -1,6 +1,7 @@
 package circularlinkedlist_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/shoenig/test/must"
@@ -25,7 +26,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []int{1, 2, 3}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can enumerate", func(t *testing.T) {
@@ -67,7 +68,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		sequence.Extend(4, 5, 6)
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
-		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values()))
 		tail := sequence.Tail()
 		head := sequence.Head()
 		must.True(t, tail.Unwrap().Next().Equal(head))
@@ -86,7 +87,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		sequence.ExtendFromSequence(other)
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
-		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values()))
 		tail := sequence.Tail()
 		head := sequence.Head()
 		must.True(t, tail.Unwrap().Next().Equal(head))
@@ -183,7 +184,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		// ========= [A]ssert  =========
 		must.True(t, inserted)
 		must.Eq(t, 4, sequence.Len())
-		must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 4}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Cannot Insert", func(t *testing.T) {
@@ -209,7 +210,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		must.True(t, removed.IsSome())
 		must.Eq(t, 3, removed.Unwrap())
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []int{1, 2, 4}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 4}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can RemoveAt - returns None", func(t *testing.T) {
@@ -235,7 +236,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		})
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []int{2, 4, 6}, sequence.ToSlice())
+		must.Eq(t, []int{2, 4, 6}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can Sort", func(t *testing.T) {
@@ -255,7 +256,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 		})
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
-		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Collection methods work", func(t *testing.T) {
@@ -379,7 +380,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			sequence.Prepend(1)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, sequence.Len())
-			must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
+			must.Eq(t, []int{1, 2, 3, 4}, slices.Collect(sequence.Values()))
 			head := sequence.Head()
 			must.Eq(t, 1, head.Unwrap().Value())
 			tail := sequence.Tail()
@@ -395,7 +396,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			sequence.Prepend(1)
 			// ========= [A]ssert  =========
 			must.Eq(t, 1, sequence.Len())
-			must.Eq(t, []int{1}, sequence.ToSlice())
+			must.Eq(t, []int{1}, slices.Collect(sequence.Values()))
 		})
 
 		t.Run("Can GetNodeAt", func(t *testing.T) {
@@ -431,7 +432,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			node := sequence.GetNodeAt(1)
 			node.Unwrap().SetValue(20)
 			// ========= [A]ssert  =========
-			must.Eq(t, []int{1, 20, 3}, sequence.ToSlice())
+			must.Eq(t, []int{1, 20, 3}, slices.Collect(sequence.Values()))
 		})
 
 		t.Run("Can Append", func(t *testing.T) {
@@ -443,7 +444,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			sequence.Append(4)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, sequence.Len())
-			must.Eq(t, []int{1, 2, 3, 4}, sequence.ToSlice())
+			must.Eq(t, []int{1, 2, 3, 4}, slices.Collect(sequence.Values()))
 			tail := sequence.Tail()
 			must.True(t, tail.IsSome())
 			must.Eq(t, 4, tail.Unwrap().Value())
@@ -476,7 +477,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			Build()
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []ComparableInt{1, 2, 3}, sequence.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can enumerate", func(t *testing.T) {
@@ -518,7 +519,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 		sequence.Extend(4, 5, 6)
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
-		must.Eq(t, []ComparableInt{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can Extend From Sequence", func(t *testing.T) {
@@ -533,7 +534,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 		sequence.ExtendFromSequence(other)
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
-		must.Eq(t, []ComparableInt{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Find returns Option", func(t *testing.T) {
@@ -626,7 +627,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 		// ========= [A]ssert  =========
 		must.True(t, inserted)
 		must.Eq(t, 4, sequence.Len())
-		must.Eq(t, []ComparableInt{1, 2, 3, 4}, sequence.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 3, 4}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Cannot Insert", func(t *testing.T) {
@@ -652,7 +653,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 		must.True(t, removed.IsSome())
 		must.Eq(t, 3, removed.Unwrap())
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []ComparableInt{1, 2, 4}, sequence.ToSlice())
+		must.Eq(t, []ComparableInt{1, 2, 4}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can RemoveAt - returns None", func(t *testing.T) {
@@ -678,7 +679,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 		})
 		// ========= [A]ssert  =========
 		must.Eq(t, 3, sequence.Len())
-		must.Eq(t, []int{2, 4, 6}, sequence.ToSlice())
+		must.Eq(t, []int{2, 4, 6}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Can Sort", func(t *testing.T) {
@@ -698,7 +699,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 		})
 		// ========= [A]ssert  =========
 		must.Eq(t, 6, sequence.Len())
-		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, sequence.ToSlice())
+		must.Eq(t, []int{1, 2, 3, 4, 5, 6}, slices.Collect(sequence.Values()))
 	})
 
 	t.Run("Collection methods work", func(t *testing.T) {
@@ -822,7 +823,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			sequence.Prepend(1)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, sequence.Len())
-			must.Eq(t, []ComparableInt{1, 2, 3, 4}, sequence.ToSlice())
+			must.Eq(t, []ComparableInt{1, 2, 3, 4}, slices.Collect(sequence.Values()))
 			head := sequence.Head()
 			must.Eq(t, 1, head.Unwrap().Value())
 		})
@@ -835,7 +836,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			sequence.Prepend(1)
 			// ========= [A]ssert  =========
 			must.Eq(t, 1, sequence.Len())
-			must.Eq(t, []ComparableInt{1}, sequence.ToSlice())
+			must.Eq(t, []ComparableInt{1}, slices.Collect(sequence.Values()))
 		})
 
 		t.Run("Can GetNodeAt", func(t *testing.T) {
@@ -871,7 +872,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			node := sequence.GetNodeAt(1)
 			node.Unwrap().SetValue(20)
 			// ========= [A]ssert  =========
-			must.Eq(t, []ComparableInt{1, 20, 3}, sequence.ToSlice())
+			must.Eq(t, []ComparableInt{1, 20, 3}, slices.Collect(sequence.Values()))
 		})
 
 		t.Run("Can Append", func(t *testing.T) {
@@ -883,7 +884,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			sequence.Append(4)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, sequence.Len())
-			must.Eq(t, []ComparableInt{1, 2, 3, 4}, sequence.ToSlice())
+			must.Eq(t, []ComparableInt{1, 2, 3, 4}, slices.Collect(sequence.Values()))
 			tail := sequence.Tail()
 			must.True(t, tail.IsSome())
 			must.True(t, tail.Unwrap().Previous().IsSome())

@@ -81,6 +81,10 @@ func (s *sliceComparableInterface[T]) Append(item T) {
 	s.inner = append(s.inner, item)
 }
 
+func (s *sliceComparableInterface[T]) Capacity() int {
+	return cap(s.inner)
+}
+
 func (s *sliceComparableInterface[T]) Values() iter.Seq[T] {
 	return func(yield func(item T) bool) {
 		for _, item := range s.inner {
@@ -106,7 +110,7 @@ func (s *sliceComparableInterface[T]) Extend(items ...T) {
 }
 
 func (s *sliceComparableInterface[T]) ExtendFromSequence(sequence sequence.Sequence[T]) {
-	s.inner = append(s.inner, sequence.ToSlice()...)
+	s.inner = append(s.inner, slices.Collect(sequence.Values())...)
 }
 
 func (s *sliceComparableInterface[T]) Last() Option[T] {
