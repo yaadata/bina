@@ -38,7 +38,7 @@ func (s *hashSetFromHashable[K, T]) Clear() {
 }
 
 func (s *hashSetFromHashable[K, T]) Any(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			return true
 		}
@@ -48,7 +48,7 @@ func (s *hashSetFromHashable[K, T]) Any(pred predicate.Predicate[T]) bool {
 
 func (s *hashSetFromHashable[K, T]) Count(pred predicate.Predicate[T]) int {
 	var count int
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			count++
 		}
@@ -57,7 +57,7 @@ func (s *hashSetFromHashable[K, T]) Count(pred predicate.Predicate[T]) int {
 }
 
 func (s *hashSetFromHashable[K, T]) Every(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !pred(element) {
 			return false
 		}
@@ -66,7 +66,7 @@ func (s *hashSetFromHashable[K, T]) Every(pred predicate.Predicate[T]) bool {
 }
 
 func (s *hashSetFromHashable[K, T]) ForEach(fn func(element T)) {
-	for element := range s.All() {
+	for element := range s.Values() {
 		fn(element)
 	}
 }
@@ -79,7 +79,7 @@ func (s *hashSetFromHashable[K, T]) Add(element T) bool {
 	return true
 }
 
-func (s *hashSetFromHashable[K, T]) All() iter.Seq[T] {
+func (s *hashSetFromHashable[K, T]) Values() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for _, value := range s.set {
 			if !yield(value) {
@@ -91,7 +91,7 @@ func (s *hashSetFromHashable[K, T]) All() iter.Seq[T] {
 
 func (s *hashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[set.Set[T]] {
 	res := HashSetFromHashable[K, T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
@@ -110,7 +110,7 @@ func (s *hashSetFromHashable[K, T]) Extend(values ...T) {
 
 func (s *hashSetFromHashable[K, T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
 	m := make(map[K]T)
-	for element := range other.All() {
+	for element := range other.Values() {
 		if s.Contains(element) {
 			m[element.Hash()] = element
 		}
@@ -128,7 +128,7 @@ func (s *hashSetFromHashable[K, T]) IsSubsetOf(other set.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			return false
 		}
@@ -141,7 +141,7 @@ func (s *hashSetFromHashable[K, T]) IsSupersetOf(other set.Set[T]) bool {
 		return false
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			return false
 		}
@@ -159,13 +159,13 @@ func (s *hashSetFromHashable[K, T]) Remove(element T) bool {
 
 func (s *hashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
 	var m = make(map[K]T)
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			m[element.Hash()] = element
 		}
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			m[element.Hash()] = element
 		}
@@ -182,7 +182,7 @@ func (s *hashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T]) Option
 
 func (s *hashSetFromHashable[K, T]) Union(other set.Set[T]) set.Set[T] {
 	var resp = maps.Clone(s.set)
-	for element := range other.All() {
+	for element := range other.Values() {
 		resp[element.Hash()] = element
 	}
 	return &hashSetFromHashable[K, T]{

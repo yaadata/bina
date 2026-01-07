@@ -50,7 +50,7 @@ func (s *orderedHashSetFromBuiltin[T]) Clear() {
 }
 
 func (s *orderedHashSetFromBuiltin[T]) Any(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			return true
 		}
@@ -60,7 +60,7 @@ func (s *orderedHashSetFromBuiltin[T]) Any(pred predicate.Predicate[T]) bool {
 
 func (s *orderedHashSetFromBuiltin[T]) Count(pred predicate.Predicate[T]) int {
 	var count int
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			count++
 		}
@@ -69,7 +69,7 @@ func (s *orderedHashSetFromBuiltin[T]) Count(pred predicate.Predicate[T]) int {
 }
 
 func (s *orderedHashSetFromBuiltin[T]) Every(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !pred(element) {
 			return false
 		}
@@ -78,7 +78,7 @@ func (s *orderedHashSetFromBuiltin[T]) Every(pred predicate.Predicate[T]) bool {
 }
 
 func (s *orderedHashSetFromBuiltin[T]) ForEach(fn func(element T)) {
-	for element := range s.All() {
+	for element := range s.Values() {
 		fn(element)
 	}
 }
@@ -94,7 +94,7 @@ func (s *orderedHashSetFromBuiltin[T]) Add(element T) bool {
 	return true
 }
 
-func (s *orderedHashSetFromBuiltin[T]) All() iter.Seq[T] {
+func (s *orderedHashSetFromBuiltin[T]) Values() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for index, key := range s.ordered {
 			if s.deleted[index] {
@@ -109,7 +109,7 @@ func (s *orderedHashSetFromBuiltin[T]) All() iter.Seq[T] {
 
 func (s *orderedHashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.Set[T]] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
@@ -121,7 +121,7 @@ func (s *orderedHashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.S
 	return Some(res)
 }
 
-func (s *orderedHashSetFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
+func (s *orderedHashSetFromBuiltin[T]) All() iter.Seq2[int, T] {
 	return func(yield func(int, T) bool) {
 		trueIndex := 0
 		for index, key := range s.ordered {
@@ -144,7 +144,7 @@ func (s *orderedHashSetFromBuiltin[T]) Extend(elements ...T) {
 
 func (s *orderedHashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
 	res := hashset.HashSetFromBuiltin[T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if other.Contains(element) {
 			res.Add(element)
 		}
@@ -159,7 +159,7 @@ func (s *orderedHashSetFromBuiltin[T]) IsSubsetOf(other set.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			return false
 		}
@@ -172,7 +172,7 @@ func (s *orderedHashSetFromBuiltin[T]) IsSupersetOf(other set.Set[T]) bool {
 		return false
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			return false
 		}
@@ -196,13 +196,13 @@ func (s *orderedHashSetFromBuiltin[T]) Remove(element T) bool {
 
 func (s *orderedHashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			res.Add(element)
 		}
@@ -216,10 +216,10 @@ func (s *orderedHashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Opt
 
 func (s *orderedHashSetFromBuiltin[T]) Union(other set.Set[T]) set.Set[T] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len() + other.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		res.Add(element)
 	}
-	for element := range other.All() {
+	for element := range other.Values() {
 		res.Add(element)
 	}
 	return res
@@ -254,7 +254,7 @@ func (s *orderedHashSetFromBuiltin[T]) Last() Option[T] {
 
 func (s *orderedHashSetFromBuiltin[T]) AsSlice() []T {
 	res := make([]T, 0, s.size)
-	for element := range s.All() {
+	for element := range s.Values() {
 		res = append(res, element)
 	}
 	return res

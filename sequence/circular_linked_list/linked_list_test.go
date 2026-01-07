@@ -36,7 +36,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ct     =========
 		var actual []int
-		for _, value := range sequence.Enumerate() {
+		for _, value := range sequence.All() {
 			actual = append(actual, value)
 		}
 		// ========= [A]ssert  =========
@@ -51,7 +51,7 @@ func TestLinkedListFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ct     =========
 		var actual []int
-		for value := range sequence.All() {
+		for value := range sequence.Values() {
 			actual = append(actual, value)
 		}
 		// ========= [A]ssert  =========
@@ -487,7 +487,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			Build()
 		// ========= [A]ct     =========
 		var actual []ComparableInt
-		for _, value := range sequence.Enumerate() {
+		for _, value := range sequence.All() {
 			actual = append(actual, value)
 		}
 		// ========= [A]ssert  =========
@@ -502,7 +502,7 @@ func TestLinkedListFromComparable(t *testing.T) {
 			Build()
 		// ========= [A]ct     =========
 		var actual []ComparableInt
-		for value := range sequence.All() {
+		for value := range sequence.Values() {
 			actual = append(actual, value)
 		}
 		// ========= [A]ssert  =========

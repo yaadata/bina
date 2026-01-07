@@ -8,7 +8,7 @@ import (
 
 type OrderedSet[T any] interface {
 	Set[T]
-	Enumerate() iter.Seq2[int, T]
+	All() iter.Seq2[int, T]
 	First() Option[T]
 	Last() Option[T]
 	AsSlice() []T

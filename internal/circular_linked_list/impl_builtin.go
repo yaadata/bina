@@ -41,7 +41,7 @@ func (s *linkedlistFromBuiltin[T]) Clear() {
 }
 
 func (s *linkedlistFromBuiltin[T]) Contains(element T) bool {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if value == element {
 			return true
 		}
@@ -50,7 +50,7 @@ func (s *linkedlistFromBuiltin[T]) Contains(element T) bool {
 }
 
 func (s *linkedlistFromBuiltin[T]) Any(predicate predicate.Predicate[T]) bool {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if predicate(value) {
 			return true
 		}
@@ -60,7 +60,7 @@ func (s *linkedlistFromBuiltin[T]) Any(predicate predicate.Predicate[T]) bool {
 
 func (s *linkedlistFromBuiltin[T]) Count(predicate predicate.Predicate[T]) int {
 	var result int
-	for value := range s.All() {
+	for value := range s.Values() {
 		if predicate(value) {
 			result++
 		}
@@ -69,7 +69,7 @@ func (s *linkedlistFromBuiltin[T]) Count(predicate predicate.Predicate[T]) int {
 }
 
 func (s *linkedlistFromBuiltin[T]) Every(predicate predicate.Predicate[T]) bool {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if !predicate(value) {
 			return false
 		}
@@ -78,7 +78,7 @@ func (s *linkedlistFromBuiltin[T]) Every(predicate predicate.Predicate[T]) bool 
 }
 
 func (s *linkedlistFromBuiltin[T]) ForEach(fn func(value T)) {
-	for value := range s.All() {
+	for value := range s.Values() {
 		fn(value)
 	}
 }
@@ -126,7 +126,7 @@ func (s *linkedlistFromBuiltin[T]) Append(item T) {
 	s.len++
 }
 
-func (s *linkedlistFromBuiltin[T]) All() iter.Seq[T] {
+func (s *linkedlistFromBuiltin[T]) Values() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		node := s.head
 		for i := 0; i < s.len; i++ {
@@ -138,7 +138,7 @@ func (s *linkedlistFromBuiltin[T]) All() iter.Seq[T] {
 	}
 }
 
-func (s *linkedlistFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
+func (s *linkedlistFromBuiltin[T]) All() iter.Seq2[int, T] {
 	return func(yield func(int, T) bool) {
 		node := s.head
 		for i := 0; i < s.len; i++ {
@@ -151,7 +151,7 @@ func (s *linkedlistFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
 }
 
 func (s *linkedlistFromBuiltin[T]) Find(predicate predicate.Predicate[T]) Option[T] {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if predicate(value) {
 			return Some(value)
 		}
@@ -160,7 +160,7 @@ func (s *linkedlistFromBuiltin[T]) Find(predicate predicate.Predicate[T]) Option
 }
 
 func (s *linkedlistFromBuiltin[T]) FindIndex(predicate predicate.Predicate[T]) Option[int] {
-	for index, value := range s.Enumerate() {
+	for index, value := range s.All() {
 		if predicate(value) {
 			return Some(index)
 		}
@@ -169,7 +169,7 @@ func (s *linkedlistFromBuiltin[T]) FindIndex(predicate predicate.Predicate[T]) O
 }
 
 func (s *linkedlistFromBuiltin[T]) Get(targetIndex int) Option[T] {
-	for index, value := range s.Enumerate() {
+	for index, value := range s.All() {
 		if index == targetIndex {
 			return Some(value)
 		}
@@ -264,7 +264,7 @@ func (s *linkedlistFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) {
 
 func (s *linkedlistFromBuiltin[T]) ToSlice() []T {
 	res := make([]T, 0, s.len)
-	for value := range s.All() {
+	for value := range s.Values() {
 		res = append(res, value)
 	}
 	return res
@@ -291,7 +291,7 @@ func (s *linkedlistFromBuiltin[T]) Extend(values ...T) {
 }
 
 func (s *linkedlistFromBuiltin[T]) ExtendFromSequence(seq sequence.Sequence[T]) {
-	for value := range seq.All() {
+	for value := range seq.Values() {
 		nextNode := &linkedListNode[T]{
 			next:     nil,
 			previous: nil,

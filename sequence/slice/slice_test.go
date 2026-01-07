@@ -48,7 +48,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			From(original...).
 			Build()
 		// ========= [A]ssert  =========
-		for index, value := range sequence.Enumerate() {
+		for index, value := range sequence.All() {
 			must.Eq(t, original[index], value)
 		}
 	})
@@ -61,7 +61,7 @@ func TestSliceFromBuiltin(t *testing.T) {
 			Build()
 		// ========= [A]ct     =========
 		var actual []int
-		for value := range sequence.All() {
+		for value := range sequence.Values() {
 			actual = append(actual, value)
 		}
 		// ========= [A]ssert  =========
@@ -450,7 +450,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			From(original...).
 			Build()
 		// ========= [A]ssert  =========
-		for index, value := range sequence.Enumerate() {
+		for index, value := range sequence.All() {
 			must.Eq(t, original[index], value)
 		}
 	})
@@ -463,7 +463,7 @@ func TestSliceFromComparableInterface(t *testing.T) {
 			Build()
 		// ========= [A]ct     =========
 		var actual []ComparableInt
-		for value := range sequence.All() {
+		for value := range sequence.Values() {
 			actual = append(actual, value)
 		}
 		// ========= [A]ssert  =========

@@ -51,7 +51,7 @@ func (s *orderedHashSetFromHashable[K, T]) Clear() {
 }
 
 func (s *orderedHashSetFromHashable[K, T]) Any(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			return true
 		}
@@ -61,7 +61,7 @@ func (s *orderedHashSetFromHashable[K, T]) Any(pred predicate.Predicate[T]) bool
 
 func (s *orderedHashSetFromHashable[K, T]) Count(pred predicate.Predicate[T]) int {
 	var count int
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			count++
 		}
@@ -70,7 +70,7 @@ func (s *orderedHashSetFromHashable[K, T]) Count(pred predicate.Predicate[T]) in
 }
 
 func (s *orderedHashSetFromHashable[K, T]) Every(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !pred(element) {
 			return false
 		}
@@ -79,7 +79,7 @@ func (s *orderedHashSetFromHashable[K, T]) Every(pred predicate.Predicate[T]) bo
 }
 
 func (s *orderedHashSetFromHashable[K, T]) ForEach(fn func(element T)) {
-	for element := range s.All() {
+	for element := range s.Values() {
 		fn(element)
 	}
 }
@@ -95,7 +95,7 @@ func (s *orderedHashSetFromHashable[K, T]) Add(element T) bool {
 	return true
 }
 
-func (s *orderedHashSetFromHashable[K, T]) All() iter.Seq[T] {
+func (s *orderedHashSetFromHashable[K, T]) Values() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for index, key := range s.ordered {
 			if s.deleted[index] {
@@ -110,7 +110,7 @@ func (s *orderedHashSetFromHashable[K, T]) All() iter.Seq[T] {
 
 func (s *orderedHashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[set.Set[T]] {
 	var res = hashset.HashSetFromHashable[K, T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
@@ -122,7 +122,7 @@ func (s *orderedHashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[s
 	return Some(res)
 }
 
-func (s *orderedHashSetFromHashable[K, T]) Enumerate() iter.Seq2[int, T] {
+func (s *orderedHashSetFromHashable[K, T]) All() iter.Seq2[int, T] {
 	return func(yield func(int, T) bool) {
 		trueIndex := 0
 		for index, key := range s.ordered {
@@ -145,7 +145,7 @@ func (s *orderedHashSetFromHashable[K, T]) Extend(elements ...T) {
 
 func (s *orderedHashSetFromHashable[K, T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
 	res := hashset.HashSetFromHashable[K, T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if other.Contains(element) {
 			res.Add(element)
 		}
@@ -160,7 +160,7 @@ func (s *orderedHashSetFromHashable[K, T]) IsSubsetOf(other set.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			return false
 		}
@@ -173,7 +173,7 @@ func (s *orderedHashSetFromHashable[K, T]) IsSupersetOf(other set.Set[T]) bool {
 		return false
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			return false
 		}
@@ -197,13 +197,13 @@ func (s *orderedHashSetFromHashable[K, T]) Remove(element T) bool {
 
 func (s *orderedHashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
 	var res = hashset.HashSetFromHashable[K, T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			res.Add(element)
 		}
@@ -217,10 +217,10 @@ func (s *orderedHashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T])
 
 func (s *orderedHashSetFromHashable[K, T]) Union(other set.Set[T]) set.Set[T] {
 	var res = hashset.HashSetFromHashable[K, T](s.Len() + other.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		res.Add(element)
 	}
-	for element := range other.All() {
+	for element := range other.Values() {
 		res.Add(element)
 	}
 	return res
@@ -255,7 +255,7 @@ func (s *orderedHashSetFromHashable[K, T]) Last() Option[T] {
 
 func (s *orderedHashSetFromHashable[K, T]) AsSlice() []T {
 	res := make([]T, 0, s.size)
-	for element := range s.All() {
+	for element := range s.Values() {
 		res = append(res, element)
 	}
 	return res

@@ -13,7 +13,7 @@ type Map[K any, V any] interface {
 	Get(key K) Option[V]
 	Put(key K, value V) bool
 	Delete(key K) bool
-	Enumerate() iter.Seq2[K, V]
+	All() iter.Seq2[K, V]
 	Keys() iter.Seq[K]
 	values() iter.Seq[V]
 }

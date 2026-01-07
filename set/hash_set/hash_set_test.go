@@ -203,7 +203,7 @@ func TestHashSetFromBuiltin(t *testing.T) {
 				Build()
 			// ========= [A]ct     =========
 			count := 0
-			for range set.All() {
+			for range set.Values() {
 				count++
 			}
 			// ========= [A]ssert  =========
@@ -597,7 +597,7 @@ func TestHashSetFromHashable(t *testing.T) {
 				Build()
 			// ========= [A]ct     =========
 			count := 0
-			for range set.All() {
+			for range set.Values() {
 				count++
 			}
 			// ========= [A]ssert  =========

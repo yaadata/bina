@@ -44,7 +44,7 @@ func (s *linkedListFromComparable[T]) Clear() {
 }
 
 func (s *linkedListFromComparable[T]) Contains(element T) bool {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if value.Equal(element) {
 			return true
 		}
@@ -53,7 +53,7 @@ func (s *linkedListFromComparable[T]) Contains(element T) bool {
 }
 
 func (s *linkedListFromComparable[T]) Any(predicate predicate.Predicate[T]) bool {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if predicate(value) {
 			return true
 		}
@@ -63,7 +63,7 @@ func (s *linkedListFromComparable[T]) Any(predicate predicate.Predicate[T]) bool
 
 func (s *linkedListFromComparable[T]) Count(predicate predicate.Predicate[T]) int {
 	var result int
-	for value := range s.All() {
+	for value := range s.Values() {
 		if predicate(value) {
 			result++
 		}
@@ -72,7 +72,7 @@ func (s *linkedListFromComparable[T]) Count(predicate predicate.Predicate[T]) in
 }
 
 func (s *linkedListFromComparable[T]) Every(predicate predicate.Predicate[T]) bool {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if !predicate(value) {
 			return false
 		}
@@ -81,7 +81,7 @@ func (s *linkedListFromComparable[T]) Every(predicate predicate.Predicate[T]) bo
 }
 
 func (s *linkedListFromComparable[T]) ForEach(fn func(value T)) {
-	for value := range s.All() {
+	for value := range s.Values() {
 		fn(value)
 	}
 }
@@ -120,7 +120,7 @@ func (s *linkedListFromComparable[T]) Append(item T) {
 	s.len++
 }
 
-func (s *linkedListFromComparable[T]) All() iter.Seq[T] {
+func (s *linkedListFromComparable[T]) Values() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for node := s.head; node != nil; node = node.next {
 			if !yield(node.value) {
@@ -130,7 +130,7 @@ func (s *linkedListFromComparable[T]) All() iter.Seq[T] {
 	}
 }
 
-func (s *linkedListFromComparable[T]) Enumerate() iter.Seq2[int, T] {
+func (s *linkedListFromComparable[T]) All() iter.Seq2[int, T] {
 	return func(yield func(int, T) bool) {
 		index := 0
 		for node := s.head; node != nil; node = node.next {
@@ -143,7 +143,7 @@ func (s *linkedListFromComparable[T]) Enumerate() iter.Seq2[int, T] {
 }
 
 func (s *linkedListFromComparable[T]) Find(predicate predicate.Predicate[T]) Option[T] {
-	for value := range s.All() {
+	for value := range s.Values() {
 		if predicate(value) {
 			return Some(value)
 		}
@@ -152,7 +152,7 @@ func (s *linkedListFromComparable[T]) Find(predicate predicate.Predicate[T]) Opt
 }
 
 func (s *linkedListFromComparable[T]) FindIndex(predicate predicate.Predicate[T]) Option[int] {
-	for index, value := range s.Enumerate() {
+	for index, value := range s.All() {
 		if predicate(value) {
 			return Some(index)
 		}
@@ -161,7 +161,7 @@ func (s *linkedListFromComparable[T]) FindIndex(predicate predicate.Predicate[T]
 }
 
 func (s *linkedListFromComparable[T]) Get(targetIndex int) Option[T] {
-	for index, value := range s.Enumerate() {
+	for index, value := range s.All() {
 		if index == targetIndex {
 			return Some(value)
 		}
@@ -226,7 +226,7 @@ func (s *linkedListFromComparable[T]) Sort(fn func(a, b T) compare.Order) {
 
 func (s *linkedListFromComparable[T]) ToSlice() []T {
 	res := make([]T, 0, s.len)
-	for value := range s.All() {
+	for value := range s.Values() {
 		res = append(res, value)
 	}
 	return res
@@ -251,7 +251,7 @@ func (s *linkedListFromComparable[T]) Extend(values ...T) {
 }
 
 func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T]) {
-	for value := range seq.All() {
+	for value := range seq.Values() {
 		nextNode := &linkedListNode[T]{
 			value: value,
 			next:  nil,

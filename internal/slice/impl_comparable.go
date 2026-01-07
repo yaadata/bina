@@ -81,7 +81,7 @@ func (s *sliceComparableInterface[T]) Append(item T) {
 	s.inner = append(s.inner, item)
 }
 
-func (s *sliceComparableInterface[T]) All() iter.Seq[T] {
+func (s *sliceComparableInterface[T]) Values() iter.Seq[T] {
 	return func(yield func(item T) bool) {
 		for _, item := range s.inner {
 			if !yield(item) {
@@ -91,7 +91,7 @@ func (s *sliceComparableInterface[T]) All() iter.Seq[T] {
 	}
 }
 
-func (s *sliceComparableInterface[T]) Enumerate() iter.Seq2[int, T] {
+func (s *sliceComparableInterface[T]) All() iter.Seq2[int, T] {
 	return func(yield func(index int, item T) bool) {
 		for index, item := range s.inner {
 			if !yield(index, item) {

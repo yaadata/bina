@@ -40,7 +40,7 @@ func (s *hashSetFromBuiltin[T]) Clear() {
 }
 
 func (s *hashSetFromBuiltin[T]) Any(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			return true
 		}
@@ -50,7 +50,7 @@ func (s *hashSetFromBuiltin[T]) Any(pred predicate.Predicate[T]) bool {
 
 func (s *hashSetFromBuiltin[T]) Count(pred predicate.Predicate[T]) int {
 	var count int
-	for element := range s.All() {
+	for element := range s.Values() {
 		if pred(element) {
 			count++
 		}
@@ -59,7 +59,7 @@ func (s *hashSetFromBuiltin[T]) Count(pred predicate.Predicate[T]) int {
 }
 
 func (s *hashSetFromBuiltin[T]) Every(pred predicate.Predicate[T]) bool {
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !pred(element) {
 			return false
 		}
@@ -68,7 +68,7 @@ func (s *hashSetFromBuiltin[T]) Every(pred predicate.Predicate[T]) bool {
 }
 
 func (s *hashSetFromBuiltin[T]) ForEach(fn func(element T)) {
-	for element := range s.All() {
+	for element := range s.Values() {
 		fn(element)
 	}
 }
@@ -81,7 +81,7 @@ func (s *hashSetFromBuiltin[T]) Add(element T) bool {
 	return true
 }
 
-func (s *hashSetFromBuiltin[T]) All() iter.Seq[T] {
+func (s *hashSetFromBuiltin[T]) Values() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for key := range s.set {
 			if !yield(key) {
@@ -93,7 +93,7 @@ func (s *hashSetFromBuiltin[T]) All() iter.Seq[T] {
 
 func (s *hashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.Set[T]] {
 	res := HashSetFromBuiltin[T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
@@ -112,7 +112,7 @@ func (s *hashSetFromBuiltin[T]) Extend(values ...T) {
 
 func (s *hashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
 	res := HashSetFromBuiltin[T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if other.Contains(element) {
 			res.Add(element)
 		}
@@ -127,7 +127,7 @@ func (s *hashSetFromBuiltin[T]) IsSubsetOf(other set.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			return false
 		}
@@ -140,7 +140,7 @@ func (s *hashSetFromBuiltin[T]) IsSupersetOf(other set.Set[T]) bool {
 		return false
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			return false
 		}
@@ -158,13 +158,13 @@ func (s *hashSetFromBuiltin[T]) Remove(element T) bool {
 
 func (s *hashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
 	var res = HashSetFromBuiltin[T](s.Len())
-	for element := range s.All() {
+	for element := range s.Values() {
 		if !other.Contains(element) {
 			res.Add(element)
 		}
 	}
 
-	for element := range other.All() {
+	for element := range other.Values() {
 		if !s.Contains(element) {
 			res.Add(element)
 		}
@@ -178,7 +178,7 @@ func (s *hashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set
 
 func (s *hashSetFromBuiltin[T]) Union(other set.Set[T]) set.Set[T] {
 	var resp = maps.Clone(s.set)
-	for element := range other.All() {
+	for element := range other.Values() {
 		resp[element] = true
 	}
 	return &hashSetFromBuiltin[T]{

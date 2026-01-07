@@ -13,8 +13,8 @@ import (
 type Sequence[T any] interface {
 	collection.Collection[T]
 	collection.Aggregate[T]
-	All() iter.Seq[T]
-	Enumerate() iter.Seq2[int, T]
+	All() iter.Seq2[int, T]
+	Values() iter.Seq[T]
 	Find(predicate predicate.Predicate[T]) Option[T]
 	FindIndex(predicate predicate.Predicate[T]) Option[int]
 	Get(index int) Option[T]

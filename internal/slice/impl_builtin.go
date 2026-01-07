@@ -73,7 +73,7 @@ func (s *sliceFromBuiltin[T]) Append(item T) {
 	s.inner = append(s.inner, item)
 }
 
-func (s *sliceFromBuiltin[T]) All() iter.Seq[T] {
+func (s *sliceFromBuiltin[T]) Values() iter.Seq[T] {
 	return func(yield func(item T) bool) {
 		for _, item := range s.inner {
 			if !yield(item) {
@@ -83,7 +83,7 @@ func (s *sliceFromBuiltin[T]) All() iter.Seq[T] {
 	}
 }
 
-func (s *sliceFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
+func (s *sliceFromBuiltin[T]) All() iter.Seq2[int, T] {
 	return func(yield func(index int, item T) bool) {
 		for index, item := range s.inner {
 			if !yield(index, item) {

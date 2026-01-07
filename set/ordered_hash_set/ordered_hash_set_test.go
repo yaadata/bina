@@ -203,28 +203,28 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 				Build()
 			// ========= [A]ct     =========
 			count := 0
-			for range set.All() {
+			for range set.Values() {
 				count++
 			}
 			// ========= [A]ssert  =========
 			must.Eq(t, 3, count)
 		})
 
-		t.Run("All - maintains insertion order", func(t *testing.T) {
+		t.Run("Values - maintains insertion order", func(t *testing.T) {
 			// ========= [A]rrange =========
 			set := orderedhashset.NewBuiltinBuilder[int]().
 				From(3, 1, 2).
 				Build()
 			// ========= [A]ct     =========
 			var items []int
-			for item := range set.All() {
+			for item := range set.Values() {
 				items = append(items, item)
 			}
 			// ========= [A]ssert  =========
 			must.Eq(t, []int{3, 1, 2}, items)
 		})
 
-		t.Run("Enumerate - maintains insertion order", func(t *testing.T) {
+		t.Run("All - maintains insertion order", func(t *testing.T) {
 			// ========= [A]rrange =========
 			insertionOrder := []int{3, 1, 2, 6, 4, 5}
 			set := orderedhashset.NewBuiltinBuilder[int]().
@@ -232,7 +232,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 				Build()
 			// ========= [A]ct     =========
 			var actual []int
-			for index, value := range set.Enumerate() {
+			for index, value := range set.All() {
 				must.Eq(t, insertionOrder[index], value)
 				actual = append(actual, value)
 			}
@@ -670,28 +670,28 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 				Build()
 			// ========= [A]ct     =========
 			count := 0
-			for range set.All() {
+			for range set.Values() {
 				count++
 			}
 			// ========= [A]ssert  =========
 			must.Eq(t, 3, count)
 		})
 
-		t.Run("All - maintains insertion order", func(t *testing.T) {
+		t.Run("Values - maintains insertion order", func(t *testing.T) {
 			// ========= [A]rrange =========
 			set := orderedhashset.NewHashableBuilder[int, HashableInt]().
 				From(3, 1, 2).
 				Build()
 			// ========= [A]ct     =========
 			var items []HashableInt
-			for item := range set.All() {
+			for item := range set.Values() {
 				items = append(items, item)
 			}
 			// ========= [A]ssert  =========
 			must.Eq(t, []HashableInt{3, 1, 2}, items)
 		})
 
-		t.Run("Enumerate - maintains insertion order", func(t *testing.T) {
+		t.Run("All - maintains insertion order", func(t *testing.T) {
 			// ========= [A]rrange =========
 			insertionOrder := []HashableInt{3, 1, 2, 6, 4, 5}
 			set := orderedhashset.NewHashableBuilder[int, HashableInt]().
@@ -699,7 +699,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 				Build()
 			// ========= [A]ct     =========
 			var actual []HashableInt
-			for index, value := range set.Enumerate() {
+			for index, value := range set.All() {
 				must.Eq(t, insertionOrder[index], value)
 				actual = append(actual, value)
 			}

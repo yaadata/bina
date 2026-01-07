@@ -75,7 +75,7 @@ func (s *arrayFromBuiltin[T]) ForEach(fn func(T)) {
 	}
 }
 
-func (s *arrayFromBuiltin[T]) All() iter.Seq[T] {
+func (s *arrayFromBuiltin[T]) Values() iter.Seq[T] {
 	return func(yield func(item T) bool) {
 		for _, item := range s.inner {
 			if !yield(item) {
@@ -85,7 +85,7 @@ func (s *arrayFromBuiltin[T]) All() iter.Seq[T] {
 	}
 }
 
-func (s *arrayFromBuiltin[T]) Enumerate() iter.Seq2[int, T] {
+func (s *arrayFromBuiltin[T]) All() iter.Seq2[int, T] {
 	return func(yield func(index int, item T) bool) {
 		for index, item := range s.inner {
 			if !yield(index, item) {
@@ -177,7 +177,7 @@ func (s *arrayFromBuiltin[T]) OfferRange(elements []T, cfgs ...core_range.CoreRa
 }
 
 func (s *arrayFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
-	for index, element := range s.Enumerate() {
+	for index, element := range s.All() {
 		if !predicate(element) {
 			s.inner[index] = *new(T)
 		}

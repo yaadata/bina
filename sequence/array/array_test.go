@@ -284,7 +284,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 	// Group 4: Iteration
 	// ============================================================================
 
-	t.Run("All iterates over all elements", func(t *testing.T) {
+	t.Run("Values iterates over all elements", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewBuiltinBuilder[int]().
 			Size(3).
@@ -292,14 +292,14 @@ func TestArrayFromBuiltin(t *testing.T) {
 		arr.OfferRange([]int{10, 20, 30})
 		// ========= [A]ct     =========
 		var collected []int
-		for item := range arr.All() {
+		for item := range arr.Values() {
 			collected = append(collected, item)
 		}
 		// ========= [A]ssert  =========
 		must.Eq(t, []int{10, 20, 30}, collected)
 	})
 
-	t.Run("All can be stopped early", func(t *testing.T) {
+	t.Run("Values can be stopped early", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewBuiltinBuilder[int]().
 			Size(5).
@@ -307,7 +307,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		arr.OfferRange([]int{1, 2, 3, 4, 5})
 		// ========= [A]ct     =========
 		var collected []int
-		for item := range arr.All() {
+		for item := range arr.Values() {
 			collected = append(collected, item)
 			if item == 3 {
 				break
@@ -317,7 +317,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		must.Eq(t, []int{1, 2, 3}, collected)
 	})
 
-	t.Run("Enumerate iterates with index and value", func(t *testing.T) {
+	t.Run("All iterates with index and value", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewBuiltinBuilder[int]().
 			Size(3).
@@ -326,7 +326,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		// ========= [A]ct     =========
 		var indices []int
 		var values []int
-		for idx, val := range arr.Enumerate() {
+		for idx, val := range arr.All() {
 			indices = append(indices, idx)
 			values = append(values, val)
 		}
@@ -335,7 +335,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		must.Eq(t, []int{10, 20, 30}, values)
 	})
 
-	t.Run("Enumerate can be stopped early", func(t *testing.T) {
+	t.Run("All can be stopped early", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewBuiltinBuilder[int]().
 			Size(5).
@@ -343,7 +343,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 		arr.OfferRange([]int{1, 2, 3, 4, 5})
 		// ========= [A]ct     =========
 		var indices []int
-		for idx := range arr.Enumerate() {
+		for idx := range arr.All() {
 			indices = append(indices, idx)
 			if idx == 2 {
 				break
@@ -931,7 +931,7 @@ func TestArrayFromComparable(t *testing.T) {
 	// Group 4: Iteration
 	// ============================================================================
 
-	t.Run("All iterates over all elements", func(t *testing.T) {
+	t.Run("Values iterates over all elements", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewComparableInterfaceBuilder[ComparableInt]().
 			Size(3).
@@ -939,14 +939,14 @@ func TestArrayFromComparable(t *testing.T) {
 		arr.OfferRange([]ComparableInt{10, 20, 30})
 		// ========= [A]ct     =========
 		var collected []ComparableInt
-		for item := range arr.All() {
+		for item := range arr.Values() {
 			collected = append(collected, item)
 		}
 		// ========= [A]ssert  =========
 		must.Eq(t, []ComparableInt{10, 20, 30}, collected)
 	})
 
-	t.Run("All can be stopped early", func(t *testing.T) {
+	t.Run("Values can be stopped early", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewComparableInterfaceBuilder[ComparableInt]().
 			Size(5).
@@ -954,7 +954,7 @@ func TestArrayFromComparable(t *testing.T) {
 		arr.OfferRange([]ComparableInt{1, 2, 3, 4, 5})
 		// ========= [A]ct     =========
 		var collected []ComparableInt
-		for item := range arr.All() {
+		for item := range arr.Values() {
 			collected = append(collected, item)
 			if item == 3 {
 				break
@@ -964,7 +964,7 @@ func TestArrayFromComparable(t *testing.T) {
 		must.Eq(t, []ComparableInt{1, 2, 3}, collected)
 	})
 
-	t.Run("Enumerate iterates with index and value", func(t *testing.T) {
+	t.Run("All iterates with index and value", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewComparableInterfaceBuilder[ComparableInt]().
 			Size(3).
@@ -973,7 +973,7 @@ func TestArrayFromComparable(t *testing.T) {
 		// ========= [A]ct     =========
 		var indices []int
 		var values []ComparableInt
-		for idx, val := range arr.Enumerate() {
+		for idx, val := range arr.All() {
 			indices = append(indices, idx)
 			values = append(values, val)
 		}
@@ -982,7 +982,7 @@ func TestArrayFromComparable(t *testing.T) {
 		must.Eq(t, []ComparableInt{10, 20, 30}, values)
 	})
 
-	t.Run("Enumerate can be stopped early", func(t *testing.T) {
+	t.Run("All can be stopped early", func(t *testing.T) {
 		// ========= [A]rrange =========
 		arr := array.NewComparableInterfaceBuilder[ComparableInt]().
 			Size(5).
@@ -990,7 +990,7 @@ func TestArrayFromComparable(t *testing.T) {
 		arr.OfferRange([]ComparableInt{1, 2, 3, 4, 5})
 		// ========= [A]ct     =========
 		var indices []int
-		for idx := range arr.Enumerate() {
+		for idx := range arr.All() {
 			indices = append(indices, idx)
 			if idx == 2 {
 				break
