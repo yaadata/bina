@@ -27,7 +27,9 @@ func (l *linkedListNode[T]) Next() Option[sequence.DoublyLinkedListNode[T]] {
 
 func (l *linkedListNode[T]) setNext(next *linkedListNode[T]) {
 	l.next = next
-	next.previous = l
+	if next != nil {
+		next.previous = l
+	}
 }
 
 func (l *linkedListNode[T]) Previous() Option[sequence.DoublyLinkedListNode[T]] {

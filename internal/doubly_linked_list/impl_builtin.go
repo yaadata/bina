@@ -199,6 +199,9 @@ func (s *linkedlistFromBuiltin[T]) Retain(predicate predicate.Predicate[T]) {
 	for node := previousNode.next; node != nil; node = node.next {
 		if !predicate(node.value) {
 			previousNode.setNext(node.next)
+			if node.next == nil {
+				s.tail = previousNode
+			}
 			s.len--
 		} else {
 			previousNode = node
