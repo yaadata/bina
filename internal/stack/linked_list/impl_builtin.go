@@ -90,7 +90,7 @@ func (b *builtinStack[T]) Push(element T) {
 }
 
 func (b *builtinStack[T]) Pop() Option[T] {
-	return b.inner.RemoveAt(b.Len())
+	return b.inner.RemoveAt(b.Len() - 1)
 }
 
 func (b *builtinStack[T]) Peek() Option[T] {

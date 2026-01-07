@@ -90,7 +90,7 @@ func (b *comparableStack[T]) Push(element T) {
 }
 
 func (b *comparableStack[T]) Pop() Option[T] {
-	return b.inner.RemoveAt(b.Len())
+	return b.inner.RemoveAt(b.Len() - 1)
 }
 
 func (b *comparableStack[T]) Peek() Option[T] {
