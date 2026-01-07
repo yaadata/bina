@@ -1,6 +1,7 @@
 package orderedhashset_test
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/shoenig/test/must"
@@ -250,7 +251,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			set.Extend(4, 5, 6)
 			// ========= [A]ssert  =========
 			must.Eq(t, 6, set.Len())
-			must.Eq(t, []int{1, 2, 3, 4, 5, 6}, set.AsSlice())
+			must.Eq(t, []int{1, 2, 3, 4, 5, 6}, slices.Collect(set.Values()))
 		})
 
 		t.Run("Extend - with duplicates", func(t *testing.T) {
@@ -262,7 +263,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			set.Extend(2, 3, 4)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, set.Len())
-			must.Eq(t, []int{1, 2, 3, 4}, set.AsSlice())
+			must.Eq(t, []int{1, 2, 3, 4}, slices.Collect(set.Values()))
 		})
 
 		// SCENARIO: Remove
@@ -277,7 +278,7 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			must.True(t, removed)
 			must.Eq(t, 2, set.Len())
 			must.False(t, set.Contains(2))
-			must.Eq(t, []int{1, 3}, set.AsSlice())
+			must.Eq(t, []int{1, 3}, slices.Collect(set.Values()))
 		})
 
 		t.Run("Remove - non-existing element", func(t *testing.T) {
@@ -465,18 +466,6 @@ func TestOrderedHashSetFromBuiltin(t *testing.T) {
 			symDiff := set1.SymmetricDifference(set2)
 			// ========= [A]ssert  =========
 			must.True(t, symDiff.IsNone())
-		})
-
-		t.Run("Slice - maintains insertion order", func(t *testing.T) {
-			// ========= [A]rrange =========
-			insertionOrder := []int{3, 1, 2, 6, 4, 5}
-			set := orderedhashset.NewBuiltinBuilder[int]().
-				From(insertionOrder...).
-				Build()
-			// ========= [A]ct     =========
-			actual := set.AsSlice()
-			// ========= [A]ssert  =========
-			must.Eq(t, insertionOrder, actual)
 		})
 	})
 }
@@ -717,7 +706,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			set.Extend(4, 5, 6)
 			// ========= [A]ssert  =========
 			must.Eq(t, 6, set.Len())
-			must.Eq(t, []HashableInt{1, 2, 3, 4, 5, 6}, set.AsSlice())
+			must.Eq(t, []HashableInt{1, 2, 3, 4, 5, 6}, slices.Collect(set.Values()))
 		})
 
 		t.Run("Extend - with duplicates", func(t *testing.T) {
@@ -729,7 +718,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			set.Extend(2, 3, 4)
 			// ========= [A]ssert  =========
 			must.Eq(t, 4, set.Len())
-			must.Eq(t, []HashableInt{1, 2, 3, 4}, set.AsSlice())
+			must.Eq(t, []HashableInt{1, 2, 3, 4}, slices.Collect(set.Values()))
 		})
 
 		// SCENARIO: Remove
@@ -744,7 +733,7 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			must.True(t, removed)
 			must.Eq(t, 2, set.Len())
 			must.False(t, set.Contains(2))
-			must.Eq(t, []HashableInt{1, 3}, set.AsSlice())
+			must.Eq(t, []HashableInt{1, 3}, slices.Collect(set.Values()))
 		})
 
 		t.Run("Remove - non-existing element", func(t *testing.T) {
@@ -932,18 +921,6 @@ func TestOrderedHashSetFromHashable(t *testing.T) {
 			symDiff := set1.SymmetricDifference(set2)
 			// ========= [A]ssert  =========
 			must.True(t, symDiff.IsNone())
-		})
-
-		t.Run("Slice - maintains insertion order", func(t *testing.T) {
-			// ========= [A]rrange =========
-			insertionOrder := []HashableInt{3, 1, 2, 6, 4, 5}
-			set := orderedhashset.NewHashableBuilder[int, HashableInt]().
-				From(insertionOrder...).
-				Build()
-			// ========= [A]ct     =========
-			actual := set.AsSlice()
-			// ========= [A]ssert  =========
-			must.Eq(t, insertionOrder, actual)
 		})
 	})
 }
