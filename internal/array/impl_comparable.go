@@ -182,15 +182,6 @@ func (s *arrayComparableInterface[T]) OfferRange(elements []T, cfgs ...core_rang
 	return true
 }
 
-func (s *arrayComparableInterface[T]) RemoveAt(index int) Option[T] {
-	if index < 0 || index >= len(s.inner) {
-		return None[T]()
-	}
-	item := s.inner[index]
-	s.inner[index] = *new(T)
-	return Some(item)
-}
-
 func (s *arrayComparableInterface[T]) Retain(predicate predicate.Predicate[T]) {
 	for index, element := range s.Enumerate() {
 		if !predicate(element) {
