@@ -10,7 +10,7 @@ import (
 )
 
 type queue[T any] struct {
-	inner sequence.Slice[T]
+	inner sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]]
 }
 
 // Compile-time interface checks
@@ -18,15 +18,15 @@ func _[T comparable]() {
 	var _ sequence.Queue[T] = (*queue[T])(nil)
 }
 
-func __[T compare.Comparable[T]]() {
+func _[T compare.Comparable[T]]() {
 	var _ sequence.Queue[T] = (*queue[T])(nil)
 }
 
-func QueueFromBuiltin[T comparable](inner sequence.Slice[T]) *queue[T] {
+func LinkedListBackedQueueFromBuiltin[T comparable](inner sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]]) *queue[T] {
 	return &queue[T]{inner: inner}
 }
 
-func QueueFromComparable[T compare.Comparable[T]](inner sequence.Slice[T]) *queue[T] {
+func LinkedListBackedQueueFromComparable[T compare.Comparable[T]](inner sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]]) *queue[T] {
 	return &queue[T]{inner: inner}
 }
 
@@ -103,5 +103,9 @@ func (b *queue[T]) Dequeue() Option[T] {
 }
 
 func (b *queue[T]) Peek() Option[T] {
-	return b.inner.First()
+	head := b.inner.Head()
+	if head.IsNone() {
+		return None[T]()
+	}
+	return Some(head.Unwrap().Value())
 }

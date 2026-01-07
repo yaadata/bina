@@ -5,9 +5,8 @@ import (
 
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/linked_list"
+	"codeberg.org/yaadata/bina/internal/queue"
 	"codeberg.org/yaadata/bina/internal/slice"
-	queuelinkedlist "codeberg.org/yaadata/bina/internal/queue/linked_list"
-	queueslice "codeberg.org/yaadata/bina/internal/queue/slice"
 	"codeberg.org/yaadata/bina/sequence"
 )
 
@@ -38,10 +37,10 @@ func (b *builtinBuilder[T]) Build() sequence.Queue[T] {
 	case QueueBackedBySinglyLinkedList:
 		inner := linkedlist.LinkedListFromBuiltin[T]()
 		inner.Extend(items...)
-		return queuelinkedlist.QueueFromBuiltin(inner)
+		return queue.LinkedListBackedQueueFromBuiltin(inner)
 	default:
 		inner := slice.SliceFromBuiltin(items...)
-		return queueslice.QueueFromBuiltin(inner)
+		return queue.SliceBackedQueueFromBuiltin(inner)
 	}
 }
 
@@ -72,9 +71,9 @@ func (b *comparableBuilder[T]) Build() sequence.Queue[T] {
 	case QueueBackedBySinglyLinkedList:
 		inner := linkedlist.LinkedListFromComparable[T]()
 		inner.Extend(items...)
-		return queuelinkedlist.QueueFromComparable(inner)
+		return queue.LinkedListBackedQueueFromComparable(inner)
 	default:
 		inner := slice.SliceFromComparableInterface(items...)
-		return queueslice.QueueFromComparable(inner)
+		return queue.SliceBackedQueueFromComparable(inner)
 	}
 }
