@@ -68,6 +68,21 @@ func TestSliceFromBuiltin(t *testing.T) {
 		must.True(t, slices.Equal(original, actual))
 	})
 
+	t.Run("Can create reverse iterator", func(t *testing.T) {
+		// ========= [A]rrange =========
+		original := []int{1, 2, 3}
+		sequence := slice.NewBuiltinBuilder[int]().
+			From(original...).
+			Build()
+		// ========= [A]ct     =========
+		var actual []int
+		for _, value := range sequence.Reverse() {
+			actual = append(actual, value)
+		}
+		// ========= [A]ssert  =========
+		must.Eq(t, []int{3, 2, 1}, actual)
+	})
+
 	t.Run("Can Extend", func(t *testing.T) {
 		// ========= [A]rrange =========
 		sequence := slice.NewBuiltinBuilder[int]().
@@ -468,6 +483,21 @@ func TestSliceFromComparableInterface(t *testing.T) {
 		}
 		// ========= [A]ssert  =========
 		must.True(t, slices.Equal(original, actual))
+	})
+
+	t.Run("Can create reverse iterator", func(t *testing.T) {
+		// ========= [A]rrange =========
+		original := []ComparableInt{1, 2, 3}
+		sequence := slice.NewComparableInterfaceBuilder[ComparableInt]().
+			From(original...).
+			Build()
+		// ========= [A]ct     =========
+		var actual []ComparableInt
+		for _, value := range sequence.Reverse() {
+			actual = append(actual, value)
+		}
+		// ========= [A]ssert  =========
+		must.True(t, slices.Equal([]ComparableInt{3, 2, 1}, actual))
 	})
 
 	t.Run("Can Extend", func(t *testing.T) {

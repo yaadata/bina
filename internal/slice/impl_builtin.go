@@ -192,3 +192,7 @@ func (s *sliceFromBuiltin[T]) Sort(fn func(a, b T) compare.Order) {
 func (s *sliceFromBuiltin[T]) ToSlice() []T {
 	return s.inner
 }
+
+func (s *sliceFromBuiltin[T]) Reverse() iter.Seq2[int, T] {
+	return slices.Backward(s.inner)
+}
