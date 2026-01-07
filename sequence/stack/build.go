@@ -6,8 +6,7 @@ import (
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/linked_list"
 	"codeberg.org/yaadata/bina/internal/slice"
-	stacklinkedlist "codeberg.org/yaadata/bina/internal/stack/linked_list"
-	stackslice "codeberg.org/yaadata/bina/internal/stack/slice"
+	internalstack "codeberg.org/yaadata/bina/internal/stack"
 	"codeberg.org/yaadata/bina/sequence"
 )
 
@@ -38,10 +37,10 @@ func (b *builtinBuilder[T]) Build() sequence.Stack[T] {
 	case StackBackedBySinglyLinkedList:
 		inner := linkedlist.LinkedListFromBuiltin[T]()
 		inner.Extend(items...)
-		return stacklinkedlist.StackFromBuiltin(inner)
+		return internalstack.LinkedListStackFromBuiltin(inner)
 	default:
 		inner := slice.SliceFromBuiltin(items...)
-		return stackslice.StackFromBuiltin(inner)
+		return internalstack.SliceStackFromBuiltin(inner)
 	}
 }
 
@@ -72,9 +71,9 @@ func (b *comparableBuilder[T]) Build() sequence.Stack[T] {
 	case StackBackedBySinglyLinkedList:
 		inner := linkedlist.LinkedListFromComparable[T]()
 		inner.Extend(items...)
-		return stacklinkedlist.StackFromComparable(inner)
+		return internalstack.LinkedListStackFromComparable(inner)
 	default:
 		inner := slice.SliceFromComparableInterface(items...)
-		return stackslice.StackFromComparable(inner)
+		return internalstack.SliceStackFromComparable(inner)
 	}
 }
