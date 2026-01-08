@@ -6,7 +6,7 @@ import (
 	"slices"
 	"sort"
 
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"

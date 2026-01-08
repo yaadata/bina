@@ -2,7 +2,7 @@ package maps
 
 import (
 	"codeberg.org/yaadata/bina/core/kv"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type OrderedMap[K comparable, V any] interface {

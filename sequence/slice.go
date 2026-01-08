@@ -4,7 +4,7 @@ import (
 	"iter"
 
 	"codeberg.org/yaadata/bina/core/predicate"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type Slice[T any] interface {

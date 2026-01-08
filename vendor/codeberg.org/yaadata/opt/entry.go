@@ -1,8 +1,8 @@
 package optionsgo
 
 import (
-	"github.com/yaadata/optionsgo/core"
-	"github.com/yaadata/optionsgo/internal"
+	"codeberg.org/yaadata/opt/core"
+	"codeberg.org/yaadata/opt/internal"
 )
 
 // Option is a re-export of [core.Option]

@@ -4,7 +4,7 @@ import (
 	"iter"
 
 	"codeberg.org/yaadata/bina/core/collection"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type Set[T any] interface {

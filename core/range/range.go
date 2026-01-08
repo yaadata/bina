@@ -1,7 +1,7 @@
 package core_range
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type Range[K any] struct {

@@ -1,7 +1,7 @@
 package sequence
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/predicate"
 	core_range "codeberg.org/yaadata/bina/core/range"

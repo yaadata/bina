@@ -1,7 +1,7 @@
 package orderedhashset
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/hashable"
 	orderedhashset "codeberg.org/yaadata/bina/internal/ordered_hashset"

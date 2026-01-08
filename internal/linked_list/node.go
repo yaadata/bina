@@ -2,7 +2,7 @@ package linkedlist
 
 import (
 	"codeberg.org/yaadata/bina/sequence"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type linkedListNode[T any] struct {

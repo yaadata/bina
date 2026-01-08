@@ -1,7 +1,7 @@
 package orderedhashmap
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	orderedhashmap "codeberg.org/yaadata/bina/internal/ordered_hashmap"
 	"codeberg.org/yaadata/bina/maps"

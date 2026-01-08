@@ -1,6 +1,6 @@
 package internal
 
-import "github.com/yaadata/optionsgo/core"
+import "codeberg.org/yaadata/opt/core"
 
 func OptionAndThen[T, V any](option core.Option[T], fn func(T) core.Option[V]) core.Option[V] {
 	if option.IsNone() {

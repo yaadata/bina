@@ -7,7 +7,7 @@ import (
 	"codeberg.org/yaadata/bina/core/predicate"
 	hashset "codeberg.org/yaadata/bina/internal/hashset"
 	"codeberg.org/yaadata/bina/set"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type orderedHashSetFromHashable[K comparable, T hashable.Hashable[K]] struct {

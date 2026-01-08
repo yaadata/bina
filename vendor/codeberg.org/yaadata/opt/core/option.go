@@ -1,6 +1,6 @@
 package core
 
-import "github.com/yaadata/optionsgo/shared"
+import "codeberg.org/yaadata/opt/shared"
 
 // Option is a Go implementation of Rust's Option<T> type.
 // It represents an optional value: every Option is either Some and contains a value,

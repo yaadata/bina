@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"github.com/yaadata/optionsgo/core"
-	"github.com/yaadata/optionsgo/shared"
+	"codeberg.org/yaadata/opt/core"
+	"codeberg.org/yaadata/opt/shared"
 )
 
 type result[T any] struct {

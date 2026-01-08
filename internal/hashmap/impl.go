@@ -4,7 +4,7 @@ import (
 	"iter"
 	"maps"
 
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/kv"
 	"codeberg.org/yaadata/bina/core/predicate"

@@ -3,8 +3,8 @@ package internal
 import (
 	"reflect"
 
-	"github.com/yaadata/optionsgo/core"
-	"github.com/yaadata/optionsgo/shared"
+	"codeberg.org/yaadata/opt/core"
+	"codeberg.org/yaadata/opt/shared"
 )
 
 const (

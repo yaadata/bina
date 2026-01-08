@@ -1,7 +1,7 @@
 package doublylinkedlist
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/doubly_linked_list"

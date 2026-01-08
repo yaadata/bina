@@ -3,7 +3,7 @@ package sequence
 import (
 	"iter"
 
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"

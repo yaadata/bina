@@ -1,7 +1,7 @@
 package deque
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/compare"
 	internal_deque "codeberg.org/yaadata/bina/internal/deque"

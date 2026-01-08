@@ -1,3 +1,9 @@
+# codeberg.org/yaadata/opt v1.0.0-alpha
+## explicit; go 1.25.4
+codeberg.org/yaadata/opt
+codeberg.org/yaadata/opt/core
+codeberg.org/yaadata/opt/internal
+codeberg.org/yaadata/opt/shared
 # github.com/google/go-cmp v0.7.0
 ## explicit; go 1.21
 github.com/google/go-cmp/cmp
@@ -13,9 +19,3 @@ github.com/shoenig/test/internal/constraints
 github.com/shoenig/test/internal/util
 github.com/shoenig/test/must
 github.com/shoenig/test/wait
-# github.com/yaadata/optionsgo v0.5.0
-## explicit; go 1.25.4
-github.com/yaadata/optionsgo
-github.com/yaadata/optionsgo/core
-github.com/yaadata/optionsgo/internal
-github.com/yaadata/optionsgo/shared

@@ -1,6 +1,6 @@
 package internal
 
-import "github.com/yaadata/optionsgo/core"
+import "codeberg.org/yaadata/opt/core"
 
 func ResultMap[T, V any](result core.Result[T], fn func(inner T) V) core.Result[V] {
 	if result.IsOk() {

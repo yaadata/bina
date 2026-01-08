@@ -1,7 +1,7 @@
 package compare
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type Order int

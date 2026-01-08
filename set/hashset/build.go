@@ -1,7 +1,7 @@
 package hashset
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/hashable"
 	hashset "codeberg.org/yaadata/bina/internal/hashset"

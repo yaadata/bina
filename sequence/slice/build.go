@@ -1,8 +1,8 @@
 package slice
 
 import (
-	. "github.com/yaadata/optionsgo"
-	"github.com/yaadata/optionsgo/core"
+	. "codeberg.org/yaadata/opt"
+	"codeberg.org/yaadata/opt/core"
 
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/internal/slice"

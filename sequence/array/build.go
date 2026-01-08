@@ -1,7 +1,7 @@
 package array
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/internal/array"

@@ -26,7 +26,7 @@ The following tools are used in this project
 ## Installation
 
 ```bash
-go get github.com/yaadata/optionsgo@v0.5.0
+go get codeberg.org/yaadata/opt@v1.0.0-alpha
 ```
 
 ## Quick Start
@@ -36,7 +36,7 @@ import (
     "errors"
     "fmt"
 
-    . "github.com/yaadata/optionsgo"
+    . "codeberg.org/yaadata/opt"
 )
 
 // Using Option
@@ -100,8 +100,8 @@ ahead to see each functions capability.
 
 ```go
 import ( 
-    "github.com/yaadata/optionsgo/extension"
-    . "github.com/yaadata/optionsgo"
+    "codeberg.org/yaadata/opt/extension"
+    . "codeberg.org/yaadata/opt"
 )
 
 // ...
@@ -138,7 +138,7 @@ extension.OptionAndThen(opt(3), toOption)
 
 ```go
 import (
-    . "github.com/yaadata/optionsgo"
+    . "codeberg.org/yaadata/opt"
 )
 // Create Some option
 opt := Some("hello")
@@ -149,36 +149,6 @@ opt.IsNone()  // false
 empty := None[string]()
 empty.IsSome()  // false
 empty.IsNone()  // true
-```
-
-#### Conditional Checks with Predicates
-
-```go
-import (
-    . "github.com/yaadata/optionsgo"
-)
-
-//... 
-
-opt := Some("SOME")
-
-// Check if Some and predicate passes
-opt.IsSomeAnd(func(s string) bool {
-    return len(s) == 4
-}) // true
-
-opt.IsSomeAnd(func(s string) bool {
-    return len(s) == 3
-}) // false
-
-// Check if None or predicate passes
-opt.IsNoneOr(func(s string) bool {
-    return len(s) == 4
-}) // true (predicate passes)
-
-None[string]().IsNoneOr(func(s string) bool {
-    return false
-}) // true (is None)
 ```
 
 #### More Examples ?

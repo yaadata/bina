@@ -6,7 +6,7 @@ import (
 
 	"codeberg.org/yaadata/bina/core/predicate"
 	"codeberg.org/yaadata/bina/set"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type hashSetFromBuiltin[T comparable] struct {

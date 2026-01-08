@@ -3,7 +3,7 @@ package hashmap
 import (
 	maps0 "maps"
 
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 
 	hashmap "codeberg.org/yaadata/bina/internal/hashmap"
 	"codeberg.org/yaadata/bina/maps"

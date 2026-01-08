@@ -1,6 +1,6 @@
 package core
 
-import "github.com/yaadata/optionsgo/shared"
+import "codeberg.org/yaadata/opt/shared"
 
 // Result represents the outcome of an operation that can either succeed with a value
 // or fail with an error. This is a Go implementation of Rust's std::result::Result type.

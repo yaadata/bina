@@ -1,7 +1,7 @@
 package sequence
 
 import (
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type LinkedList[T any, Node LinkedListNode[T]] interface {

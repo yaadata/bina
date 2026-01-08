@@ -3,7 +3,7 @@ package set
 import (
 	"iter"
 
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type OrderedSet[T any] interface {

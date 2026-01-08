@@ -6,7 +6,7 @@ import (
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
 	"codeberg.org/yaadata/bina/sequence"
-	. "github.com/yaadata/optionsgo"
+	. "codeberg.org/yaadata/opt"
 )
 
 type queueSlice[T any] struct {
