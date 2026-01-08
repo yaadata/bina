@@ -18,15 +18,9 @@ type impl[K comparable, V any] struct {
 	m map[K]V
 }
 
-func New[K comparable, V any](capacity int) *impl[K, V] {
+func New[K comparable, V any](m map[K]V) *impl[K, V] {
 	return &impl[K, V]{
-		m: make(map[K]V, capacity),
-	}
-}
-
-func From[K comparable, V any](raw map[K]V) *impl[K, V] {
-	return &impl[K, V]{
-		m: raw,
+		m: m,
 	}
 }
 
@@ -107,7 +101,7 @@ func (i *impl[K, V]) Keys() iter.Seq[K] {
 }
 
 func (i *impl[K, V]) Merge(other bina_maps.Map[K, V], fn bina_maps.MapMergeFunc[K, V]) bina_maps.Map[K, V] {
-	res := New[K, V](i.Len() + other.Len())
+	res := New[K, V](make(map[K]V, i.Len()+other.Len()))
 	for key, incoming := range other.All() {
 		current := i.Get(key)
 		if !current.IsSome() {
