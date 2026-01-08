@@ -6,7 +6,7 @@ import (
 
 	"github.com/shoenig/test/must"
 
-	orderedhashset "codeberg.org/yaadata/bina/set/ordered_hash_set"
+	orderedhashset "codeberg.org/yaadata/bina/set/ordered_hashset"
 )
 
 type HashableInt int

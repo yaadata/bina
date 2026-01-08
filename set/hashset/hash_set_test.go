@@ -5,7 +5,7 @@ import (
 
 	"github.com/shoenig/test/must"
 
-	hashset "codeberg.org/yaadata/bina/set/hash_set"
+	hashset "codeberg.org/yaadata/bina/set/hashset"
 )
 
 type HashableInt int

@@ -5,7 +5,7 @@ import (
 
 	. "github.com/yaadata/optionsgo"
 
-	hashmap "codeberg.org/yaadata/bina/internal/hash_map"
+	hashmap "codeberg.org/yaadata/bina/internal/hashmap"
 	"codeberg.org/yaadata/bina/maps"
 )
 
