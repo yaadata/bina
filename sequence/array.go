@@ -13,5 +13,5 @@ type Array[T any] interface {
 	First() Option[T]
 	Last() Option[T]
 	Offer(element T, index int) bool
-	OfferRange(elements []T, cfgs ...core_range.CoreRangeConfig) bool
+	OfferRange(elements []T, cfgs ...core_range.RangeConfig[int]) bool
 }

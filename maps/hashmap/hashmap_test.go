@@ -5,7 +5,7 @@ import (
 
 	"github.com/shoenig/test/must"
 
-	"codeberg.org/yaadata/bina/maps"
+	"codeberg.org/yaadata/bina/core/kv"
 	"codeberg.org/yaadata/bina/maps/hashmap"
 )
 
@@ -118,7 +118,7 @@ func TestHashMapBuiltinBuilder(t *testing.T) {
 		// SCENARIO: Any
 		t.Run("Any - false", func(t *testing.T) {
 			// ========= [A]ct     =========
-			actual := m.Any(func(entry maps.MapEntry[string, int]) bool {
+			actual := m.Any(func(entry kv.Pair[string, int]) bool {
 				return entry.Value() > 10
 			})
 			// ========= [A]ssert  =========
@@ -126,7 +126,7 @@ func TestHashMapBuiltinBuilder(t *testing.T) {
 		})
 		t.Run("Any - true", func(t *testing.T) {
 			// ========= [A]ct     =========
-			actual := m.Any(func(entry maps.MapEntry[string, int]) bool {
+			actual := m.Any(func(entry kv.Pair[string, int]) bool {
 				return entry.Value() > 3
 			})
 			// ========= [A]ssert  =========
@@ -136,7 +136,7 @@ func TestHashMapBuiltinBuilder(t *testing.T) {
 		// SCENARIO: Count
 		t.Run("Count", func(t *testing.T) {
 			// ========= [A]ct     =========
-			actual := m.Count(func(entry maps.MapEntry[string, int]) bool {
+			actual := m.Count(func(entry kv.Pair[string, int]) bool {
 				return entry.Value()%2 == 0
 			})
 			// ========= [A]ssert  =========
@@ -146,7 +146,7 @@ func TestHashMapBuiltinBuilder(t *testing.T) {
 		// SCENARIO: Every
 		t.Run("Every - true", func(t *testing.T) {
 			// ========= [A]ct     =========
-			actual := m.Every(func(entry maps.MapEntry[string, int]) bool {
+			actual := m.Every(func(entry kv.Pair[string, int]) bool {
 				return entry.Value() < 10
 			})
 			// ========= [A]ssert  =========
@@ -154,7 +154,7 @@ func TestHashMapBuiltinBuilder(t *testing.T) {
 		})
 		t.Run("Every - false", func(t *testing.T) {
 			// ========= [A]ct     =========
-			actual := m.Every(func(entry maps.MapEntry[string, int]) bool {
+			actual := m.Every(func(entry kv.Pair[string, int]) bool {
 				return entry.Value() > 10
 			})
 			// ========= [A]ssert  =========
@@ -170,7 +170,7 @@ func TestHashMapBuiltinBuilder(t *testing.T) {
 			// ========= [A]ct     =========
 			count := 0
 			sum := 0
-			m.ForEach(func(entry maps.MapEntry[string, int]) {
+			m.ForEach(func(entry kv.Pair[string, int]) {
 				count++
 				sum += entry.Value()
 			})

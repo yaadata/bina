@@ -162,8 +162,8 @@ func (s *arrayComparableInterface[T]) Offer(element T, index int) bool {
 	return true
 }
 
-func (s *arrayComparableInterface[T]) OfferRange(elements []T, cfgs ...core_range.CoreRangeConfig) bool {
-	r := core_range.New()
+func (s *arrayComparableInterface[T]) OfferRange(elements []T, cfgs ...core_range.RangeConfig[int]) bool {
+	r := core_range.New[int]()
 	for _, cfg := range cfgs {
 		cfg(r)
 	}
@@ -178,7 +178,7 @@ func (s *arrayComparableInterface[T]) OfferRange(elements []T, cfgs ...core_rang
 	if end > length {
 		return false
 	}
-	slices.Replace(s.inner, from, end, elements...)
+	s.inner = slices.Replace(s.inner, from, end, elements...)
 	return true
 }
 

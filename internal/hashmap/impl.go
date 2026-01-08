@@ -6,8 +6,8 @@ import (
 
 	. "github.com/yaadata/optionsgo"
 
+	"codeberg.org/yaadata/bina/core/kv"
 	"codeberg.org/yaadata/bina/core/predicate"
-	mapentry "codeberg.org/yaadata/bina/internal/map_entry"
 	bina_maps "codeberg.org/yaadata/bina/maps"
 )
 
@@ -41,37 +41,37 @@ func (i *impl[K, V]) Clear() {
 	clear(i.m)
 }
 
-func (i *impl[K, V]) Any(predicate predicate.Predicate[bina_maps.MapEntry[K, V]]) bool {
+func (i *impl[K, V]) Any(predicate predicate.Predicate[kv.Pair[K, V]]) bool {
 	for key, value := range i.All() {
-		if predicate(mapentry.New(key, value)) {
+		if predicate(kv.New(key, value)) {
 			return true
 		}
 	}
 	return false
 }
 
-func (i *impl[K, V]) Count(predicate predicate.Predicate[bina_maps.MapEntry[K, V]]) int {
+func (i *impl[K, V]) Count(predicate predicate.Predicate[kv.Pair[K, V]]) int {
 	var count int
 	for key, value := range i.All() {
-		if predicate(mapentry.New(key, value)) {
+		if predicate(kv.New(key, value)) {
 			count++
 		}
 	}
 	return count
 }
 
-func (i *impl[K, V]) Every(predicate predicate.Predicate[bina_maps.MapEntry[K, V]]) bool {
+func (i *impl[K, V]) Every(predicate predicate.Predicate[kv.Pair[K, V]]) bool {
 	for key, value := range i.All() {
-		if !predicate(mapentry.New(key, value)) {
+		if !predicate(kv.New(key, value)) {
 			return false
 		}
 	}
 	return true
 }
 
-func (i *impl[K, V]) ForEach(fn func(element bina_maps.MapEntry[K, V])) {
+func (i *impl[K, V]) ForEach(fn func(element kv.Pair[K, V])) {
 	for key, value := range i.All() {
-		fn(mapentry.New(key, value))
+		fn(kv.New(key, value))
 	}
 }
 
@@ -101,7 +101,7 @@ func (i *impl[K, V]) Keys() iter.Seq[K] {
 }
 
 func (i *impl[K, V]) Merge(other bina_maps.Map[K, V], fn bina_maps.MapMergeFunc[K, V]) bina_maps.Map[K, V] {
-	res := New[K, V](make(map[K]V, i.Len()+other.Len()))
+	res := New(make(map[K]V, i.Len()+other.Len()))
 	for key, incoming := range other.All() {
 		current := i.Get(key)
 		if !current.IsSome() {

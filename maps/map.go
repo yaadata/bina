@@ -4,12 +4,13 @@ import (
 	"iter"
 
 	"codeberg.org/yaadata/bina/core/collection"
+	"codeberg.org/yaadata/bina/core/kv"
 	. "github.com/yaadata/optionsgo"
 )
 
 type Map[K comparable, V any] interface {
 	collection.Collection[K]
-	collection.Aggregate[MapEntry[K, V]]
+	collection.Aggregate[kv.Pair[K, V]]
 	All() iter.Seq2[K, V]
 	Delete(key K) Option[V]
 	Get(key K) Option[V]

@@ -156,8 +156,8 @@ func (s *arrayFromBuiltin[T]) Offer(element T, index int) bool {
 	return true
 }
 
-func (s *arrayFromBuiltin[T]) OfferRange(elements []T, cfgs ...core_range.CoreRangeConfig) bool {
-	r := core_range.New()
+func (s *arrayFromBuiltin[T]) OfferRange(elements []T, cfgs ...core_range.RangeConfig[int]) bool {
+	r := core_range.New[int]()
 	for _, cfg := range cfgs {
 		cfg(r)
 	}
@@ -172,7 +172,7 @@ func (s *arrayFromBuiltin[T]) OfferRange(elements []T, cfgs ...core_range.CoreRa
 	if end > length {
 		return false
 	}
-	slices.Replace(s.inner, from, end, elements...)
+	s.inner = slices.Replace(s.inner, from, end, elements...)
 	return true
 }
 

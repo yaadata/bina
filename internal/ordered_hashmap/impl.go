@@ -5,14 +5,14 @@ import (
 
 	. "github.com/yaadata/optionsgo"
 
+	"codeberg.org/yaadata/bina/core/kv"
 	"codeberg.org/yaadata/bina/core/predicate"
 	"codeberg.org/yaadata/bina/internal/hashmap"
-	mapentry "codeberg.org/yaadata/bina/internal/map_entry"
 	bina_maps "codeberg.org/yaadata/bina/maps"
 )
 
 type orderedHashMapFromBuiltin[K comparable, V any] struct {
-	ordered  []bina_maps.MapEntry[K, V]
+	ordered  []kv.Pair[K, V]
 	deleted  []bool
 	keyIndex map[K]int
 	size     int
@@ -23,7 +23,7 @@ var _ bina_maps.OrderedMap[int, int] = (*orderedHashMapFromBuiltin[int, int])(ni
 
 func OrderedHashMapFromBuiltin[K comparable, V any](capacity int) bina_maps.OrderedMap[K, V] {
 	return &orderedHashMapFromBuiltin[K, V]{
-		ordered:  make([]bina_maps.MapEntry[K, V], 0, capacity),
+		ordered:  make([]kv.Pair[K, V], 0, capacity),
 		deleted:  make([]bool, 0, capacity/2),
 		keyIndex: make(map[K]int, capacity),
 		size:     0,
@@ -46,41 +46,41 @@ func (m *orderedHashMapFromBuiltin[K, V]) IsEmpty() bool {
 func (m *orderedHashMapFromBuiltin[K, V]) Clear() {
 	clear(m.keyIndex)
 	m.size = 0
-	m.ordered = make([]bina_maps.MapEntry[K, V], 0)
+	m.ordered = make([]kv.Pair[K, V], 0)
 	m.deleted = make([]bool, 0)
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) Any(pred predicate.Predicate[bina_maps.MapEntry[K, V]]) bool {
+func (m *orderedHashMapFromBuiltin[K, V]) Any(pred predicate.Predicate[kv.Pair[K, V]]) bool {
 	for key, value := range m.All() {
-		if pred(mapentry.New(key, value)) {
+		if pred(kv.New(key, value)) {
 			return true
 		}
 	}
 	return false
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) Count(pred predicate.Predicate[bina_maps.MapEntry[K, V]]) int {
+func (m *orderedHashMapFromBuiltin[K, V]) Count(pred predicate.Predicate[kv.Pair[K, V]]) int {
 	var count int
 	for key, value := range m.All() {
-		if pred(mapentry.New(key, value)) {
+		if pred(kv.New(key, value)) {
 			count++
 		}
 	}
 	return count
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) Every(pred predicate.Predicate[bina_maps.MapEntry[K, V]]) bool {
+func (m *orderedHashMapFromBuiltin[K, V]) Every(pred predicate.Predicate[kv.Pair[K, V]]) bool {
 	for key, value := range m.All() {
-		if !pred(mapentry.New(key, value)) {
+		if !pred(kv.New(key, value)) {
 			return false
 		}
 	}
 	return true
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) ForEach(fn func(element bina_maps.MapEntry[K, V])) {
+func (m *orderedHashMapFromBuiltin[K, V]) ForEach(fn func(element kv.Pair[K, V])) {
 	for key, value := range m.All() {
-		fn(mapentry.New(key, value))
+		fn(kv.New(key, value))
 	}
 }
 
@@ -151,11 +151,11 @@ func (m *orderedHashMapFromBuiltin[K, V]) Merge(other bina_maps.Map[K, V], fn bi
 
 func (m *orderedHashMapFromBuiltin[K, V]) Put(key K, value V) bool {
 	if index, contains := m.keyIndex[key]; contains {
-		m.ordered[index] = mapentry.New(key, value)
+		m.ordered[index] = kv.New(key, value)
 		return false
 	}
 	m.keyIndex[key] = len(m.ordered)
-	m.ordered = append(m.ordered, mapentry.New(key, value))
+	m.ordered = append(m.ordered, kv.New(key, value))
 	m.deleted = append(m.deleted, false)
 	m.size++
 	return true
@@ -175,7 +175,7 @@ func (m *orderedHashMapFromBuiltin[K, V]) Values() iter.Seq[V] {
 }
 
 func (m *orderedHashMapFromBuiltin[K, V]) compact() {
-	updated := make([]bina_maps.MapEntry[K, V], 0, m.size)
+	updated := make([]kv.Pair[K, V], 0, m.size)
 	for index, entry := range m.ordered {
 		if !m.deleted[index] {
 			m.keyIndex[entry.Key()] = len(updated)
@@ -186,20 +186,20 @@ func (m *orderedHashMapFromBuiltin[K, V]) compact() {
 	m.deleted = make([]bool, len(updated))
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) First() Option[bina_maps.MapEntry[K, V]] {
+func (m *orderedHashMapFromBuiltin[K, V]) First() Option[kv.Pair[K, V]] {
 	for index, entry := range m.ordered {
 		if !m.deleted[index] {
 			return Some(entry)
 		}
 	}
-	return None[bina_maps.MapEntry[K, V]]()
+	return None[kv.Pair[K, V]]()
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) Last() Option[bina_maps.MapEntry[K, V]] {
+func (m *orderedHashMapFromBuiltin[K, V]) Last() Option[kv.Pair[K, V]] {
 	for i := len(m.ordered) - 1; i >= 0; i-- {
 		if !m.deleted[i] {
 			return Some(m.ordered[i])
 		}
 	}
-	return None[bina_maps.MapEntry[K, V]]()
+	return None[kv.Pair[K, V]]()
 }

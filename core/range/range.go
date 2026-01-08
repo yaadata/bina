@@ -4,36 +4,36 @@ import (
 	. "github.com/yaadata/optionsgo"
 )
 
-type Range struct {
-	from Option[int]
-	end  Option[int]
+type Range[K any] struct {
+	from Option[K]
+	end  Option[K]
 }
 
-func New() *Range {
-	return &Range{
-		from: None[int](),
-		end:  None[int](),
+func New[K any]() *Range[K] {
+	return &Range[K]{
+		from: None[K](),
+		end:  None[K](),
 	}
 }
 
-func (c *Range) From() Option[int] {
+func (c *Range[K]) From() Option[K] {
 	return c.from
 }
 
-func (c *Range) End() Option[int] {
+func (c *Range[K]) End() Option[K] {
 	return c.end
 }
 
-type CoreRangeConfig func(ranger *Range)
+type RangeConfig[K any] func(ranger *Range[K])
 
-func WithRangeFrom(from int) CoreRangeConfig {
-	return func(ranger *Range) {
+func WithRangeFrom[K any](from K) RangeConfig[K] {
+	return func(ranger *Range[K]) {
 		ranger.from = Some(from)
 	}
 }
 
-func WithRangeEnd(end int) CoreRangeConfig {
-	return func(ranger *Range) {
+func WithRangeEnd[K any](end K) RangeConfig[K] {
+	return func(ranger *Range[K]) {
 		ranger.end = Some(end)
 	}
 }
