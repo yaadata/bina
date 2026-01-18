@@ -1,5 +1,5 @@
-codeberg.org/yaadata/opt v1.0.0-alpha h1:bhfmoTR32ty3xe3SFQlQvLhqzPGtQv1izlRtLp8wbTw=
-codeberg.org/yaadata/opt v1.0.0-alpha/go.mod h1:TyXGACC8/2K8VcuIS1xrdteu3MG6znCNKrTd0yE3WT4=
+codeberg.org/yaadata/opt v1.0.0-alpha-1 h1:d8uEkL0Qz9uYT8YeW4vdEH5ZCHGXt1rf1ErOKyc5/4Q=
+codeberg.org/yaadata/opt v1.0.0-alpha-1/go.mod h1:TyXGACC8/2K8VcuIS1xrdteu3MG6znCNKrTd0yE3WT4=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/shoenig/test v1.12.2 h1:ZVT8NeIUwGWpZcKaepPmFMoNQ3sVpxvqUh/MAqwFiJI=

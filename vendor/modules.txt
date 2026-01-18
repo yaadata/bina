@@ -1,4 +1,4 @@
-# codeberg.org/yaadata/opt v1.0.0-alpha
+# codeberg.org/yaadata/opt v1.0.0-alpha-1
 ## explicit; go 1.25.4
 codeberg.org/yaadata/opt
 codeberg.org/yaadata/opt/core

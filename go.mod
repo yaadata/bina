@@ -3,7 +3,7 @@ module codeberg.org/yaadata/bina
 go 1.25.4
 
 require (
-	codeberg.org/yaadata/opt v1.0.0-alpha
+	codeberg.org/yaadata/opt v1.0.0-alpha-1
 	github.com/shoenig/test v1.12.2
 )
 

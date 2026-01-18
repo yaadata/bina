@@ -1,4 +1,4 @@
-package optionsgo
+package opt
 
 import (
 	"codeberg.org/yaadata/opt/core"

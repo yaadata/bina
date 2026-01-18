@@ -1,4 +1,4 @@
-// Package optionsgo provides Rust-style Option and Result types for Go.
+// Package opt provides Rust-style Option and Result types for Go.
 //
 // This package replicates the semantics of Rust's std::option::Option and
 // std::result::Result types
@@ -12,4 +12,4 @@
 //
 // Result[T, E] represents a value that could be successful (Ok) or an error (Err).
 // This is similar to Go's (value, error).
-package optionsgo
+package opt
