@@ -13,6 +13,7 @@ import (
 type SearchTree[K any, V any] interface {
 	collection.Collection[K]
 	collection.Aggregate[K]
+	Delete(key K) Option[V]
 	Get(key K) Option[V]
 	Put(key K, value V)
 	Height() int
