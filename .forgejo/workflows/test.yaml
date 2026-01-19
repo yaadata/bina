@@ -1,6 +1,7 @@
 name: Go Tests
 
 on:
+  workflow_dispatch:
   push:
     paths: &go-paths
       - '**/*.go'
