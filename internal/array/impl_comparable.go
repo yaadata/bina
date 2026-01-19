@@ -8,10 +8,10 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
 	core_range "codeberg.org/yaadata/bina/core/range"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
 type arrayComparableInterface[T compare.Comparable[T]] struct {
@@ -26,7 +26,7 @@ func ArrayFromComparableInterface[T compare.Comparable[T]](size int) *arrayCompa
 
 // Compile-time interface implementation check for arrayComparableInterface
 func _[T compare.Comparable[T]]() {
-	var _ sequence.Array[T] = (*arrayComparableInterface[T])(nil)
+	var _ collection.Array[T] = (*arrayComparableInterface[T])(nil)
 }
 
 func (s *arrayComparableInterface[T]) Len() int {
@@ -109,7 +109,7 @@ func (s *arrayComparableInterface[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *arrayComparableInterface[T]) Filter(predicate predicate.Predicate[T]) sequence.Array[T] {
+func (s *arrayComparableInterface[T]) Filter(predicate predicate.Predicate[T]) collection.Array[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {

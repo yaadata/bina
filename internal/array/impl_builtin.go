@@ -8,10 +8,10 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
 	core_range "codeberg.org/yaadata/bina/core/range"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
 type arrayFromBuiltin[T comparable] struct {
@@ -19,7 +19,7 @@ type arrayFromBuiltin[T comparable] struct {
 	position int
 }
 
-var _ sequence.Array[int] = (*arrayFromBuiltin[int])(nil)
+var _ collection.Array[int] = (*arrayFromBuiltin[int])(nil)
 
 func ArrayFromBuiltin[T comparable](size int) *arrayFromBuiltin[T] {
 	return &arrayFromBuiltin[T]{
@@ -103,7 +103,7 @@ func (s *arrayFromBuiltin[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *arrayFromBuiltin[T]) Filter(predicate predicate.Predicate[T]) sequence.Array[T] {
+func (s *arrayFromBuiltin[T]) Filter(predicate predicate.Predicate[T]) collection.Array[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {

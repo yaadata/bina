@@ -6,13 +6,13 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/kv"
 	"codeberg.org/yaadata/bina/core/predicate"
-	bina_maps "codeberg.org/yaadata/bina/maps"
 )
 
 // compile time check
-var _ bina_maps.Map[int, int] = (*impl[int, int])(nil)
+var _ collection.Map[int, int] = (*impl[int, int])(nil)
 
 type impl[K comparable, V any] struct {
 	m map[K]V
@@ -100,7 +100,7 @@ func (i *impl[K, V]) Keys() iter.Seq[K] {
 	return maps.Keys(i.m)
 }
 
-func (i *impl[K, V]) Merge(other bina_maps.Map[K, V], fn bina_maps.MapMergeFunc[K, V]) bina_maps.Map[K, V] {
+func (i *impl[K, V]) Merge(other collection.Map[K, V], fn collection.MapMergeFunc[K, V]) collection.Map[K, V] {
 	res := New(make(map[K]V, i.Len()+other.Len()))
 	for key, incoming := range other.All() {
 		current := i.Get(key)

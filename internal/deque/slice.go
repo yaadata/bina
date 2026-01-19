@@ -3,30 +3,30 @@ package deque
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 	. "codeberg.org/yaadata/opt"
 )
 
 type dequeSlice[T any] struct {
-	inner sequence.Slice[T]
+	inner collection.Slice[T]
 }
 
 // Compile-time interface checks
 func _[T comparable]() {
-	var _ sequence.Deque[T] = (*dequeSlice[T])(nil)
+	var _ collection.Deque[T] = (*dequeSlice[T])(nil)
 }
 
 func __[T compare.Comparable[T]]() {
-	var _ sequence.Deque[T] = (*dequeSlice[T])(nil)
+	var _ collection.Deque[T] = (*dequeSlice[T])(nil)
 }
 
-func SliceBackedDequeFromBuiltin[T comparable](inner sequence.Slice[T]) *dequeSlice[T] {
+func SliceBackedDequeFromBuiltin[T comparable](inner collection.Slice[T]) *dequeSlice[T] {
 	return &dequeSlice[T]{inner: inner}
 }
 
-func SliceBackedDequeFromComparable[T compare.Comparable[T]](inner sequence.Slice[T]) *dequeSlice[T] {
+func SliceBackedDequeFromComparable[T compare.Comparable[T]](inner collection.Slice[T]) *dequeSlice[T] {
 	return &dequeSlice[T]{inner: inner}
 }
 

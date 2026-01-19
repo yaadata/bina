@@ -3,12 +3,12 @@ package doublylinkedlist
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/doubly_linked_list"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.LinkedList[T, collection.DoublyLinkedListNode[T]], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		from: None[[]T](),
 	}
@@ -23,13 +23,13 @@ func (b *builtinBuilder[T]) From(items ...T) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]] {
+func (b *builtinBuilder[T]) Build() collection.LinkedList[T, collection.DoublyLinkedListNode[T]] {
 	ll := linkedlist.LinkedListFromBuiltin[T]()
 	ll.Extend(b.from.UnwrapOrDefault()...)
 	return ll
 }
 
-func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]], *comparableBuilder[T]] {
+func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.LinkedList[T, collection.DoublyLinkedListNode[T]], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		from: None[[]T](),
 	}
@@ -44,7 +44,7 @@ func (b *comparableBuilder[T]) From(items ...T) *comparableBuilder[T] {
 	return b
 }
 
-func (b *comparableBuilder[T]) Build() sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]] {
+func (b *comparableBuilder[T]) Build() collection.LinkedList[T, collection.DoublyLinkedListNode[T]] {
 	ll := linkedlist.LinkedListFromComparable[T]()
 	ll.Extend(b.from.UnwrapOrDefault()...)
 	return ll

@@ -1,4 +1,4 @@
-package sequence
+package collection
 
 import (
 	"iter"

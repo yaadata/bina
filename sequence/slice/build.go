@@ -4,12 +4,12 @@ import (
 	. "codeberg.org/yaadata/opt"
 	"codeberg.org/yaadata/opt/core"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/internal/slice"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, sequence.Slice[T], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.Slice[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		from:     None[[]T](),
 		capacity: None[int](),
@@ -31,13 +31,13 @@ func (b *builtinBuilder[T]) Capacity(cap int) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() sequence.Slice[T] {
+func (b *builtinBuilder[T]) Build() collection.Slice[T] {
 	return slice.SliceFromBuiltin(b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)
 }
 
-func NewComparableInterfaceBuilder[T compare.Comparable[T]]() Builder[T, sequence.Slice[T], *comparableBuilder[T]] {
+func NewComparableInterfaceBuilder[T compare.Comparable[T]]() Builder[T, collection.Slice[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		from:     None[[]T](),
 		capacity: None[int](),
@@ -59,7 +59,7 @@ func (b *comparableBuilder[T]) Capacity(cap int) *comparableBuilder[T] {
 	return b
 }
 
-func (b *comparableBuilder[T]) Build() sequence.Slice[T] {
+func (b *comparableBuilder[T]) Build() collection.Slice[T] {
 	return slice.SliceFromComparableInterface(b.from.OrElse(func() core.Option[[]T] {
 		return b.from.Or(Some(make([]T, 0, b.capacity.UnwrapOrDefault())))
 	}).Unwrap()...)

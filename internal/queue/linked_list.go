@@ -3,30 +3,30 @@ package queue
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 	. "codeberg.org/yaadata/opt"
 )
 
 type queue[T any] struct {
-	inner sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]]
+	inner collection.LinkedList[T, collection.SinglyLinkedListNode[T]]
 }
 
 // Compile-time interface checks
 func _[T comparable]() {
-	var _ sequence.Queue[T] = (*queue[T])(nil)
+	var _ collection.Queue[T] = (*queue[T])(nil)
 }
 
 func _[T compare.Comparable[T]]() {
-	var _ sequence.Queue[T] = (*queue[T])(nil)
+	var _ collection.Queue[T] = (*queue[T])(nil)
 }
 
-func LinkedListBackedQueueFromBuiltin[T comparable](inner sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]]) *queue[T] {
+func LinkedListBackedQueueFromBuiltin[T comparable](inner collection.LinkedList[T, collection.SinglyLinkedListNode[T]]) *queue[T] {
 	return &queue[T]{inner: inner}
 }
 
-func LinkedListBackedQueueFromComparable[T compare.Comparable[T]](inner sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]]) *queue[T] {
+func LinkedListBackedQueueFromComparable[T compare.Comparable[T]](inner collection.LinkedList[T, collection.SinglyLinkedListNode[T]]) *queue[T] {
 	return &queue[T]{inner: inner}
 }
 

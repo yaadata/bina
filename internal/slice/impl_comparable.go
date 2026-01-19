@@ -7,9 +7,9 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
 type sliceComparableInterface[T compare.Comparable[T]] struct {
@@ -22,7 +22,7 @@ func SliceFromComparableInterface[T compare.Comparable[T]](items ...T) *sliceCom
 
 // Compile-time interface implementation check for sliceComparableInterface
 func _[T compare.Comparable[T]]() {
-	var _ sequence.Slice[T] = (*sliceComparableInterface[T])(nil)
+	var _ collection.Slice[T] = (*sliceComparableInterface[T])(nil)
 }
 
 func (s *sliceComparableInterface[T]) Len() int {
@@ -109,7 +109,7 @@ func (s *sliceComparableInterface[T]) Extend(items ...T) {
 	s.inner = append(s.inner, items...)
 }
 
-func (s *sliceComparableInterface[T]) ExtendFromSequence(sequence sequence.Sequence[T]) {
+func (s *sliceComparableInterface[T]) ExtendFromSequence(sequence collection.Sequence[T]) {
 	s.inner = append(s.inner, slices.Collect(sequence.Values())...)
 }
 
@@ -121,7 +121,7 @@ func (s *sliceComparableInterface[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceComparableInterface[T]) Filter(predicate predicate.Predicate[T]) sequence.Slice[T] {
+func (s *sliceComparableInterface[T]) Filter(predicate predicate.Predicate[T]) collection.Slice[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {

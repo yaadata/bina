@@ -1,7 +1,7 @@
 package doublylinkedlist
 
 import (
-	"codeberg.org/yaadata/bina/sequence"
+	"codeberg.org/yaadata/bina/core/collection"
 	. "codeberg.org/yaadata/opt"
 )
 
@@ -19,9 +19,9 @@ func newLinkedListNode[T any](value T) *linkedListNode[T] {
 	}
 }
 
-var _ sequence.DoublyLinkedListNode[int] = (*linkedListNode[int])(nil)
+var _ collection.DoublyLinkedListNode[int] = (*linkedListNode[int])(nil)
 
-func (l *linkedListNode[T]) Next() Option[sequence.DoublyLinkedListNode[T]] {
+func (l *linkedListNode[T]) Next() Option[collection.DoublyLinkedListNode[T]] {
 	return optionalNode(l.next)
 }
 
@@ -32,7 +32,7 @@ func (l *linkedListNode[T]) setNext(next *linkedListNode[T]) {
 	}
 }
 
-func (l *linkedListNode[T]) Previous() Option[sequence.DoublyLinkedListNode[T]] {
+func (l *linkedListNode[T]) Previous() Option[collection.DoublyLinkedListNode[T]] {
 	return optionalNode(l.previous)
 }
 
@@ -44,10 +44,10 @@ func (l *linkedListNode[T]) Value() T {
 	return l.value
 }
 
-func optionalNode[T any](l *linkedListNode[T]) Option[sequence.DoublyLinkedListNode[T]] {
+func optionalNode[T any](l *linkedListNode[T]) Option[collection.DoublyLinkedListNode[T]] {
 	if l == nil {
-		return None[sequence.DoublyLinkedListNode[T]]()
+		return None[collection.DoublyLinkedListNode[T]]()
 	}
-	var node sequence.DoublyLinkedListNode[T] = l
+	var node collection.DoublyLinkedListNode[T] = l
 	return Some(node)
 }

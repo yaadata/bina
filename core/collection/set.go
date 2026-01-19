@@ -1,15 +1,14 @@
-package set
+package collection
 
 import (
 	"iter"
 
-	"codeberg.org/yaadata/bina/core/collection"
 	. "codeberg.org/yaadata/opt"
 )
 
 type Set[T any] interface {
-	collection.Collection[T]
-	collection.Aggregate[T]
+	Collection[T]
+	Aggregate[T]
 	Add(value T) bool
 	Values() iter.Seq[T]
 	Extend(values ...T)

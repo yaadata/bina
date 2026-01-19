@@ -3,14 +3,14 @@ package queue
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/linked_list"
 	internal_queue "codeberg.org/yaadata/bina/internal/queue"
 	"codeberg.org/yaadata/bina/internal/slice"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, sequence.Queue[T], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.Queue[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		backedBy: QueueBackedBySlice,
 		from:     None[[]T](),
@@ -31,7 +31,7 @@ func (b *builtinBuilder[T]) From(items ...T) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() sequence.Queue[T] {
+func (b *builtinBuilder[T]) Build() collection.Queue[T] {
 	items := b.from.UnwrapOrDefault()
 	switch b.backedBy {
 	case QueueBackedBySinglyLinkedList:
@@ -44,7 +44,7 @@ func (b *builtinBuilder[T]) Build() sequence.Queue[T] {
 	}
 }
 
-func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, sequence.Queue[T], *comparableBuilder[T]] {
+func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.Queue[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		backedBy: QueueBackedBySlice,
 		from:     None[[]T](),
@@ -65,7 +65,7 @@ func (b *comparableBuilder[T]) From(items ...T) *comparableBuilder[T] {
 	return b
 }
 
-func (b *comparableBuilder[T]) Build() sequence.Queue[T] {
+func (b *comparableBuilder[T]) Build() collection.Queue[T] {
 	items := b.from.UnwrapOrDefault()
 	switch b.backedBy {
 	case QueueBackedBySinglyLinkedList:

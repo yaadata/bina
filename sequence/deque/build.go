@@ -3,14 +3,14 @@ package deque
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	internal_deque "codeberg.org/yaadata/bina/internal/deque"
 	linkedlist "codeberg.org/yaadata/bina/internal/doubly_linked_list"
 	"codeberg.org/yaadata/bina/internal/slice"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, sequence.Deque[T], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.Deque[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		backedBy: DequeBackedBySlice,
 		from:     None[[]T](),
@@ -31,7 +31,7 @@ func (b *builtinBuilder[T]) From(items ...T) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() sequence.Deque[T] {
+func (b *builtinBuilder[T]) Build() collection.Deque[T] {
 	items := b.from.UnwrapOrDefault()
 	switch b.backedBy {
 	case DequeBackedByDoublyLinkedList:
@@ -44,7 +44,7 @@ func (b *builtinBuilder[T]) Build() sequence.Deque[T] {
 	}
 }
 
-func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, sequence.Deque[T], *comparableBuilder[T]] {
+func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.Deque[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		backedBy: DequeBackedBySlice,
 		from:     None[[]T](),
@@ -65,7 +65,7 @@ func (b *comparableBuilder[T]) From(items ...T) *comparableBuilder[T] {
 	return b
 }
 
-func (b *comparableBuilder[T]) Build() sequence.Deque[T] {
+func (b *comparableBuilder[T]) Build() collection.Deque[T] {
 	items := b.from.UnwrapOrDefault()
 	switch b.backedBy {
 	case DequeBackedByDoublyLinkedList:

@@ -3,14 +3,14 @@ package stack
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	linkedlist "codeberg.org/yaadata/bina/internal/linked_list"
 	"codeberg.org/yaadata/bina/internal/slice"
 	internalstack "codeberg.org/yaadata/bina/internal/stack"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, sequence.Stack[T], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.Stack[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		backedBy: StackBackedBySlice,
 		from:     None[[]T](),
@@ -31,7 +31,7 @@ func (b *builtinBuilder[T]) From(items ...T) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() sequence.Stack[T] {
+func (b *builtinBuilder[T]) Build() collection.Stack[T] {
 	items := b.from.UnwrapOrDefault()
 	switch b.backedBy {
 	case StackBackedBySinglyLinkedList:
@@ -44,7 +44,7 @@ func (b *builtinBuilder[T]) Build() sequence.Stack[T] {
 	}
 }
 
-func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, sequence.Stack[T], *comparableBuilder[T]] {
+func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.Stack[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		backedBy: StackBackedBySlice,
 		from:     None[[]T](),
@@ -65,7 +65,7 @@ func (b *comparableBuilder[T]) From(items ...T) *comparableBuilder[T] {
 	return b
 }
 
-func (b *comparableBuilder[T]) Build() sequence.Stack[T] {
+func (b *comparableBuilder[T]) Build() collection.Stack[T] {
 	items := b.from.UnwrapOrDefault()
 	switch b.backedBy {
 	case StackBackedBySinglyLinkedList:

@@ -3,30 +3,30 @@ package deque
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 	. "codeberg.org/yaadata/opt"
 )
 
 type dequeLinkedList[T any] struct {
-	inner sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]]
+	inner collection.LinkedList[T, collection.DoublyLinkedListNode[T]]
 }
 
 // Compile-time interface checks
 func ___[T comparable]() {
-	var _ sequence.Deque[T] = (*dequeLinkedList[T])(nil)
+	var _ collection.Deque[T] = (*dequeLinkedList[T])(nil)
 }
 
 func ____[T compare.Comparable[T]]() {
-	var _ sequence.Deque[T] = (*dequeLinkedList[T])(nil)
+	var _ collection.Deque[T] = (*dequeLinkedList[T])(nil)
 }
 
-func LinkedListBackedDequeFromBuiltin[T comparable](inner sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]]) *dequeLinkedList[T] {
+func LinkedListBackedDequeFromBuiltin[T comparable](inner collection.LinkedList[T, collection.DoublyLinkedListNode[T]]) *dequeLinkedList[T] {
 	return &dequeLinkedList[T]{inner: inner}
 }
 
-func LinkedListBackedDequeFromComparable[T compare.Comparable[T]](inner sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]]) *dequeLinkedList[T] {
+func LinkedListBackedDequeFromComparable[T compare.Comparable[T]](inner collection.LinkedList[T, collection.DoublyLinkedListNode[T]]) *dequeLinkedList[T] {
 	return &dequeLinkedList[T]{inner: inner}
 }
 

@@ -1,18 +1,17 @@
-package sequence
+package collection
 
 import (
 	"iter"
 
 	. "codeberg.org/yaadata/opt"
 
-	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
 )
 
 type Sequence[T any] interface {
-	collection.Collection[T]
-	collection.Aggregate[T]
+	Collection[T]
+	Aggregate[T]
 	All() iter.Seq2[int, T]
 	Values() iter.Seq[T]
 	Find(predicate predicate.Predicate[T]) Option[T]

@@ -1,7 +1,7 @@
 package linkedlist
 
 import (
-	"codeberg.org/yaadata/bina/sequence"
+	"codeberg.org/yaadata/bina/core/collection"
 	. "codeberg.org/yaadata/opt"
 )
 
@@ -10,7 +10,7 @@ type linkedListNode[T any] struct {
 	value T
 }
 
-var _ sequence.LinkedListNode[int] = (*linkedListNode[int])(nil)
+var _ collection.LinkedListNode[int] = (*linkedListNode[int])(nil)
 
 func (l *linkedListNode[T]) Value() T {
 	return l.value
@@ -20,14 +20,14 @@ func (l *linkedListNode[T]) SetValue(value T) {
 	l.value = value
 }
 
-func (l *linkedListNode[T]) Next() Option[sequence.SinglyLinkedListNode[T]] {
+func (l *linkedListNode[T]) Next() Option[collection.SinglyLinkedListNode[T]] {
 	return optionalNode(l.next)
 }
 
-func optionalNode[T any](l *linkedListNode[T]) Option[sequence.SinglyLinkedListNode[T]] {
+func optionalNode[T any](l *linkedListNode[T]) Option[collection.SinglyLinkedListNode[T]] {
 	if l == nil {
-		return None[sequence.SinglyLinkedListNode[T]]()
+		return None[collection.SinglyLinkedListNode[T]]()
 	}
-	var node sequence.SinglyLinkedListNode[T] = l
+	var node collection.SinglyLinkedListNode[T] = l
 	return Some(node)
 }

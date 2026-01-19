@@ -1,16 +1,15 @@
-package maps
+package collection
 
 import (
 	"iter"
 
-	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/kv"
 	. "codeberg.org/yaadata/opt"
 )
 
 type Map[K comparable, V any] interface {
-	collection.Collection[K]
-	collection.Aggregate[kv.Pair[K, V]]
+	Collection[K]
+	Aggregate[kv.Pair[K, V]]
 	All() iter.Seq2[K, V]
 	Delete(key K) Option[V]
 	Get(key K) Option[V]

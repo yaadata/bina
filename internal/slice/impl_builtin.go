@@ -7,16 +7,16 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
 type sliceFromBuiltin[T comparable] struct {
 	inner []T
 }
 
-var _ sequence.Slice[int] = (*sliceFromBuiltin[int])(nil)
+var _ collection.Slice[int] = (*sliceFromBuiltin[int])(nil)
 
 func SliceFromBuiltin[T comparable](items ...T) *sliceFromBuiltin[T] {
 	return &sliceFromBuiltin[T]{inner: items}
@@ -101,7 +101,7 @@ func (s *sliceFromBuiltin[T]) Extend(items ...T) {
 	s.inner = append(s.inner, items...)
 }
 
-func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence sequence.Sequence[T]) {
+func (s *sliceFromBuiltin[T]) ExtendFromSequence(sequence collection.Sequence[T]) {
 	s.inner = append(s.inner, slices.Collect(sequence.Values())...)
 }
 
@@ -113,7 +113,7 @@ func (s *sliceFromBuiltin[T]) Last() Option[T] {
 	return Some(s.inner[length-1])
 }
 
-func (s *sliceFromBuiltin[T]) Filter(predicate predicate.Predicate[T]) sequence.Slice[T] {
+func (s *sliceFromBuiltin[T]) Filter(predicate predicate.Predicate[T]) collection.Slice[T] {
 	filtered := make([]T, 0, len(s.inner))
 	for _, item := range s.inner {
 		if predicate(item) {

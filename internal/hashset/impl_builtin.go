@@ -4,8 +4,8 @@ import (
 	"iter"
 	"maps"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/set"
 	. "codeberg.org/yaadata/opt"
 )
 
@@ -14,10 +14,10 @@ type hashSetFromBuiltin[T comparable] struct {
 }
 
 func _[T comparable]() {
-	var _ set.Set[T] = (*hashSetFromBuiltin[T])(nil)
+	var _ collection.Set[T] = (*hashSetFromBuiltin[T])(nil)
 }
 
-func HashSetFromBuiltin[T comparable](capacity int) set.Set[T] {
+func HashSetFromBuiltin[T comparable](capacity int) collection.Set[T] {
 	return &hashSetFromBuiltin[T]{
 		set: make(map[T]bool, capacity),
 	}
@@ -91,7 +91,7 @@ func (s *hashSetFromBuiltin[T]) Values() iter.Seq[T] {
 	}
 }
 
-func (s *hashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.Set[T]] {
+func (s *hashSetFromBuiltin[T]) Difference(other collection.Set[T]) Option[collection.Set[T]] {
 	res := HashSetFromBuiltin[T](s.Len())
 	for element := range s.Values() {
 		if !other.Contains(element) {
@@ -99,7 +99,7 @@ func (s *hashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.Set[T]] 
 		}
 	}
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
@@ -110,7 +110,7 @@ func (s *hashSetFromBuiltin[T]) Extend(values ...T) {
 	}
 }
 
-func (s *hashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
+func (s *hashSetFromBuiltin[T]) Intersect(other collection.Set[T]) Option[collection.Set[T]] {
 	res := HashSetFromBuiltin[T](s.Len())
 	for element := range s.Values() {
 		if other.Contains(element) {
@@ -118,12 +118,12 @@ func (s *hashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
 		}
 	}
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
 
-func (s *hashSetFromBuiltin[T]) IsSubsetOf(other set.Set[T]) bool {
+func (s *hashSetFromBuiltin[T]) IsSubsetOf(other collection.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
@@ -135,7 +135,7 @@ func (s *hashSetFromBuiltin[T]) IsSubsetOf(other set.Set[T]) bool {
 	return true
 }
 
-func (s *hashSetFromBuiltin[T]) IsSupersetOf(other set.Set[T]) bool {
+func (s *hashSetFromBuiltin[T]) IsSupersetOf(other collection.Set[T]) bool {
 	if s.Len() < other.Len() {
 		return false
 	}
@@ -156,7 +156,7 @@ func (s *hashSetFromBuiltin[T]) Remove(element T) bool {
 	return false
 }
 
-func (s *hashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
+func (s *hashSetFromBuiltin[T]) SymmetricDifference(other collection.Set[T]) Option[collection.Set[T]] {
 	var res = HashSetFromBuiltin[T](s.Len())
 	for element := range s.Values() {
 		if !other.Contains(element) {
@@ -171,12 +171,12 @@ func (s *hashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set
 	}
 
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
 
-func (s *hashSetFromBuiltin[T]) Union(other set.Set[T]) set.Set[T] {
+func (s *hashSetFromBuiltin[T]) Union(other collection.Set[T]) collection.Set[T] {
 	var resp = maps.Clone(s.set)
 	for element := range other.Values() {
 		resp[element] = true

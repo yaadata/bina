@@ -3,12 +3,12 @@ package hashset
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/hashable"
 	hashset "codeberg.org/yaadata/bina/internal/hashset"
-	"codeberg.org/yaadata/bina/set"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, set.Set[T], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.Set[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		from:     None[[]T](),
 		capacity: None[int](),
@@ -30,13 +30,13 @@ func (b *builtinBuilder[T]) Capacity(cap int) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() set.Set[T] {
+func (b *builtinBuilder[T]) Build() collection.Set[T] {
 	s := hashset.HashSetFromBuiltin[T](b.capacity.UnwrapOrDefault())
 	s.Extend(b.from.UnwrapOrDefault()...)
 	return s
 }
 
-func NewHashableBuilder[K comparable, T hashable.Hashable[K]]() Builder[T, set.Set[T], *hashableBuilder[K, T]] {
+func NewHashableBuilder[K comparable, T hashable.Hashable[K]]() Builder[T, collection.Set[T], *hashableBuilder[K, T]] {
 	return &hashableBuilder[K, T]{
 		from:     None[[]T](),
 		capacity: None[int](),
@@ -58,7 +58,7 @@ func (b *hashableBuilder[K, T]) Capacity(cap int) *hashableBuilder[K, T] {
 	return b
 }
 
-func (b *hashableBuilder[K, T]) Build() set.Set[T] {
+func (b *hashableBuilder[K, T]) Build() collection.Set[T] {
 	s := hashset.HashSetFromHashable[K, T](b.capacity.UnwrapOrDefault())
 	s.Extend(b.from.UnwrapOrDefault()...)
 	return s

@@ -3,9 +3,9 @@ package linkedlist
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 	. "codeberg.org/yaadata/opt"
 )
 
@@ -15,7 +15,7 @@ type linkedListFromComparable[T compare.Comparable[T]] struct {
 	len  int
 }
 
-func LinkedListFromComparable[T compare.Comparable[T]]() sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]] {
+func LinkedListFromComparable[T compare.Comparable[T]]() collection.LinkedList[T, collection.SinglyLinkedListNode[T]] {
 	return &linkedListFromComparable[T]{
 		head: nil,
 		tail: nil,
@@ -25,7 +25,7 @@ func LinkedListFromComparable[T compare.Comparable[T]]() sequence.LinkedList[T, 
 
 // Compile-time interface implementation check for sliceComparableInterface
 func _[T compare.Comparable[T]]() {
-	var _ sequence.LinkedList[T, sequence.SinglyLinkedListNode[T]] = (*linkedListFromComparable[T])(nil)
+	var _ collection.LinkedList[T, collection.SinglyLinkedListNode[T]] = (*linkedListFromComparable[T])(nil)
 }
 
 func (s *linkedListFromComparable[T]) Len() int {
@@ -251,7 +251,7 @@ func (s *linkedListFromComparable[T]) Extend(values ...T) {
 	}
 }
 
-func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T]) {
+func (s *linkedListFromComparable[T]) ExtendFromSequence(seq collection.Sequence[T]) {
 	for value := range seq.Values() {
 		nextNode := &linkedListNode[T]{
 			value: value,
@@ -269,19 +269,19 @@ func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T
 	}
 }
 
-func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.SinglyLinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[collection.SinglyLinkedListNode[T]] {
 	currentIndex := 0
 	for node := s.head; node != nil; node = node.next {
 		if currentIndex == index {
-			var res sequence.SinglyLinkedListNode[T] = node
+			var res collection.SinglyLinkedListNode[T] = node
 			return Some(res)
 		}
 		currentIndex++
 	}
-	return None[sequence.SinglyLinkedListNode[T]]()
+	return None[collection.SinglyLinkedListNode[T]]()
 }
 
-func (s *linkedListFromComparable[T]) Head() Option[sequence.SinglyLinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) Head() Option[collection.SinglyLinkedListNode[T]] {
 	return optionalNode(s.head)
 }
 
@@ -300,6 +300,6 @@ func (s *linkedListFromComparable[T]) Prepend(value T) {
 	s.len++
 }
 
-func (s *linkedListFromComparable[T]) Tail() Option[sequence.SinglyLinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) Tail() Option[collection.SinglyLinkedListNode[T]] {
 	return optionalNode(s.tail)
 }

@@ -3,11 +3,11 @@ package orderedhashmap
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	orderedhashmap "codeberg.org/yaadata/bina/internal/ordered_hashmap"
-	"codeberg.org/yaadata/bina/maps"
 )
 
-func BuiltinBuilder[K comparable, V any]() Builder[K, V, maps.OrderedMap[K, V], *build[K, V]] {
+func BuiltinBuilder[K comparable, V any]() Builder[K, V, collection.OrderedMap[K, V], *build[K, V]] {
 	return &build[K, V]{
 		capacity: None[int](),
 		from:     None[map[K]V](),
@@ -29,7 +29,7 @@ func (b *build[K, V]) From(builtin map[K]V) *build[K, V] {
 	return b
 }
 
-func (b *build[K, V]) Build() maps.OrderedMap[K, V] {
+func (b *build[K, V]) Build() collection.OrderedMap[K, V] {
 	if b.from.IsNone() {
 		return orderedhashmap.OrderedHashMapFromBuiltin[K, V](b.capacity.UnwrapOrDefault())
 	}

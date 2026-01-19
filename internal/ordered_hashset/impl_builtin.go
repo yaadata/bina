@@ -3,9 +3,9 @@ package orderedhashset
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/predicate"
 	hashset "codeberg.org/yaadata/bina/internal/hashset"
-	"codeberg.org/yaadata/bina/set"
 	. "codeberg.org/yaadata/opt"
 )
 
@@ -17,10 +17,10 @@ type orderedHashSetFromBuiltin[T comparable] struct {
 }
 
 func _[T comparable]() {
-	var _ set.OrderedSet[T] = (*orderedHashSetFromBuiltin[T])(nil)
+	var _ collection.OrderedSet[T] = (*orderedHashSetFromBuiltin[T])(nil)
 }
 
-func OrderedHashSetFromBuiltin[T comparable](capacity int) set.OrderedSet[T] {
+func OrderedHashSetFromBuiltin[T comparable](capacity int) collection.OrderedSet[T] {
 	return &orderedHashSetFromBuiltin[T]{
 		ordered: make([]T, 0, capacity),
 		deleted: make([]bool, capacity/2),
@@ -107,7 +107,7 @@ func (s *orderedHashSetFromBuiltin[T]) Values() iter.Seq[T] {
 	}
 }
 
-func (s *orderedHashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.Set[T]] {
+func (s *orderedHashSetFromBuiltin[T]) Difference(other collection.Set[T]) Option[collection.Set[T]] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len())
 	for element := range s.Values() {
 		if !other.Contains(element) {
@@ -116,7 +116,7 @@ func (s *orderedHashSetFromBuiltin[T]) Difference(other set.Set[T]) Option[set.S
 	}
 
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
@@ -142,7 +142,7 @@ func (s *orderedHashSetFromBuiltin[T]) Extend(elements ...T) {
 	}
 }
 
-func (s *orderedHashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
+func (s *orderedHashSetFromBuiltin[T]) Intersect(other collection.Set[T]) Option[collection.Set[T]] {
 	res := hashset.HashSetFromBuiltin[T](s.Len())
 	for element := range s.Values() {
 		if other.Contains(element) {
@@ -150,12 +150,12 @@ func (s *orderedHashSetFromBuiltin[T]) Intersect(other set.Set[T]) Option[set.Se
 		}
 	}
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
 
-func (s *orderedHashSetFromBuiltin[T]) IsSubsetOf(other set.Set[T]) bool {
+func (s *orderedHashSetFromBuiltin[T]) IsSubsetOf(other collection.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
@@ -167,7 +167,7 @@ func (s *orderedHashSetFromBuiltin[T]) IsSubsetOf(other set.Set[T]) bool {
 	return true
 }
 
-func (s *orderedHashSetFromBuiltin[T]) IsSupersetOf(other set.Set[T]) bool {
+func (s *orderedHashSetFromBuiltin[T]) IsSupersetOf(other collection.Set[T]) bool {
 	if s.Len() < other.Len() {
 		return false
 	}
@@ -194,7 +194,7 @@ func (s *orderedHashSetFromBuiltin[T]) Remove(element T) bool {
 	return true
 }
 
-func (s *orderedHashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
+func (s *orderedHashSetFromBuiltin[T]) SymmetricDifference(other collection.Set[T]) Option[collection.Set[T]] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len())
 	for element := range s.Values() {
 		if !other.Contains(element) {
@@ -209,12 +209,12 @@ func (s *orderedHashSetFromBuiltin[T]) SymmetricDifference(other set.Set[T]) Opt
 	}
 
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
 
-func (s *orderedHashSetFromBuiltin[T]) Union(other set.Set[T]) set.Set[T] {
+func (s *orderedHashSetFromBuiltin[T]) Union(other collection.Set[T]) collection.Set[T] {
 	var res = hashset.HashSetFromBuiltin[T](s.Len() + other.Len())
 	for element := range s.Values() {
 		res.Add(element)

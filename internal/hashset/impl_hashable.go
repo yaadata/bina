@@ -4,9 +4,9 @@ import (
 	"iter"
 	"maps"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/hashable"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/set"
 	. "codeberg.org/yaadata/opt"
 )
 
@@ -14,7 +14,7 @@ type hashSetFromHashable[K comparable, T hashable.Hashable[K]] struct {
 	set map[K]T
 }
 
-func HashSetFromHashable[K comparable, T hashable.Hashable[K]](capacity int) set.Set[T] {
+func HashSetFromHashable[K comparable, T hashable.Hashable[K]](capacity int) collection.Set[T] {
 	return &hashSetFromHashable[K, T]{
 		set: make(map[K]T, capacity),
 	}
@@ -89,7 +89,7 @@ func (s *hashSetFromHashable[K, T]) Values() iter.Seq[T] {
 	}
 }
 
-func (s *hashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[set.Set[T]] {
+func (s *hashSetFromHashable[K, T]) Difference(other collection.Set[T]) Option[collection.Set[T]] {
 	res := HashSetFromHashable[K, T](s.Len())
 	for element := range s.Values() {
 		if !other.Contains(element) {
@@ -97,7 +97,7 @@ func (s *hashSetFromHashable[K, T]) Difference(other set.Set[T]) Option[set.Set[
 		}
 	}
 	if res.IsEmpty() {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
 	return Some(res)
 }
@@ -108,7 +108,7 @@ func (s *hashSetFromHashable[K, T]) Extend(values ...T) {
 	}
 }
 
-func (s *hashSetFromHashable[K, T]) Intersect(other set.Set[T]) Option[set.Set[T]] {
+func (s *hashSetFromHashable[K, T]) Intersect(other collection.Set[T]) Option[collection.Set[T]] {
 	m := make(map[K]T)
 	for element := range other.Values() {
 		if s.Contains(element) {
@@ -116,15 +116,15 @@ func (s *hashSetFromHashable[K, T]) Intersect(other set.Set[T]) Option[set.Set[T
 		}
 	}
 	if len(m) == 0 {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
-	var resp set.Set[T] = &hashSetFromHashable[K, T]{
+	var resp collection.Set[T] = &hashSetFromHashable[K, T]{
 		set: m,
 	}
 	return Some(resp)
 }
 
-func (s *hashSetFromHashable[K, T]) IsSubsetOf(other set.Set[T]) bool {
+func (s *hashSetFromHashable[K, T]) IsSubsetOf(other collection.Set[T]) bool {
 	if s.Len() > other.Len() {
 		return false
 	}
@@ -136,7 +136,7 @@ func (s *hashSetFromHashable[K, T]) IsSubsetOf(other set.Set[T]) bool {
 	return true
 }
 
-func (s *hashSetFromHashable[K, T]) IsSupersetOf(other set.Set[T]) bool {
+func (s *hashSetFromHashable[K, T]) IsSupersetOf(other collection.Set[T]) bool {
 	if s.Len() < other.Len() {
 		return false
 	}
@@ -157,7 +157,7 @@ func (s *hashSetFromHashable[K, T]) Remove(element T) bool {
 	return false
 }
 
-func (s *hashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T]) Option[set.Set[T]] {
+func (s *hashSetFromHashable[K, T]) SymmetricDifference(other collection.Set[T]) Option[collection.Set[T]] {
 	var m = make(map[K]T)
 	for element := range s.Values() {
 		if !other.Contains(element) {
@@ -172,15 +172,15 @@ func (s *hashSetFromHashable[K, T]) SymmetricDifference(other set.Set[T]) Option
 	}
 
 	if len(m) == 0 {
-		return None[set.Set[T]]()
+		return None[collection.Set[T]]()
 	}
-	var resp set.Set[T] = &hashSetFromHashable[K, T]{
+	var resp collection.Set[T] = &hashSetFromHashable[K, T]{
 		set: m,
 	}
 	return Some(resp)
 }
 
-func (s *hashSetFromHashable[K, T]) Union(other set.Set[T]) set.Set[T] {
+func (s *hashSetFromHashable[K, T]) Union(other collection.Set[T]) collection.Set[T] {
 	var resp = maps.Clone(s.set)
 	for element := range other.Values() {
 		resp[element.Hash()] = element

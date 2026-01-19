@@ -6,8 +6,8 @@ import (
 
 	"github.com/shoenig/test/must"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/sequence"
 	"codeberg.org/yaadata/bina/sequence/stack"
 )
 
@@ -28,7 +28,7 @@ func TestStackFromBuiltin(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			newStack := func(items ...int) sequence.Stack[int] {
+			newStack := func(items ...int) collection.Stack[int] {
 				builder := stack.NewBuiltinBuilder[int]()
 				builder.BackedBy(tc.backedBy)
 				return builder.From(items...).Build()
@@ -383,7 +383,7 @@ func TestStackFromComparable(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			newStack := func(items ...ComparableInt) sequence.Stack[ComparableInt] {
+			newStack := func(items ...ComparableInt) collection.Stack[ComparableInt] {
 				builder := stack.NewComparableBuilder[ComparableInt]()
 				builder.BackedBy(tc.backedBy)
 				return builder.From(items...).Build()

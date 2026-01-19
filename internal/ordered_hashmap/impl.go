@@ -5,10 +5,10 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/kv"
 	"codeberg.org/yaadata/bina/core/predicate"
 	"codeberg.org/yaadata/bina/internal/hashmap"
-	bina_maps "codeberg.org/yaadata/bina/maps"
 )
 
 type orderedHashMapFromBuiltin[K comparable, V any] struct {
@@ -19,9 +19,9 @@ type orderedHashMapFromBuiltin[K comparable, V any] struct {
 }
 
 // compile time check
-var _ bina_maps.OrderedMap[int, int] = (*orderedHashMapFromBuiltin[int, int])(nil)
+var _ collection.OrderedMap[int, int] = (*orderedHashMapFromBuiltin[int, int])(nil)
 
-func OrderedHashMapFromBuiltin[K comparable, V any](capacity int) bina_maps.OrderedMap[K, V] {
+func OrderedHashMapFromBuiltin[K comparable, V any](capacity int) collection.OrderedMap[K, V] {
 	return &orderedHashMapFromBuiltin[K, V]{
 		ordered:  make([]kv.Pair[K, V], 0, capacity),
 		deleted:  make([]bool, 0, capacity/2),
@@ -133,7 +133,7 @@ func (m *orderedHashMapFromBuiltin[K, V]) Keys() iter.Seq[K] {
 	}
 }
 
-func (m *orderedHashMapFromBuiltin[K, V]) Merge(other bina_maps.Map[K, V], fn bina_maps.MapMergeFunc[K, V]) bina_maps.Map[K, V] {
+func (m *orderedHashMapFromBuiltin[K, V]) Merge(other collection.Map[K, V], fn collection.MapMergeFunc[K, V]) collection.Map[K, V] {
 	res := hashmap.New(make(map[K]V, m.Len()+other.Len()))
 	for key, value := range m.All() {
 		res.Put(key, value)

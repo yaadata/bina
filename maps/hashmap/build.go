@@ -5,11 +5,11 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	hashmap "codeberg.org/yaadata/bina/internal/hashmap"
-	"codeberg.org/yaadata/bina/maps"
 )
 
-func BuiltinBuilder[K comparable, V any]() Builder[K, V, maps.Map[K, V], *build[K, V]] {
+func BuiltinBuilder[K comparable, V any]() Builder[K, V, collection.Map[K, V], *build[K, V]] {
 	return &build[K, V]{
 		capacity: None[int](),
 		from:     None[map[K]V](),
@@ -31,7 +31,7 @@ func (b *build[K, V]) From(builtin map[K]V) *build[K, V] {
 	return b
 }
 
-func (b *build[K, V]) Build() maps.Map[K, V] {
+func (b *build[K, V]) Build() collection.Map[K, V] {
 	if b.from.IsNone() {
 		return hashmap.New(make(map[K]V))
 	}

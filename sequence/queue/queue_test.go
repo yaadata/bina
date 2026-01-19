@@ -6,8 +6,8 @@ import (
 
 	"github.com/shoenig/test/must"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/sequence"
 	"codeberg.org/yaadata/bina/sequence/queue"
 )
 
@@ -28,7 +28,7 @@ func TestQueueFromBuiltin(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			newQueue := func(items ...int) sequence.Queue[int] {
+			newQueue := func(items ...int) collection.Queue[int] {
 				builder := queue.NewBuiltinBuilder[int]()
 				builder.BackedBy(tc.backedBy)
 				return builder.From(items...).Build()
@@ -394,7 +394,7 @@ func TestQueueFromComparable(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			newQueue := func(items ...ComparableInt) sequence.Queue[ComparableInt] {
+			newQueue := func(items ...ComparableInt) collection.Queue[ComparableInt] {
 				builder := queue.NewComparableBuilder[ComparableInt]()
 				builder.BackedBy(tc.backedBy)
 				return builder.From(items...).Build()

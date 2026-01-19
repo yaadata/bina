@@ -3,30 +3,30 @@ package queue
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 	. "codeberg.org/yaadata/opt"
 )
 
 type queueSlice[T any] struct {
-	inner sequence.Slice[T]
+	inner collection.Slice[T]
 }
 
 // Compile-time interface checks
 func _[T comparable]() {
-	var _ sequence.Queue[T] = (*queueSlice[T])(nil)
+	var _ collection.Queue[T] = (*queueSlice[T])(nil)
 }
 
 func __[T compare.Comparable[T]]() {
-	var _ sequence.Queue[T] = (*queueSlice[T])(nil)
+	var _ collection.Queue[T] = (*queueSlice[T])(nil)
 }
 
-func SliceBackedQueueFromBuiltin[T comparable](inner sequence.Slice[T]) *queueSlice[T] {
+func SliceBackedQueueFromBuiltin[T comparable](inner collection.Slice[T]) *queueSlice[T] {
 	return &queueSlice[T]{inner: inner}
 }
 
-func SliceBackedQueueFromComparable[T compare.Comparable[T]](inner sequence.Slice[T]) *queueSlice[T] {
+func SliceBackedQueueFromComparable[T compare.Comparable[T]](inner collection.Slice[T]) *queueSlice[T] {
 	return &queueSlice[T]{inner: inner}
 }
 

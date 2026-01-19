@@ -3,12 +3,12 @@ package orderedhashset
 import (
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/hashable"
 	orderedhashset "codeberg.org/yaadata/bina/internal/ordered_hashset"
-	"codeberg.org/yaadata/bina/set"
 )
 
-func NewBuiltinBuilder[T comparable]() Builder[T, set.OrderedSet[T], *builtinBuilder[T]] {
+func NewBuiltinBuilder[T comparable]() Builder[T, collection.OrderedSet[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		from:     None[[]T](),
 		capacity: None[int](),
@@ -30,13 +30,13 @@ func (b *builtinBuilder[T]) Capacity(cap int) *builtinBuilder[T] {
 	return b
 }
 
-func (b *builtinBuilder[T]) Build() set.OrderedSet[T] {
+func (b *builtinBuilder[T]) Build() collection.OrderedSet[T] {
 	s := orderedhashset.OrderedHashSetFromBuiltin[T](b.capacity.UnwrapOrDefault())
 	s.Extend(b.from.UnwrapOrDefault()...)
 	return s
 }
 
-func NewHashableBuilder[K comparable, T hashable.Hashable[K]]() Builder[T, set.OrderedSet[T], *hashableBuilder[K, T]] {
+func NewHashableBuilder[K comparable, T hashable.Hashable[K]]() Builder[T, collection.OrderedSet[T], *hashableBuilder[K, T]] {
 	return &hashableBuilder[K, T]{
 		from:     None[[]T](),
 		capacity: None[int](),
@@ -58,7 +58,7 @@ func (b *hashableBuilder[K, T]) Capacity(cap int) *hashableBuilder[K, T] {
 	return b
 }
 
-func (b *hashableBuilder[K, T]) Build() set.OrderedSet[T] {
+func (b *hashableBuilder[K, T]) Build() collection.OrderedSet[T] {
 	s := orderedhashset.OrderedHashSetFromHashable[K, T](b.capacity.UnwrapOrDefault())
 	s.Extend(b.from.UnwrapOrDefault()...)
 	return s

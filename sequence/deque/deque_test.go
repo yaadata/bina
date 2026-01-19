@@ -6,8 +6,8 @@ import (
 
 	"github.com/shoenig/test/must"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
-	"codeberg.org/yaadata/bina/sequence"
 	"codeberg.org/yaadata/bina/sequence/deque"
 )
 
@@ -28,7 +28,7 @@ func TestDequeFromBuiltin(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			newDeque := func(items ...int) sequence.Deque[int] {
+			newDeque := func(items ...int) collection.Deque[int] {
 				builder := deque.NewBuiltinBuilder[int]()
 				builder.BackedBy(tc.backedBy)
 				return builder.From(items...).Build()
@@ -442,7 +442,7 @@ func TestDequeFromComparable(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			newDeque := func(items ...ComparableInt) sequence.Deque[ComparableInt] {
+			newDeque := func(items ...ComparableInt) collection.Deque[ComparableInt] {
 				builder := deque.NewComparableBuilder[ComparableInt]()
 				builder.BackedBy(tc.backedBy)
 				return builder.From(items...).Build()

@@ -1,4 +1,4 @@
-package maps
+package collection
 
 import (
 	"codeberg.org/yaadata/bina/core/kv"

@@ -5,9 +5,9 @@ import (
 
 	. "codeberg.org/yaadata/opt"
 
+	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	"codeberg.org/yaadata/bina/sequence"
 )
 
 type linkedListFromComparable[T compare.Comparable[T]] struct {
@@ -18,10 +18,10 @@ type linkedListFromComparable[T compare.Comparable[T]] struct {
 
 // Compile-time interface implementation check for sliceComparableInterface
 func _[T compare.Comparable[T]]() {
-	var _ sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]] = (*linkedListFromComparable[T])(nil)
+	var _ collection.LinkedList[T, collection.DoublyLinkedListNode[T]] = (*linkedListFromComparable[T])(nil)
 }
 
-func LinkedListFromComparable[T compare.Comparable[T]]() sequence.LinkedList[T, sequence.DoublyLinkedListNode[T]] {
+func LinkedListFromComparable[T compare.Comparable[T]]() collection.LinkedList[T, collection.DoublyLinkedListNode[T]] {
 	return &linkedListFromComparable[T]{
 		head: nil,
 		tail: nil,
@@ -253,7 +253,7 @@ func (s *linkedListFromComparable[T]) Extend(values ...T) {
 	}
 }
 
-func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T]) {
+func (s *linkedListFromComparable[T]) ExtendFromSequence(seq collection.Sequence[T]) {
 	for value := range seq.Values() {
 		nextNode := &linkedListNode[T]{
 			value: value,
@@ -271,19 +271,19 @@ func (s *linkedListFromComparable[T]) ExtendFromSequence(seq sequence.Sequence[T
 	}
 }
 
-func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[sequence.DoublyLinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) GetNodeAt(index int) Option[collection.DoublyLinkedListNode[T]] {
 	currentIndex := 0
 	for node := s.head; node != nil; node = node.next {
 		if currentIndex == index {
-			var res sequence.DoublyLinkedListNode[T] = node
+			var res collection.DoublyLinkedListNode[T] = node
 			return Some(res)
 		}
 		currentIndex++
 	}
-	return None[sequence.DoublyLinkedListNode[T]]()
+	return None[collection.DoublyLinkedListNode[T]]()
 }
 
-func (s *linkedListFromComparable[T]) Head() Option[sequence.DoublyLinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) Head() Option[collection.DoublyLinkedListNode[T]] {
 	return optionalNode(s.head)
 }
 
@@ -302,6 +302,6 @@ func (s *linkedListFromComparable[T]) Prepend(value T) {
 	s.len++
 }
 
-func (s *linkedListFromComparable[T]) Tail() Option[sequence.DoublyLinkedListNode[T]] {
+func (s *linkedListFromComparable[T]) Tail() Option[collection.DoublyLinkedListNode[T]] {
 	return optionalNode(s.tail)
 }

@@ -1,9 +1,7 @@
 package builder
 
-import (
-	"codeberg.org/yaadata/bina/sequence"
-)
+import "codeberg.org/yaadata/bina/core/collection"
 
-type BaseBuilder[T any, Target sequence.Sequence[T], Self any] interface {
+type BaseBuilder[T any, Target collection.Sequence[T], Self any] interface {
 	Build() Target
 }
