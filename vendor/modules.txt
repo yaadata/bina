@@ -2,6 +2,7 @@
 ## explicit; go 1.25.4
 codeberg.org/yaadata/opt
 codeberg.org/yaadata/opt/core
+codeberg.org/yaadata/opt/extension
 codeberg.org/yaadata/opt/internal
 codeberg.org/yaadata/opt/shared
 # github.com/google/go-cmp v0.7.0
