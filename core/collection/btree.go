@@ -6,6 +6,6 @@ import (
 
 type BTree[K any, V any] interface {
 	SearchTree[K, V]
-	GetNode(key K) Option[BTreeNode[V]]
+	GetNode(key K) Option[BTreeNode[K, V]]
 	Order() int
 }

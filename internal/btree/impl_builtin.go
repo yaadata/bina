@@ -35,13 +35,13 @@ func (b *builtinImpl[K, V]) Clear() {
 	b.len = 0
 }
 
-func (b *builtinImpl[K, V]) GetNode(key K) Option[collection.BTreeNode[V]] {
+func (b *builtinImpl[K, V]) GetNode(key K) Option[collection.BTreeNode[K, V]] {
 	node := get(b.root, key)
 	if node.IsNone() {
-		return None[collection.BTreeNode[V]]()
+		return None[collection.BTreeNode[K, V]]()
 	}
 	n := node.Unwrap()
-	var res collection.BTreeNode[V] = &n
+	var res collection.BTreeNode[K, V] = &n
 	return Some(res)
 }
 
@@ -78,13 +78,21 @@ func inorder[K cmp.Ordered, V any](node Option[Node[K, V]]) []kv.Pair[K, V] {
 	}
 	n := node.Unwrap()
 	var res []kv.Pair[K, V]
-	for child := range n.lessBranch.Values() {
-		res = append(res, inorder(Some(child))...)
+	childrenLength := n.children.Len()
+	elementsLength := len(n.elements)
+	for i := 0; i < elementsLength; i++ {
+		// Visit child[i] (everything less than keys[i])
+		if i < childrenLength {
+			res = append(res, inorder(n.children.Get(i))...)
+		}
+		// Visit keys[i]
+		res = append(res, n.elements[i])
 	}
-	res = append(res, n.inner)
-	for child := range n.greaterBranch.Values() {
-		res = append(res, inorder(Some(child))...)
+	// Visit last child (everything greater than all keys)
+	if childrenLength > elementsLength {
+		res = append(res, inorder(n.children.Get(elementsLength))...)
 	}
+
 	return res
 }
 
@@ -93,14 +101,22 @@ func preorder[K cmp.Ordered, V any](node Option[Node[K, V]]) []kv.Pair[K, V] {
 		return nil
 	}
 	n := node.Unwrap()
-	res := []kv.Pair[K, V]{n.inner}
-	for child := range n.lessBranch.Values() {
-		res = append(res, inorder(Some(child))...)
+	childrenLength := n.children.Len()
+	elementsLength := len(n.elements)
+
+	// 1. Visit ALL keys in this node first
+	res := make([]kv.Pair[K, V], 0, elementsLength)
+	res = append(res, n.elements...)
+
+	// 2. Then visit all children (in preorder)
+	for i := 0; i <= elementsLength; i++ {
+		if i < childrenLength {
+			res = append(res, preorder(n.children.Get(i))...)
+		}
 	}
-	for child := range n.greaterBranch.Values() {
-		res = append(res, inorder(Some(child))...)
-	}
+
 	return res
+
 }
 
 func postorder[K cmp.Ordered, V any](node Option[Node[K, V]]) []kv.Pair[K, V] {
@@ -108,13 +124,19 @@ func postorder[K cmp.Ordered, V any](node Option[Node[K, V]]) []kv.Pair[K, V] {
 		return nil
 	}
 	n := node.Unwrap()
-	var res []kv.Pair[K, V]
-	for child := range n.lessBranch.Values() {
-		res = append(res, inorder(Some(child))...)
+	childrenLength := n.children.Len()
+	elementsLength := len(n.elements)
+
+	res := make([]kv.Pair[K, V], 0, elementsLength)
+	// 1. Visit all children nodes
+	for i := 0; i <= elementsLength; i++ {
+		if i < childrenLength {
+			res = append(res, postorder(n.children.Get(i))...)
+		}
 	}
-	for child := range n.greaterBranch.Values() {
-		res = append(res, inorder(Some(child))...)
-	}
+
+	// 2. Visit ALL keys in current node
+	res = append(res, n.elements...)
 	return res
 }
 
@@ -123,36 +145,26 @@ func get[K cmp.Ordered, V any](current Option[Node[K, V]], target K) Option[Node
 		return current
 	}
 	node := current.Unwrap()
-	switch cmp.Compare(target, node.inner.Key()) {
-	case -1:
-		sibling := node.lessSibling
-		if sibling.IsSome() {
-			if cmp.Compare(target, sibling.Unwrap().inner.Key()) <= 0 {
-				return get(sibling, target)
-			}
-		}
-		for child := range node.lessBranch.Values() {
-			res := get(Some(child), target)
-			if res.IsSome() {
-				return res
-			}
-		}
-	case 0:
-		return current
-	case 1:
-		sibling := node.greaterSibling
-		if sibling.IsSome() {
-			if cmp.Compare(target, sibling.Unwrap().inner.Key()) <= 0 {
-				return get(sibling, target)
-			}
-		}
-		for child := range node.greaterBranch.Values() {
-			res := get(Some(child), target)
-			if res.IsSome() {
-				return res
-			}
+	elements := node.elements
+
+	// Binary search for target
+	lo, hi := 0, len(elements)
+	for lo < hi {
+		mid := lo + (hi-lo)/2
+		switch cmp.Compare(target, elements[mid].Key()) {
+		case 0:
+			return current // Found
+		case -1:
+			hi = mid
+		case 1:
+			lo = mid + 1
 		}
 	}
 
+	// Not found, descend into child[lo]
+	if lo < node.children.Len() {
+		return get(node.children.Get(lo), target)
+	}
 	return None[Node[K, V]]()
+
 }

@@ -3,12 +3,12 @@ package collection
 import (
 	"iter"
 
+	"codeberg.org/yaadata/bina/core/kv"
 	. "codeberg.org/yaadata/opt"
 )
 
-type BTreeNode[T any] interface {
-	GreaterBranch() iter.Seq[T]
-	LessBranch() iter.Seq[T]
-	Parent() Option[T]
-	Value() T
+type BTreeNode[K any, V any] interface {
+	Children() iter.Seq[BTreeNode[K, V]]
+	Parent() Option[BTreeNode[K, V]]
+	Value() []kv.Pair[K, V]
 }
