@@ -7,7 +7,8 @@ import (
 )
 
 type BTreeNode[T any] interface {
-	Children() iter.Seq[T]
+	GreaterBranch() iter.Seq[T]
+	LessBranch() iter.Seq[T]
 	Parent() Option[T]
 	Value() T
 }
