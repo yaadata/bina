@@ -9,6 +9,7 @@ import (
 
 	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/kv"
+	"codeberg.org/yaadata/bina/core/predicate"
 	"codeberg.org/yaadata/bina/core/where"
 	"codeberg.org/yaadata/bina/internal/slice"
 )
@@ -21,6 +22,8 @@ type builtinImpl[K cmp.Ordered, V any] struct {
 	max             Option[kv.Pair[K, V]]
 	root            Option[Node[K, V]]
 }
+
+var _ collection.BTree[int, int] = (*builtinImpl[int, int])(nil)
 
 func (b *builtinImpl[K, V]) Len() int {
 	return b.len
@@ -37,6 +40,47 @@ func (b *builtinImpl[K, V]) IsEmpty() bool {
 func (b *builtinImpl[K, V]) Clear() {
 	b.root = None[Node[K, V]]()
 	b.len = 0
+	b.height = 0
+}
+
+func (b *builtinImpl[K, V]) Any(pred predicate.Predicate[kv.Pair[K, V]]) bool {
+	// TODO: optimize to short circuit
+	for key, value := range b.All() {
+		if pred(kv.New(key, value)) {
+			return true
+		}
+	}
+	return false
+}
+
+func (b *builtinImpl[K, V]) Every(pred predicate.Predicate[kv.Pair[K, V]]) bool {
+	for key, value := range b.All() {
+		if !pred(kv.New(key, value)) {
+			return false
+		}
+	}
+	return true
+}
+
+func (b *builtinImpl[K, V]) Count(pred predicate.Predicate[kv.Pair[K, V]]) int {
+	var count int
+	for key, value := range b.All() {
+		if pred(kv.New(key, value)) {
+			count++
+		}
+	}
+	return count
+}
+
+func (b *builtinImpl[K, V]) ForEach(fn func(pair kv.Pair[K, V])) {
+	for key, value := range b.All() {
+		fn(kv.New(key, value))
+	}
+}
+
+func (b *builtinImpl[K, V]) Delete(key K) Option[V] {
+	// TODO: implement me
+	return None[V]()
 }
 
 func (b *builtinImpl[K, V]) Get(key K) Option[V] {
