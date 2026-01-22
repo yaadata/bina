@@ -6,7 +6,7 @@ import (
 	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/kv"
-	core_range "codeberg.org/yaadata/bina/core/range"
+	"codeberg.org/yaadata/bina/core/where"
 )
 
 type SearchTree[K any, V any] interface {
@@ -20,6 +20,6 @@ type SearchTree[K any, V any] interface {
 	Max() Option[kv.Pair[K, V]]
 	Floor(key K) Option[kv.Pair[K, V]]
 	Ceiling(key K) Option[kv.Pair[K, V]]
-	Range(cfg ...core_range.RangeConfig[K]) iter.Seq2[K, V]
+	Range(opts ...where.WhereOption[K]) iter.Seq2[K, V]
 	All(opts ...SearchTreeTraversalOption) iter.Seq2[K, V]
 }

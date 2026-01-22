@@ -38,6 +38,18 @@ func (n *Node[K, V]) Parent() Option[collection.BTreeNode[K, V]] {
 	})
 }
 
-func (n *Node[K, V]) Value() []kv.Pair[K, V] {
+func (n *Node[K, V]) Values() []kv.Pair[K, V] {
 	return n.elements
+}
+
+func (n Node[K, V]) Equal(other Node[K, V]) bool {
+	if len(n.elements) != len(other.elements) {
+		return false
+	}
+	for i, elem := range n.elements {
+		if elem.Key() != other.elements[i].Key() {
+			return false
+		}
+	}
+	return true
 }

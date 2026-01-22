@@ -4,7 +4,7 @@ import (
 	. "codeberg.org/yaadata/opt"
 
 	"codeberg.org/yaadata/bina/core/predicate"
-	core_range "codeberg.org/yaadata/bina/core/range"
+	"codeberg.org/yaadata/bina/core/where"
 )
 
 type Array[T any] interface {
@@ -13,5 +13,5 @@ type Array[T any] interface {
 	First() Option[T]
 	Last() Option[T]
 	Offer(element T, index int) bool
-	OfferRange(elements []T, cfgs ...core_range.RangeConfig[int]) bool
+	OfferRange(elements []T, cfgs ...where.WhereOption[int]) bool
 }

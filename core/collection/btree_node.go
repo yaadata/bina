@@ -10,5 +10,5 @@ import (
 type BTreeNode[K any, V any] interface {
 	Children() iter.Seq[BTreeNode[K, V]]
 	Parent() Option[BTreeNode[K, V]]
-	Value() []kv.Pair[K, V]
+	Values() []kv.Pair[K, V]
 }

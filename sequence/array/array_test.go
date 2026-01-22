@@ -7,7 +7,7 @@ import (
 	"github.com/shoenig/test/must"
 
 	"codeberg.org/yaadata/bina/core/compare"
-	core_range "codeberg.org/yaadata/bina/core/range"
+	"codeberg.org/yaadata/bina/core/where"
 	"codeberg.org/yaadata/bina/sequence/array"
 )
 
@@ -247,7 +247,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			Size(5).
 			Build()
 		// ========= [A]ct     =========
-		success := arr.OfferRange([]int{1, 2, 3}, core_range.WithRangeFrom(-1))
+		success := arr.OfferRange([]int{1, 2, 3}, where.From(-1))
 		// ========= [A]ssert  =========
 		must.False(t, success)
 	})
@@ -258,7 +258,7 @@ func TestArrayFromBuiltin(t *testing.T) {
 			Size(5).
 			Build()
 		// ========= [A]ct     =========
-		success := arr.OfferRange([]int{1, 2, 3}, core_range.WithRangeEnd(10))
+		success := arr.OfferRange([]int{1, 2, 3}, where.To(10))
 		// ========= [A]ssert  =========
 		must.False(t, success)
 		must.Eq(t, 5, arr.Len()) // Size remains fixed
@@ -894,7 +894,7 @@ func TestArrayFromComparable(t *testing.T) {
 			Size(5).
 			Build()
 		// ========= [A]ct     =========
-		success := arr.OfferRange([]ComparableInt{1, 2, 3}, core_range.WithRangeFrom(-1))
+		success := arr.OfferRange([]ComparableInt{1, 2, 3}, where.From(-1))
 		// ========= [A]ssert  =========
 		must.False(t, success)
 	})
@@ -905,7 +905,7 @@ func TestArrayFromComparable(t *testing.T) {
 			Size(5).
 			Build()
 		// ========= [A]ct     =========
-		success := arr.OfferRange([]ComparableInt{1, 2, 3}, core_range.WithRangeEnd(10))
+		success := arr.OfferRange([]ComparableInt{1, 2, 3}, where.To(10))
 		// ========= [A]ssert  =========
 		must.False(t, success)
 		must.Eq(t, 5, arr.Len()) // Size remains fixed

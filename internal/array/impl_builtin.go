@@ -11,7 +11,7 @@ import (
 	"codeberg.org/yaadata/bina/core/collection"
 	"codeberg.org/yaadata/bina/core/compare"
 	"codeberg.org/yaadata/bina/core/predicate"
-	core_range "codeberg.org/yaadata/bina/core/range"
+	"codeberg.org/yaadata/bina/core/where"
 )
 
 type arrayFromBuiltin[T comparable] struct {
@@ -156,23 +156,25 @@ func (s *arrayFromBuiltin[T]) Offer(element T, index int) bool {
 	return true
 }
 
-func (s *arrayFromBuiltin[T]) OfferRange(elements []T, cfgs ...core_range.RangeConfig[int]) bool {
-	r := core_range.New[int]()
-	for _, cfg := range cfgs {
-		cfg(r)
+func (s *arrayFromBuiltin[T]) OfferRange(elements []T, opts ...where.WhereOption[int]) bool {
+	whereConfig := where.Default[int]()
+	for _, cfg := range opts {
+		cfg(whereConfig)
 	}
 	length := s.Len()
-	from := r.From().UnwrapOrDefault()
-	if from < 0 {
+	from := whereConfig.From()
+	if from.Key().UnwrapOrDefault() < 0 {
 		return false
 	}
-	end := r.End().UnwrapOrElse(func() int {
-		return from + len(elements)
+	to := whereConfig.To()
+	end := to.Key().UnwrapOrElse(func() int {
+		return from.Key().UnwrapOrDefault() + len(elements)
 	})
 	if end > length {
 		return false
 	}
-	s.inner = slices.Replace(s.inner, from, end, elements...)
+	// TODO: bounds check
+	s.inner = slices.Replace(s.inner, from.Key().UnwrapOrDefault(), end, elements...)
 	return true
 }
 
