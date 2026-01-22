@@ -11,7 +11,7 @@ import (
 
 type SearchTree[K any, V any] interface {
 	Collection[K]
-	Aggregate[K]
+	Aggregate[kv.Pair[K, V]]
 	Delete(key K) Option[V]
 	Get(key K) Option[V]
 	Put(key K, value V)
