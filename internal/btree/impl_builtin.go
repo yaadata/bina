@@ -79,8 +79,49 @@ func (b *builtinImpl[K, V]) ForEach(fn func(pair kv.Pair[K, V])) {
 }
 
 func (b *builtinImpl[K, V]) Delete(key K) Option[V] {
-	// TODO: implement me
-	return None[V]()
+	if b.root.IsNone() {
+		return None[V]()
+	}
+
+	root := b.root.Unwrap()
+	newRoot, deletedValue := deleteKey(&root, key, b.branchingFactor)
+
+	if deletedValue.IsNone() {
+		return None[V]()
+	}
+
+	// Update root
+	if len(newRoot.elements) == 0 {
+		// Root became empty after merge
+		if newRoot.children.Len() > 0 {
+			// Promote the single child as new root
+			b.root = newRoot.children.Get(0)
+			b.height--
+		} else {
+			// Tree is now empty
+			b.root = None[Node[K, V]]()
+			b.height = 0
+		}
+	} else {
+		b.root = Some(newRoot)
+	}
+
+	b.len--
+
+	// Update min/max if we deleted the boundary
+	if b.len == 0 {
+		b.min = None[kv.Pair[K, V]]()
+		b.max = None[kv.Pair[K, V]]()
+	} else {
+		if b.min.IsSome() && b.min.Unwrap().Key() == key {
+			b.min = b.Min() // Recalculate from tree
+		}
+		if b.max.IsSome() && b.max.Unwrap().Key() == key {
+			b.max = b.Max() // Recalculate from tree
+		}
+	}
+
+	return deletedValue
 }
 
 func (b *builtinImpl[K, V]) Get(key K) Option[V] {
@@ -396,6 +437,221 @@ func ceiling[K cmp.Ordered, V any](
 	}
 
 	return candidate
+}
+
+// deleteKey recursively deletes a key from the subtree rooted at node.
+// Returns the modified node and the deleted value (if found).
+func deleteKey[K cmp.Ordered, V any](
+	node *Node[K, V],
+	key K,
+	branchingFactor int,
+) (Node[K, V], Option[V]) {
+	elements := node.elements
+
+	// Binary search for key position
+	idx := -1
+	lo, hi := 0, len(elements)
+	for lo < hi {
+		mid := lo + (hi-lo)/2
+		switch cmp.Compare(key, elements[mid].Key()) {
+		case 0:
+			idx = mid
+			lo = hi // exit loop
+		case -1:
+			hi = mid
+		case 1:
+			lo = mid + 1
+		}
+	}
+
+	isLeaf := node.children.Len() == 0
+
+	if idx != -1 {
+		// Key found in this node
+		deletedValue := elements[idx].Value()
+
+		if isLeaf {
+			// Case 1: Key is in a leaf - just remove it
+			node.elements = slices.Delete(node.elements, idx, idx+1)
+			return *node, Some(deletedValue)
+		}
+
+		// Case 2: Key is in an internal node
+		// Replace with predecessor (max of left subtree)
+		leftChild := node.children.Get(idx).Unwrap()
+		predecessor := getMax(&leftChild)
+
+		// Replace the key with predecessor
+		node.elements[idx] = predecessor
+
+		// Delete predecessor from left subtree
+		newLeftChild, _ := deleteKey(&leftChild, predecessor.Key(), branchingFactor)
+
+		// Update the left child
+		node.children.RemoveAt(idx)
+		node.children.Insert(idx, newLeftChild)
+
+		// Check if left child needs rebalancing
+		minKeys := branchingFactor - 1
+		if len(newLeftChild.elements) < minKeys {
+			rebalance(node, idx, branchingFactor)
+		}
+
+		return *node, Some(deletedValue)
+	}
+
+	// Key not in this node
+	if isLeaf {
+		// Key doesn't exist
+		return *node, None[V]()
+	}
+
+	// Recurse into appropriate child
+	childIdx := lo
+	child := node.children.Get(childIdx).Unwrap()
+	newChild, deletedValue := deleteKey(&child, key, branchingFactor)
+
+	if deletedValue.IsNone() {
+		// Key wasn't found
+		return *node, None[V]()
+	}
+
+	// Update the child
+	node.children.RemoveAt(childIdx)
+	node.children.Insert(childIdx, newChild)
+
+	// Check if child needs rebalancing
+	minKeys := branchingFactor - 1
+	if len(newChild.elements) < minKeys {
+		rebalance(node, childIdx, branchingFactor)
+	}
+
+	return *node, deletedValue
+}
+
+// getMax returns the maximum (rightmost) key-value pair in a subtree
+func getMax[K cmp.Ordered, V any](node *Node[K, V]) kv.Pair[K, V] {
+	if node.children.Len() == 0 {
+		// Leaf node - return last element
+		return node.elements[len(node.elements)-1]
+	}
+	// Internal node - go to rightmost child
+	rightmost := node.children.Get(node.children.Len() - 1).Unwrap()
+	return getMax(&rightmost)
+}
+
+// rebalance fixes underflow in child at childIdx by borrowing or merging
+func rebalance[K cmp.Ordered, V any](
+	parent *Node[K, V],
+	childIdx int,
+	branchingFactor int,
+) {
+	minKeys := branchingFactor - 1
+
+	// Try to borrow from left sibling
+	if childIdx > 0 {
+		leftSibling := parent.children.Get(childIdx - 1).Unwrap()
+		if len(leftSibling.elements) > minKeys {
+			borrowFromLeft(parent, childIdx)
+			return
+		}
+	}
+
+	// Try to borrow from right sibling
+	if childIdx < parent.children.Len()-1 {
+		rightSibling := parent.children.Get(childIdx + 1).Unwrap()
+		if len(rightSibling.elements) > minKeys {
+			borrowFromRight(parent, childIdx)
+			return
+		}
+	}
+
+	// Must merge - prefer merging with left sibling
+	if childIdx > 0 {
+		mergeChildren(parent, childIdx-1)
+	} else {
+		mergeChildren(parent, childIdx)
+	}
+}
+
+// borrowFromLeft borrows a key from the left sibling through the parent
+func borrowFromLeft[K cmp.Ordered, V any](parent *Node[K, V], childIdx int) {
+	child := parent.children.Get(childIdx).Unwrap()
+	leftSibling := parent.children.Get(childIdx - 1).Unwrap()
+	separatorIdx := childIdx - 1
+
+	// Move separator from parent down to child (at front)
+	child.elements = slices.Insert(child.elements, 0, parent.elements[separatorIdx])
+
+	// Move max key from left sibling up to parent
+	parent.elements[separatorIdx] = leftSibling.elements[len(leftSibling.elements)-1]
+	leftSibling.elements = leftSibling.elements[:len(leftSibling.elements)-1]
+
+	// If internal nodes, move rightmost child of left sibling to child
+	if leftSibling.children.Len() > 0 {
+		movedChild := leftSibling.children.Get(leftSibling.children.Len() - 1).Unwrap()
+		leftSibling.children.RemoveAt(leftSibling.children.Len() - 1)
+		child.children.Insert(0, movedChild)
+	}
+
+	// Update children in parent
+	parent.children.RemoveAt(childIdx)
+	parent.children.Insert(childIdx, child)
+	parent.children.RemoveAt(childIdx - 1)
+	parent.children.Insert(childIdx-1, leftSibling)
+}
+
+// borrowFromRight borrows a key from the right sibling through the parent
+func borrowFromRight[K cmp.Ordered, V any](parent *Node[K, V], childIdx int) {
+	child := parent.children.Get(childIdx).Unwrap()
+	rightSibling := parent.children.Get(childIdx + 1).Unwrap()
+	separatorIdx := childIdx
+
+	// Move separator from parent down to child (at end)
+	child.elements = append(child.elements, parent.elements[separatorIdx])
+
+	// Move min key from right sibling up to parent
+	parent.elements[separatorIdx] = rightSibling.elements[0]
+	rightSibling.elements = slices.Delete(rightSibling.elements, 0, 1)
+
+	// If internal nodes, move leftmost child of right sibling to child
+	if rightSibling.children.Len() > 0 {
+		movedChild := rightSibling.children.Get(0).Unwrap()
+		rightSibling.children.RemoveAt(0)
+		child.children.Append(movedChild)
+	}
+
+	// Update children in parent
+	parent.children.RemoveAt(childIdx)
+	parent.children.Insert(childIdx, child)
+	parent.children.RemoveAt(childIdx + 1)
+	parent.children.Insert(childIdx+1, rightSibling)
+}
+
+// mergeChildren merges child at idx with child at idx+1
+func mergeChildren[K cmp.Ordered, V any](parent *Node[K, V], idx int) {
+	leftChild := parent.children.Get(idx).Unwrap()
+	rightChild := parent.children.Get(idx + 1).Unwrap()
+	separator := parent.elements[idx]
+
+	// Merge: left + separator + right
+	leftChild.elements = append(leftChild.elements, separator)
+	leftChild.elements = append(leftChild.elements, rightChild.elements...)
+
+	// Merge children if internal nodes
+	for i := 0; i < rightChild.children.Len(); i++ {
+		if child := rightChild.children.Get(i); child.IsSome() {
+			leftChild.children.Append(child.Unwrap())
+		}
+	}
+
+	// Remove separator from parent
+	parent.elements = slices.Delete(parent.elements, idx, idx+1)
+
+	// Remove right child and update left child
+	parent.children.RemoveAt(idx + 1)
+	parent.children.RemoveAt(idx)
+	parent.children.Insert(idx, leftChild)
 }
 
 // promotedKey holds a key promoted during split, with its left and right children
