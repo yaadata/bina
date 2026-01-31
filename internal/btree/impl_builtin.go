@@ -15,15 +15,27 @@ import (
 )
 
 type builtinImpl[K cmp.Ordered, V any] struct {
-	branchingFactor int
-	height          int
-	len             int
-	min             Option[kv.Pair[K, V]]
-	max             Option[kv.Pair[K, V]]
-	root            Option[Node[K, V]]
+	height int
+	len    int
+	min    Option[kv.Pair[K, V]]
+	max    Option[kv.Pair[K, V]]
+	order  int
+	root   Option[Node[K, V]]
 }
 
 var _ collection.BTree[int, int] = (*builtinImpl[int, int])(nil)
+
+func NewBuiltinImpl[K cmp.Ordered, V any](order int) *builtinImpl[K, V] {
+	return &builtinImpl[K, V]{
+		height: 0,
+		len:    0,
+		min:    None[kv.Pair[K, V]](),
+		max:    None[kv.Pair[K, V]](),
+		order:  order,
+		root:   None[Node[K, V]](),
+	}
+
+}
 
 func (b *builtinImpl[K, V]) Len() int {
 	return b.len
@@ -84,7 +96,7 @@ func (b *builtinImpl[K, V]) Delete(key K) Option[V] {
 	}
 
 	root := b.root.Unwrap()
-	newRoot, deletedValue := deleteKey(&root, key, b.branchingFactor)
+	newRoot, deletedValue := deleteKey(&root, key, b.order)
 
 	if deletedValue.IsNone() {
 		return None[V]()
@@ -168,7 +180,7 @@ func (b *builtinImpl[K, V]) Put(key K, value V) {
 
 	// Case 2: Insert recursively
 	root := b.root.Unwrap()
-	newRoot, promoted, wasInserted := insert(&root, key, value, b.branchingFactor)
+	newRoot, promoted, wasInserted := insert(&root, key, value, b.order)
 
 	// Handle root split (promoted element needs new root)
 	if promoted.IsSome() {
@@ -230,7 +242,7 @@ func (b *builtinImpl[K, V]) GetNode(key K) Option[collection.BTreeNode[K, V]] {
 }
 
 func (b *builtinImpl[K, V]) Order() int {
-	return b.branchingFactor
+	return b.order
 }
 
 func (b *builtinImpl[K, V]) All(opts ...collection.SearchTreeTraversalOption) iter.Seq2[K, V] {
