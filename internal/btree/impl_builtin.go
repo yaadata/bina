@@ -264,7 +264,7 @@ func inorder[K cmp.Ordered, V any](node Option[Node[K, V]]) []kv.Pair[K, V] {
 	var res []kv.Pair[K, V]
 	childrenLength := n.children.Len()
 	elementsLength := len(n.elements)
-	for i := 0; i < elementsLength; i++ {
+	for i := range elementsLength {
 		// Visit child[i] (everything less than keys[i])
 		if i < childrenLength {
 			res = append(res, inorder(n.children.Get(i))...)
@@ -836,7 +836,7 @@ func rangeInorder[K cmp.Ordered, V any](
 	elementsLength := len(n.elements)
 	hitUpperBound := false
 
-	for i := 0; i < elementsLength; i++ {
+	for i := range elementsLength {
 		key := n.elements[i].Key()
 
 		// Check if we should visit the left child
