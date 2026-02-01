@@ -72,6 +72,6 @@ jobs:
             -d '{
               "tag_name": "nightly",
               "name": "Nightly Build",
-              "body": "Automated nightly build.\n\n**Commit:** [${{ github.sha }}](https://codeberg.org/${{ github.repository }}/src/commit/${{ github.sha }})\n**Date:** '"$(date -u +%Y-%m-%d)"'",
+              "body": "Automated nightly build.\n\n**Commit:** ['"${GITHUB_SHA:0:10}"'](https://codeberg.org/${{ github.repository }}/src/commit/${{ github.sha }})\n**Date:** '"$(date -u +%Y-%m-%d)"'",
               "prerelease": true
             }'
