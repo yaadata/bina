@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Install Essentials
         run: |
-          apt-get update && apt-get install -y nodejs npm
+          apt-get update && apt-get install -y nodejs npm jq
       - name: Checkout code
         uses: https://code.forgejo.org/actions/checkout@v6
         with:
@@ -50,17 +50,28 @@ jobs:
 
       - name: Create nightly release
         if: steps.check_commits.outputs.has_commits == 'true'
-        uses: https://code.forgejo.org/actions/forgejo-release@v2
-        with:
-          tag: nightly
-          title: "Nightly Build"
-          body: |
-            Automated nightly build from $(date -u +%Y-%m-%d)
+        run: |
+          # Get existing release ID by tag (if exists)
+          RELEASE_ID=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://codeberg.org/api/v1/repos/${{ github.repository }}/releases/tags/nightly" \
+            | jq -r '.id // empty')
 
-            Commit: ${{ github.sha }}
-          prerelease: true
-          release-notes: |
-            Automated nightly build.
+          # Delete existing release if found
+          if [ -n "$RELEASE_ID" ]; then
+            curl -s -X DELETE \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://codeberg.org/api/v1/repos/${{ github.repository }}/releases/$RELEASE_ID"
+          fi
 
-            **Commit:** ${{ github.sha }}
-            **Date:** $(date -u +%Y-%m-%d)
+          # Create new release
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            "https://codeberg.org/api/v1/repos/${{ github.repository }}/releases" \
+            -d '{
+              "tag_name": "nightly",
+              "name": "Nightly Build",
+              "body": "Automated nightly build.\n\n**Commit:** ${{ github.sha }}\n**Date:** '"$(date -u +%Y-%m-%d)"'",
+              "prerelease": true
+            }'
