@@ -10,6 +10,9 @@ jobs:
     name: Nightly Release
     runs-on: ubuntu-latest
     steps:
+      - name: Install Essentials
+        run: |
+          apt-get update && apt-get install -y nodejs npm
       - name: Checkout code
         uses: https://code.forgejo.org/actions/checkout@v6
         with:
