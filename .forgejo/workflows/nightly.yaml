@@ -1,0 +1,74 @@
+name: Nightly Release
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' # Run at 2 AM UTC every night
+
+jobs:
+  nightly:
+    name: Nightly Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: https://code.forgejo.org/actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check for recent commits
+        id: check_commits
+        run: |
+          COMMITS_TODAY=$(git log --oneline --since="24 hours ago" | wc -l)
+          if [ "$COMMITS_TODAY" -eq 0 ]; then
+            echo "No commits in the last 24 hours, skipping release"
+            echo "has_commits=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found $COMMITS_TODAY commits in the last 24 hours"
+            echo "has_commits=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Go
+        if: steps.check_commits.outputs.has_commits == 'true'
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build
+        if: steps.check_commits.outputs.has_commits == 'true'
+        run: go build -o bina ./...
+
+      - name: Delete existing nightly release
+        if: steps.check_commits.outputs.has_commits == 'true'
+        run: |
+          # Delete existing nightly tag and release if they exist
+          if git rev-parse nightly >/dev/null 2>&1; then
+            git push origin :refs/tags/nightly || true
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create nightly tag
+        if: steps.check_commits.outputs.has_commits == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -f nightly -m "Nightly build $(date -u +%Y-%m-%d)"
+          git push origin nightly -f
+
+      - name: Create nightly release
+        if: steps.check_commits.outputs.has_commits == 'true'
+        uses: https://code.forgejo.org/actions/forgejo-release@v2
+        with:
+          tag: nightly
+          title: "Nightly Build"
+          body: |
+            Automated nightly build from $(date -u +%Y-%m-%d)
+
+            Commit: ${{ github.sha }}
+          prerelease: true
+          release-dir: .
+          release-notes: |
+            Automated nightly build.
+
+            **Commit:** ${{ github.sha }}
+            **Date:** $(date -u +%Y-%m-%d)
