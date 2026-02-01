@@ -36,10 +36,6 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Build
-        if: steps.check_commits.outputs.has_commits == 'true'
-        run: go build -o bina ./...
-
       - name: Delete existing nightly release
         if: steps.check_commits.outputs.has_commits == 'true'
         run: |
