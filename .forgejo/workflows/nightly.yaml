@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Install Essentials
         run: |
-          apt-get update && apt-get install -y nodejs npm jq
+          apt-get update && apt-get install -y nodejs npm jq curl
       - name: Checkout code
         uses: https://code.forgejo.org/actions/checkout@v6
         with:
