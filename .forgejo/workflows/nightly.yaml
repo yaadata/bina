@@ -30,12 +30,6 @@ jobs:
             echo "has_commits=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Set up Go
-        if: steps.check_commits.outputs.has_commits == 'true'
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-
       - name: Delete existing nightly release
         if: steps.check_commits.outputs.has_commits == 'true'
         run: |
@@ -49,8 +43,8 @@ jobs:
       - name: Create nightly tag
         if: steps.check_commits.outputs.has_commits == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "forgejo-actions[bot]"
+          git config user.email "forgejo-actions[bot]@noreply.codeberg.org"
           git tag -f nightly -m "Nightly build $(date -u +%Y-%m-%d)"
           git push origin nightly -f
 
@@ -65,7 +59,6 @@ jobs:
 
             Commit: ${{ github.sha }}
           prerelease: true
-          release-dir: .
           release-notes: |
             Automated nightly build.
 
