@@ -1,5 +1,6 @@
 package compare
 
+// comparableWrapper adapts any type to implement Comparable.
 type comparableWrapper[T any] struct {
 	inner T
 	fn    func(a, b T) Order
@@ -19,6 +20,7 @@ func (e *comparableWrapper[T]) Inner() T {
 	return e.inner
 }
 
+// ToComparable wraps a value with a comparison function.
 func ToComparable[T any](inner T, fn func(a, b T) Order) *comparableWrapper[T] {
 	return &comparableWrapper[T]{
 		inner: inner,

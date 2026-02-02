@@ -5,6 +5,7 @@ import (
 	. "codeberg.org/yaadata/opt"
 )
 
+// Where defines a range with optional start and end bounds.
 type Where[K any] struct {
 	from      Option[K]
 	fromBound Bound
@@ -12,6 +13,7 @@ type Where[K any] struct {
 	toBound   Bound
 }
 
+// Default returns an unbounded range (no start or end limits).
 func Default[K any]() *Where[K] {
 	return &Where[K]{
 		from: None[K](),
@@ -19,10 +21,12 @@ func Default[K any]() *Where[K] {
 	}
 }
 
+// From returns the start point and its bound type.
 func (c *Where[K]) From() kv.Pair[Option[K], Bound] {
 	return kv.New(c.from, c.fromBound)
 }
 
+// To returns the end point and its bound type.
 func (c *Where[K]) To() kv.Pair[Option[K], Bound] {
 	return kv.New(c.to, c.toBound)
 }

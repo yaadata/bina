@@ -4,6 +4,11 @@ import (
 	. "codeberg.org/yaadata/opt"
 )
 
+// Order represents the result of comparing two values.
+//
+//	OrderLess    (-1): first value < second value
+//	OrderEqual   (0):  first value == second value
+//	OrderGreater (1):  first value > second value
 type Order int
 
 const (
