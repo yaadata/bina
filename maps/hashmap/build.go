@@ -9,6 +9,7 @@ import (
 	hashmap "codeberg.org/yaadata/bina/internal/hashmap"
 )
 
+// BuiltinBuilder returns a [Builder] for creating a [collection.Map] from a built-in Go map.
 func BuiltinBuilder[K comparable, V any]() Builder[K, V, collection.Map[K, V], *build[K, V]] {
 	return &build[K, V]{
 		capacity: None[int](),

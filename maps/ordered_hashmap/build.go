@@ -7,6 +7,7 @@ import (
 	orderedhashmap "codeberg.org/yaadata/bina/internal/ordered_hashmap"
 )
 
+// BuiltinBuilder returns a [Builder] for creating a [collection.OrderedMap] from a built-in Go map.
 func BuiltinBuilder[K comparable, V any]() Builder[K, V, collection.OrderedMap[K, V], *build[K, V]] {
 	return &build[K, V]{
 		capacity: None[int](),
