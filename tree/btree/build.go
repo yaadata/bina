@@ -10,6 +10,7 @@ import (
 	"codeberg.org/yaadata/bina/internal/btree"
 )
 
+// NewBuiltinBuilder returns a [Builder] for creating a [collection.BTree] with ordered keys.
 func NewBuiltinBuilder[K cmp.Ordered, V any]() Builder[K, V, collection.BTree[K, V], *builtinBuilder[K, V]] {
 	return &builtinBuilder[K, V]{
 		order: None[int](),
