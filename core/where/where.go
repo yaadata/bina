@@ -7,6 +7,7 @@ import (
 
 // Where defines a range with optional start and end bounds.
 type Where[K any] struct {
+	// TODO: singular construct for Point (value and constraint)
 	from      Option[K]
 	fromBound Bound
 	to        Option[K]
