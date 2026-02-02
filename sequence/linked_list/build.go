@@ -8,6 +8,7 @@ import (
 	linkedlist "codeberg.org/yaadata/bina/internal/linked_list"
 )
 
+// NewBuiltinBuilder returns a [Builder] for creating a [collection.LinkedList] with comparable elements.
 func NewBuiltinBuilder[T comparable]() Builder[T, collection.LinkedList[T, collection.SinglyLinkedListNode[T]], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		from: None[[]T](),
@@ -29,6 +30,7 @@ func (b *builtinBuilder[T]) Build() collection.LinkedList[T, collection.SinglyLi
 	return ll
 }
 
+// NewComparableBuilder returns a [Builder] for creating a [collection.LinkedList] with [compare.Comparable] elements.
 func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.LinkedList[T, collection.SinglyLinkedListNode[T]], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		from: None[[]T](),

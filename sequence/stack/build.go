@@ -10,6 +10,7 @@ import (
 	internalstack "codeberg.org/yaadata/bina/internal/stack"
 )
 
+// NewBuiltinBuilder returns a [Builder] for creating a [collection.Stack] with comparable elements.
 func NewBuiltinBuilder[T comparable]() Builder[T, collection.Stack[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		backedBy: StackBackedBySlice,
@@ -44,6 +45,7 @@ func (b *builtinBuilder[T]) Build() collection.Stack[T] {
 	}
 }
 
+// NewComparableBuilder returns a [Builder] for creating a [collection.Stack] with [compare.Comparable] elements.
 func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.Stack[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		backedBy: StackBackedBySlice,

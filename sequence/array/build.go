@@ -12,6 +12,7 @@ type builtinBuilder[T comparable] struct {
 	size Option[int]
 }
 
+// NewBuiltinBuilder returns a [Builder] for creating a [collection.Array] with comparable elements.
 func NewBuiltinBuilder[T comparable]() Builder[T, collection.Array[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		size: None[int](),
@@ -33,6 +34,7 @@ type comparableInterfaceBuilder[T compare.Comparable[T]] struct {
 	size Option[int]
 }
 
+// NewComparableInterfaceBuilder returns a [Builder] for creating a [collection.Array] with [compare.Comparable] elements.
 func NewComparableInterfaceBuilder[T compare.Comparable[T]]() Builder[T, collection.Array[T], *comparableInterfaceBuilder[T]] {
 	return &comparableInterfaceBuilder[T]{
 		size: None[int](),

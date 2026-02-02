@@ -9,6 +9,7 @@ import (
 	"codeberg.org/yaadata/bina/internal/slice"
 )
 
+// NewBuiltinBuilder returns a [Builder] for creating a [collection.Slice] with comparable elements.
 func NewBuiltinBuilder[T comparable]() Builder[T, collection.Slice[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		from:     None[[]T](),
@@ -37,6 +38,7 @@ func (b *builtinBuilder[T]) Build() collection.Slice[T] {
 	}).Unwrap()...)
 }
 
+// NewComparableInterfaceBuilder returns a [Builder] for creating a [collection.Slice] with [compare.Comparable] elements.
 func NewComparableInterfaceBuilder[T compare.Comparable[T]]() Builder[T, collection.Slice[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		from:     None[[]T](),

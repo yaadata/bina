@@ -10,6 +10,7 @@ import (
 	"codeberg.org/yaadata/bina/internal/slice"
 )
 
+// NewBuiltinBuilder returns a [Builder] for creating a [collection.Queue] with comparable elements.
 func NewBuiltinBuilder[T comparable]() Builder[T, collection.Queue[T], *builtinBuilder[T]] {
 	return &builtinBuilder[T]{
 		backedBy: QueueBackedBySlice,
@@ -44,6 +45,7 @@ func (b *builtinBuilder[T]) Build() collection.Queue[T] {
 	}
 }
 
+// NewComparableBuilder returns a [Builder] for creating a [collection.Queue] with [compare.Comparable] elements.
 func NewComparableBuilder[T compare.Comparable[T]]() Builder[T, collection.Queue[T], *comparableBuilder[T]] {
 	return &comparableBuilder[T]{
 		backedBy: QueueBackedBySlice,
