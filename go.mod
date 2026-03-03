@@ -1,6 +1,6 @@
 module codeberg.org/yaadata/bina
 
-go 1.25.4
+go 1.26.0
 
 require (
 	codeberg.org/yaadata/opt v1.0.0-alpha-1

@@ -3,6 +3,7 @@ name: Go Tests
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths: &go-paths
       - '**/*.go'
       - 'go.mod'
@@ -16,12 +17,9 @@ jobs:
     name: test (go v${{ matrix.go-version }})
     strategy:
       matrix:
-        go-version: ['1.25']
+        go-version: ['1.26']
     runs-on: ubuntu-latest
     steps:
-      - name: Install Essentials
-        run: |
-          apt-get update && apt-get install -y nodejs npm
       - name: Checkout code
         uses: https://code.forgejo.org/actions/checkout@v6
         with:

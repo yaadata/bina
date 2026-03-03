@@ -1,3 +1,9 @@
+ref-tags:
+    git config --local --add remote.origin.fetch '+refs/tags/*:refs/tags/*'
+
+# Configure local git to fetch all tags from origin
+setup: ref-tags
+
 # Run all tests verbose with concurrency of 5
 test:
     go test -v -p 5 ./...
