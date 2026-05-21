@@ -16,7 +16,7 @@ const (
 )
 
 // Builder is a [builder.BaseBuilder] for [collection.Stack] implementations.
-type Builder[T any, Target collection.Sequence[T], Self any] interface {
+type Builder[T any, Target collection.Sequence[T], Self Builder[T, Target, Self]] interface {
 	builder.BaseBuilder[T, Target, Self]
 	// BackedBy sets the underlying data structure.
 	BackedBy(ds StackBackedBy)

@@ -6,7 +6,7 @@ import (
 )
 
 // Builder is a [builder.BaseBuilder] for [collection.LinkedList] implementations.
-type Builder[T any, Target collection.Sequence[T], Self any] interface {
+type Builder[T any, Target collection.Sequence[T], Self Builder[T, Target, Self]] interface {
 	builder.BaseBuilder[T, Target, Self]
 	// From initializes the linked list with the given items.
 	From(items ...T) Self

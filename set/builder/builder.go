@@ -4,7 +4,7 @@ import "codeberg.org/yaadata/bina/core/collection"
 
 // BaseBuilder defines the fluent interface for constructing sets.
 // Methods return Self to enable method chaining.
-type BaseBuilder[T any, Target collection.Set[T], Self any] interface {
+type BaseBuilder[T any, Target collection.Set[T], Self BaseBuilder[T, Target, Self]] interface {
 	// Build constructs and returns the set with the configured options.
 	// If From was called, the set is populated with those values.
 	// If Capacity was called, the set is pre-allocated to that size.

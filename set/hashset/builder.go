@@ -8,6 +8,6 @@ import (
 // Builder defines the fluent interface for constructing hash sets.
 // Use [NewBuiltinBuilder] for comparable types or [NewHashableBuilder]
 // for types implementing the Hashable interface.
-type Builder[T any, Target collection.Set[T], Self any] interface {
+type Builder[T any, Target collection.Set[T], Self Builder[T, Target, Self]] interface {
 	builder.BaseBuilder[T, Target, Self]
 }

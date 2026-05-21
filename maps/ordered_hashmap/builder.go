@@ -6,6 +6,6 @@ import (
 )
 
 // Builder is a [builder.BaseBuilder] for [collection.OrderedMap] implementations.
-type Builder[K comparable, V any, Target collection.OrderedMap[K, V], Self any] interface {
+type Builder[K comparable, V any, Target collection.OrderedMap[K, V], Self Builder[K, V, Target, Self]] interface {
 	builder.BaseBuilder[K, V, Target, Self]
 }

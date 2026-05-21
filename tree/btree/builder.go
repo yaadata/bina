@@ -6,6 +6,6 @@ import (
 )
 
 // Builder is a [builder.BaseBuilder] for [collection.BTree] implementations.
-type Builder[K any, V any, Target collection.BTree[K, V], Self any] interface {
+type Builder[K any, V any, Target collection.BTree[K, V], Self Builder[K, V, Target, Self]] interface {
 	builder.BaseBuilder[K, V, Target, Self]
 }
